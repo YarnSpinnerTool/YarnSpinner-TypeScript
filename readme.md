@@ -79,4 +79,4 @@ The testing infrastructure is all contained withing `index.test.ts`
 
 ## License
 
-See the LICENSE file for information on the license of this.
+See the license file for information on the license of this.
