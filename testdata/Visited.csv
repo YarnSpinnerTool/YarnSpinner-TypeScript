@@ -1,0 +1,4 @@
+id,text,file,node,lineNumber
+line:/Users/McJones/Development/ysc/src/YarnSpinner.Console/bin/Debug/netcoreapp3.1/Visited.yarn-Start-0,entered start,/Users/McJones/Development/ysc/src/YarnSpinner.Console/bin/Debug/netcoreapp3.1/Visited.yarn,Start,3
+line:/Users/McJones/Development/ysc/src/YarnSpinner.Console/bin/Debug/netcoreapp3.1/Visited.yarn-Start-1,we have visited Start before,/Users/McJones/Development/ysc/src/YarnSpinner.Console/bin/Debug/netcoreapp3.1/Visited.yarn,Start,5
+line:/Users/McJones/Development/ysc/src/YarnSpinner.Console/bin/Debug/netcoreapp3.1/Visited.yarn-Start-2,we have not visited Start,/Users/McJones/Development/ysc/src/YarnSpinner.Console/bin/Debug/netcoreapp3.1/Visited.yarn,Start,7
