@@ -39,6 +39,8 @@ export class YarnVM
     public commandCallback: ((command: string) => Promise<void>) | null = null;
     public optionCallback: ((options: OptionItem[]) => Promise<number>) | null = null;
 
+    // public library: { string: Function } | null = null;
+
     constructor(newProgram: Program, strings: { [key: string]: string })
     {
         this.program = newProgram;
