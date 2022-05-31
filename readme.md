@@ -58,8 +58,7 @@ If you wanted to replace the story you would need to do the following:
 1. Using ysc compile your yarn into a yarnc and csv file: `ysc compile your_yarn.yarn`
 2. Using `munger.py` create a TypeScript text embeddable version of your compiled story: `python munger.py`
 3. Replace the `stringTable` and `data` variables inside `index.ts` with those created by `munger.py`
-4. Compile the TypeScript: `npx tsc`
-5. Run webpack to munge everything up into a single js file we can use: `npx webpack`
+5. Compile the TypeScript and run webpack to munge everything up into a single js file we can use: `npm run build`
 6. Open `index.html` in your browser and "enjoy"
 
 ### Build the Protobuf file
