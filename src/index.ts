@@ -2,6 +2,9 @@ import { data, stringTable } from "./data";
 import { YarnVM, OptionItem } from "./yarnvm";
 import { Program } from "./yarn_spinner";
 
+import "./yarnspinner.scss";
+import 'bootstrap';
+
 window.addEventListener('load', async function () {
     console.log("window loaded!");
 
