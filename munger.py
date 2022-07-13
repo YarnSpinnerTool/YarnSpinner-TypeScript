@@ -4,7 +4,10 @@ dict = []
 with open('Output.csv', newline='') as csvfile:
     reader = csv.DictReader(csvfile)
     for row in reader:
-        dict.append(f"\"{row['id']}\":\"{row['text']}\"")
+        text = row['text'];
+        text = text.replace("\\", "\\\\" );
+        text = text.replace("\"", "\\\"" );
+        dict.append(f"\"{row['id']}\":\"{text}\"")
 
 output = ",".join(dict)
 opener = "const stringTable: { [key: string]: string } = {";
