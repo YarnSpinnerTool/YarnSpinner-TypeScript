@@ -5,6 +5,13 @@ import { Program } from "./yarn_spinner";
 import "./yarnspinner.scss";
 import 'bootstrap';
 
+enum LineDeliveryMode {
+    OneAtATime,
+    AllAtOnce
+}
+
+const lineDelivery: LineDeliveryMode = LineDeliveryMode.OneAtATime;
+
 window.addEventListener('load', async function () {
     console.log("window loaded!");
 
@@ -62,7 +69,22 @@ export function load(stringTable: {[key: string]: string}, data: Uint8Array)
                 return new Promise<void>(function (resolve)
                 {
                     addDialogueText(line).scrollIntoView();
-                    resolve();
+
+                    if (lineDelivery == LineDeliveryMode.OneAtATime) {
+                        let nextLineButton = addDialogueElement("div", "list-group-item", "list-group-item-action");
+                        nextLineButton.innerText = "Continue...";
+
+                        nextLineButton.scrollIntoView();
+
+                        nextLineButton.addEventListener("click", () => {
+                            nextLineButton.remove();
+                            resolve();
+                        });
+
+                    } else {
+                        resolve();
+
+                    }
                 });
             }
             VM.commandCallback = function (command: string)
