@@ -8,15 +8,41 @@ import 'bootstrap';
 window.addEventListener('load', async function () {
     console.log("window loaded!");
 
-    this.document.getElementById("testbutton")?.addEventListener("click", () => {
-        let container = this.document.getElementById("container")
-        if (container != null)
-        {
-            container.innerHTML = "";
-        }
+    this.document.getElementById("start")?.addEventListener("click", () => {
+        clearDialogue();
         load(stringTable, data);
     });
+
+    // Immediately start the dialogue when the page loads
+    load(stringTable, data);
 });
+
+const dialogueContentsID = "dialogue-contents";
+
+function clearDialogue() {
+    let log = document.getElementById(dialogueContentsID)!;
+    while (log.firstChild) {
+        log.removeChild(log.firstChild);
+    }
+}
+
+function addDialogueText(text: string, ...classes : string[]) {
+    var logElement = addDialogueElement("div", "list-group-item", ...classes);
+    logElement.innerText = text;
+    return logElement;
+}
+
+function addDialogueElement(elementType : string, ...classes : string[]) : HTMLElement {
+    let log = document.getElementById(dialogueContentsID)!;
+    var logElement = document.createElement(elementType);
+    log.appendChild(logElement);
+
+    for (let logClass of classes) {
+        logElement.classList.add(logClass);
+    }
+    
+    return logElement;
+}
 
 export function load(stringTable: {[key: string]: string}, data: Uint8Array)
 {
@@ -35,23 +61,20 @@ export function load(stringTable: {[key: string]: string}, data: Uint8Array)
             {
                 return new Promise<void>(function (resolve)
                 {
-                    var lineElement = document.createElement("div");
-                    lineElement.innerHTML = `<p>${line}</p>`;
-                    document.getElementById("container")?.appendChild(lineElement);
+                    addDialogueText(line).scrollIntoView();
                     resolve();
                 });
             }
             VM.commandCallback = function (command: string)
             {
                 return new Promise(function (resolve) {
-                    var commandElement = document.createElement("div");
-                    commandElement.innerHTML = `<p><i>${command}</i></p>`;
-                    document.getElementById("container")?.appendChild(commandElement);
+                    addDialogueText("<<" + command + ">>", "list-group-item-primary").scrollIntoView();
                     resolve();
                 });
             }
             VM.optionCallback = function (options: OptionItem[])
             {
+                /*
                 return new Promise<number>(function (resolve)
                 {
                     var optionContainer = document.createElement("div");
@@ -78,6 +101,54 @@ export function load(stringTable: {[key: string]: string}, data: Uint8Array)
                         });
                     });
                     document.getElementById("container")?.appendChild(optionContainer);
+                });
+                */
+            
+                return new Promise<number>((resolve, reject) => {
+            
+                    // Create a button that resolves this promise with the specified
+                    // option index on click. (In other words, onOptions will finish
+                    // running when the button is clicked.)
+        
+                    // Start by creating a container for the options
+                    var optionsContainer = addDialogueElement("div", "list-group-item");
+        
+                    var optionsList = document.createElement("div");
+                    optionsList.classList.add("list-group");
+                    optionsContainer.appendChild(optionsList);
+        
+                    options.forEach((option, index) => {
+                        // Create a button in the options container
+                        let button = document.createElement("a");
+                        button.classList.add("list-group-item", "list-group-item-action");
+        
+                        if (option.lineCondition == false) {
+                            button.classList.add("list-group-item-unavailable");
+                        }
+        
+                        optionsList.appendChild(button);
+        
+                        // Set the text of the button to the button itself
+                        let text = option.line;
+                        button.innerText = text;
+        
+                        // If the option is available, allow the user to select it
+                        if (option.lineCondition) {
+                            // When the button is clicked, display the selected option and
+                            // resolve with its ID.
+                            button.addEventListener("click", () => {
+                                // Add the text of the button that was selected, and get rid
+                                // of the buttons.
+                                addDialogueText(text, "selected-option", "list-group-item-secondary");
+                                optionsContainer.remove();
+                                
+                                // Resolve with the option ID that was selected. 
+                                resolve(index);
+                            });
+                        }
+                    });
+        
+                    optionsList.scrollIntoView();
                 });
             }
 
