@@ -10,7 +10,27 @@ enum LineDeliveryMode {
     AllAtOnce
 }
 
-const lineDelivery: LineDeliveryMode = LineDeliveryMode.OneAtATime;
+let settings = {
+    lineDelivery: LineDeliveryMode.OneAtATime
+};
+
+let settingLinesOneAtATimeButton : HTMLElement
+let settingLinesAllAtOnceButton : HTMLElement
+
+function setLineDeliveryMode(mode: LineDeliveryMode) : void {
+    settings.lineDelivery = mode;
+
+    switch (mode) {
+        case LineDeliveryMode.AllAtOnce:
+            settingLinesAllAtOnceButton.classList.add("dropdown-item-checked");
+            settingLinesOneAtATimeButton.classList.remove("dropdown-item-checked");
+            break;
+        case LineDeliveryMode.OneAtATime:
+            settingLinesOneAtATimeButton.classList.add("dropdown-item-checked");
+            settingLinesAllAtOnceButton.classList.remove("dropdown-item-checked");
+            break;
+    }
+}
 
 window.addEventListener('load', async function () {
     console.log("window loaded!");
@@ -20,6 +40,19 @@ window.addEventListener('load', async function () {
         load(stringTable, data);
     });
 
+    settingLinesOneAtATimeButton = this.document.getElementById("setting-lines-one-at-a-time")!;
+    settingLinesAllAtOnceButton = this.document.getElementById("setting-lines-all-at-once")!;    
+
+    settingLinesOneAtATimeButton?.addEventListener("click", () => {
+        setLineDeliveryMode(LineDeliveryMode.OneAtATime);
+    });
+    
+    settingLinesAllAtOnceButton?.addEventListener("click", () => {
+        setLineDeliveryMode(LineDeliveryMode.AllAtOnce);
+    });
+
+    setLineDeliveryMode(LineDeliveryMode.OneAtATime);
+    
     // Immediately start the dialogue when the page loads
     load(stringTable, data);
 });
@@ -70,7 +103,7 @@ export function load(stringTable: {[key: string]: string}, data: Uint8Array)
                 {
                     addDialogueText(line).scrollIntoView();
 
-                    if (lineDelivery == LineDeliveryMode.OneAtATime) {
+                    if (settings.lineDelivery == LineDeliveryMode.OneAtATime) {
                         let nextLineButton = addDialogueElement("div", "list-group-item", "list-group-item-action");
                         nextLineButton.innerText = "Continue...";
 
@@ -152,7 +185,7 @@ export function load(stringTable: {[key: string]: string}, data: Uint8Array)
         
                         // Set the text of the button to the button itself
                         let text = option.line;
-                        button.innerText = text;
+                        button.innerHTML = "<b>&#8594;</b> " + text; // '→'
         
                         // If the option is available, allow the user to select it
                         if (option.lineCondition) {

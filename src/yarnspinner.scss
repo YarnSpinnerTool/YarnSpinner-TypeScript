@@ -65,3 +65,14 @@ $link-color: $darker-green;
 #app-header, #app-footer {
     background-color: $background-tint;
 }
+
+.dropdown-menu.dropdown-menu-checkable .dropdown-item {
+    padding-left: 30px;
+}
+
+.dropdown-menu.dropdown-menu-checkable .dropdown-item-checked::before {
+    position: absolute;
+    left: .3rem;
+    content: '✓';
+    font-weight: 600;
+  }
