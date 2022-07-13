@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "build": "npx webpack --mode=production"
+    "build": "npx webpack --mode=production",
+    "start": "npx webpack serve --open"
   },
   "author": "",
   "license": "MIT",
@@ -24,7 +25,8 @@
     "ts-loader": "^9.3.1",
     "typescript": "^4.7.4",
     "webpack": "^5.72.1",
-    "webpack-cli": "^4.9.2"
+    "webpack-cli": "^4.9.2",
+    "webpack-dev-server": "^4.9.3"
   },
   "dependencies": {
     "@popperjs/core": "^2.11.5",

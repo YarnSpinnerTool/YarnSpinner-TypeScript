@@ -39,6 +39,18 @@ module.exports = {
   optimization: {
     minimize: true
   },
+  devServer: {
+    static: './dist',
+    watchFiles: ['src/**/*'],
+  },
+  devtool: 'source-map',
+  mode: 'development',
+  performance: {
+    // TODO: The generated artifact is designed to be all-in-one, so while
+    // keeping the file size small is desirable, we'll disable performance hints
+    // for now.
+    hints: false
+  },
   plugins: [
 
     new MiniCssExtractPlugin({
