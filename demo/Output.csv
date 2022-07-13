@@ -1,0 +1,36 @@
+id,text,file,node,lineNumber
+line:/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn-Start-0,Yarn Spinner is a language for writing conversations in games!,/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn,Start,3
+line:/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn-Start-1,"You can use it to write branching dialogue, and use that in a game engine!",/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn,Start,4
+line:/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn-Start-2,"For example, here's a choice between some options!",/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn,Start,6
+line:/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn-Start-3,"Wow, some options!",/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn,Start,8
+line:/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn-Start-4,"You got it, pal!",/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn,Start,9
+line:/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn-Start-5,Can I put text inside options?,/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn,Start,10
+line:/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn-Start-6,You sure can!,/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn,Start,11
+line:/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn-Start-7,"For example, here's some lines inside an option.",/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn,Start,12
+line:/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn-Start-8,You can even put options inside OTHER options!,/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn,Start,13
+line:/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn-Start-9,Like this!,/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn,Start,14
+line:/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn-Start-10,Wow!,/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn,Start,15
+line:/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn-Start-11,Or this!,/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn,Start,16
+line:/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn-Start-12,Incredible!,/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn,Start,17
+line:/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn-Start-13,"Wow, some options can be made unavailable!",/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn,Start,18
+line:/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn-Start-14,"You can also write 'commands', which represent things that happen in the game!",/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn,Start,23
+line:/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn-Start-15,"In this editor, they'll appear as text:",/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn,Start,25
+line:/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn-Start-16,Nice!,/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn,Start,29
+line:/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn-Start-17,Right??,/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn,Start,30
+line:/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn-Start-18,But it didn't actually fade!,/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn,Start,31
+line:/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn-Start-19,"That's because this page doesn't know about 'fading', or any other feature.",/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn,Start,32
+line:/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn-Start-20,"When you're testing your script on this page, we'll just show you your commands as text.",/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn,Start,33
+line:/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn-Start-21,"In a real game, you can define custom commands that do useful work!",/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn,Start,34
+line:/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn-Start-22,"You can also use variables, which store information!",/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn,Start,36
+line:/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn-Start-23,"Let's set a variable called ""$name"".",/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn,Start,38
+line:/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn-Start-24,"We can use ""$name"" in lines: My name's {0}!",/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn,Start,42
+line:/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn-Start-25,What can I store in variables?,/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn,Start,44
+line:/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn-Start-26,"You can store text, numbers, and true/false values!",/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn,Start,45
+line:/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn-Start-27,Where do variables get stored?,/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn,Start,46
+line:/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn-Start-28,"In this page, we store them in memory. When you use Yarn Spinner in a game engine, like Unity, you can store them in memory, or write custom code that stores them on disk alongside the rest of your saved game!",/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn,Start,47
+line:/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn-Start-29,We can also use 'if' statements to change what happens!,/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn,Start,49
+line:/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn-Start-30,The '$gold' variable is bigger than 5!,/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn,Start,54
+line:/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn-Start-31,The '$gold' variable is 5 or less!,/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn,Start,56
+line:/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn-Start-32,"Finally, we can use the ""jump"" command to go to a different node! Let's do that now!",/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn,Start,59
+line:/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn-OtherNode-33,"Here we are in a different node! Nodes let you divide up your content into different blocks, which makes it easier to manage.",/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn,OtherNode,65
+line:/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn-OtherNode-34,"We're all done! Try changing the text in the editor to the left, and clicking Test again!",/Users/desplesda/Work/YarnSpinner-TypeScript/demo/Demo.yarn,OtherNode,67
