@@ -28,7 +28,7 @@ export class YarnVM
     private state: ExecutionState = ExecutionState.Stopped;
     private programCounter = 0;
 
-    private variableStorage: VariableStorage = {};
+    public variableStorage: VariableStorage = {};
     private stringTable: { [key: string]: string };
 
     private optionSet: OptionItem[] = [];
@@ -38,6 +38,8 @@ export class YarnVM
     public lineCallback: ((line: string) => Promise<void>) | null = null;
     public commandCallback: ((command: string) => Promise<void>) | null = null;
     public optionCallback: ((options: OptionItem[]) => Promise<number>) | null = null;
+
+    public onVariableSet: ((variable: string, value: any) => void) | null = null;
 
     // public library: { string: Function } | null = null;
 
@@ -429,6 +431,9 @@ export class YarnVM
                 if (variableName != undefined)
                 {
                     this.variableStorage[variableName] = value;
+                    if (this.onVariableSet) {
+                        this.onVariableSet(variableName, value);
+                    }
                 }
                 break;
             }
