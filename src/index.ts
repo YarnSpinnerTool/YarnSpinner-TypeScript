@@ -16,6 +16,7 @@ let settings = {
 
 let settingLinesOneAtATimeButton : HTMLElement
 let settingLinesAllAtOnceButton : HTMLElement
+let variableTableBody : HTMLElement
 
 function setLineDeliveryMode(mode: LineDeliveryMode) : void {
     settings.lineDelivery = mode;
@@ -41,7 +42,8 @@ window.addEventListener('load', async function () {
     });
 
     settingLinesOneAtATimeButton = this.document.getElementById("setting-lines-one-at-a-time")!;
-    settingLinesAllAtOnceButton = this.document.getElementById("setting-lines-all-at-once")!;    
+    settingLinesAllAtOnceButton = this.document.getElementById("setting-lines-all-at-once")!;
+    variableTableBody = this.document.getElementById("variables-body")!;
 
     settingLinesOneAtATimeButton?.addEventListener("click", () => {
         setLineDeliveryMode(LineDeliveryMode.OneAtATime);
@@ -84,6 +86,36 @@ function addDialogueElement(elementType : string, ...classes : string[]) : HTMLE
     return logElement;
 }
 
+function updateVariableDisplay(vm : YarnVM) {
+    while (variableTableBody.firstChild) {
+        variableTableBody.removeChild(variableTableBody.firstChild);
+    }
+
+    for (let variableName in vm.variableStorage) {
+        let value = vm.variableStorage[variableName];
+
+        // Name, type, value
+        let row = variableTableBody.appendChild(document.createElement("tr"));
+
+        row.appendChild(document.createElement("td")).innerText = variableName;
+
+        let typeLabel : string
+
+        if (typeof value === "string") {
+            typeLabel = "string";
+        } else if (typeof value === "number") {
+            typeLabel = "number";
+        } else if (typeof value === "boolean") {
+            typeLabel = "boolean";
+        } else {
+            typeLabel = "<unknown!>";
+        }
+
+        row.appendChild(document.createElement("td")).innerText = typeLabel; // TODO: add value
+        row.appendChild(document.createElement("td")).innerText = value.toString();
+    }
+}
+
 export function load(stringTable: {[key: string]: string}, data: Uint8Array)
 {
     let program = Program.fromBinary(data);
@@ -95,6 +127,10 @@ export function load(stringTable: {[key: string]: string}, data: Uint8Array)
     else
     {
         var VM = new YarnVM(program, stringTable);
+
+        VM.onVariableSet = (name, value) => updateVariableDisplay(VM);
+        updateVariableDisplay(VM);
+
         if (VM.setNode("Start"))
         {
             VM.lineCallback = function (line: string)

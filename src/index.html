@@ -8,11 +8,12 @@
   <script src="yarnspinner.js"></script> -->
 </head>
 
-<body style="padding-top: 70px;" class="pb-2">
+<body style="padding-top: 70px;" class="pb-2 ">
   <nav class="navbar  fixed-top navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
       <a class="navbar-brand" href="https://yarnspinner.dev">Yarn Spinner Preview</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -28,15 +29,18 @@
             <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
           </li> -->
         </ul>
-        
+
         <ul class="navbar-nav mb-2 mb-lg-0">
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
               Settings
             </a>
             <ul class="dropdown-menu dropdown-menu-checkable dropdown-menu-end" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item dropdown-item-checked" id="setting-lines-one-at-a-time" href="#">Show Lines One At A Time</a></li>
-              <li><a class="dropdown-item dropdown-item-checked" id="setting-lines-all-at-once" href="#">Show Lines All At Once</a></li>
+              <li><a class="dropdown-item dropdown-item-checked" id="setting-lines-one-at-a-time" href="#">Show Lines
+                  One At A Time</a></li>
+              <li><a class="dropdown-item dropdown-item-checked" id="setting-lines-all-at-once" href="#">Show Lines All
+                  At Once</a></li>
               <!-- <li><a class="dropdown-item" href="#">Another action</a></li>
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" href="#">Something else here</a></li> -->
@@ -44,17 +48,35 @@
           </li>
           <button class="btn btn-outline-success" id="start" type="submit">Restart</button>
         </ul>
-        
-        </div>
+      </div>
     </div>
   </nav>
 
   <div class="container h-100 d-flex flex-column">
-    <ul class="list-group" id="dialogue-contents">
-      
-    </ul>
+    <div class="row flex-fill mh-100" style="overflow-y: scroll;">
+      <div class="col">
+        <ul class="list-group" id="dialogue-contents">
+
+        </ul>
+      </div>
+    </div>
+    <div class="row flex-shrink-0 mt-3" style="max-height: 25%; overflow-y: scroll;">
+      <div class="col-12">
+        <div id="variables">
+          <table class="table table-borderless">
+            <thead>
+              <th>Variable</th>
+              <th>Type</th>
+              <th>Value</th>
+            </thead>
+            <tbody id="variables-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  
   </div> <!-- /container -->
-    
+
 
 </body>
 
