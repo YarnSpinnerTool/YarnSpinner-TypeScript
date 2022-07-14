@@ -3,6 +3,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HTMLInlineCSSWebpackPlugin = require('html-inline-css-webpack-plugin').default;
+var InlineChunkHtmlPlugin = require('react-dev-utils/InlineChunkHtmlPlugin');
+
 
 module.exports = {
   entry: {
@@ -64,7 +66,9 @@ module.exports = {
     new HTMLInlineCSSWebpackPlugin(),
     new HtmlWebpackPlugin({
       template: 'src/index.html',
+      inject: true,
       urlBase: process.env['BASE_URL'] || '',
-  }),
+    }),
+  new InlineChunkHtmlPlugin(HtmlWebpackPlugin, [/yarnspinner/]),
 ]
 };
