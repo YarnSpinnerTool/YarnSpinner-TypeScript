@@ -93,3 +93,35 @@ html,
     content: '✓';
     font-weight: 600;
   }
+
+#log .list-group-item {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    cursor: default;
+}
+
+#log .list-group-item-action {
+    cursor: pointer;
+}
+
+#log .list-group-item-danger {
+    // Allow selecting text in errors
+    -webkit-user-select: auto;
+    -moz-user-select: auto;
+    -ms-user-select: auto;
+    user-select: auto;
+    cursor: auto !important;
+}
+
+// Unavailable options are light grey, have a strikethrough, do not change
+// colour on hover, and have a default cursor
+.list-group-item-unavailable,
+.list-group-item-unavailable:hover {
+    color: $grey;
+    text-decoration: line-through;
+    background-color: inherit;
+    cursor: default !important;
+}
