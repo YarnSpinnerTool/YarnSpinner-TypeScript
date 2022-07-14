@@ -1,10 +1,16 @@
 const path = require('path');
+const glob = require('glob')
+
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HTMLInlineCSSWebpackPlugin = require('html-inline-css-webpack-plugin').default;
 var InlineChunkHtmlPlugin = require('react-dev-utils/InlineChunkHtmlPlugin');
+const PurgecssPlugin = require('purgecss-webpack-plugin');
 
+const PATHS = {
+  src: path.join(__dirname, 'src')
+};
 
 module.exports = {
   entry: {
@@ -43,7 +49,17 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
   },
   optimization: {
-    minimize: true
+    minimize: true,
+    splitChunks: {
+      cacheGroups: {
+        styles: {
+          name: 'styles',
+          test: /\.css$/,
+          chunks: 'all',
+          enforce: true
+        }
+      }
+    }
   },
   devServer: {
     static: './dist',
@@ -63,12 +79,15 @@ module.exports = {
       filename: "[name].css",
       chunkFilename: "[id].css"
     }),
+    new PurgecssPlugin({
+      paths: glob.sync(`${PATHS.src}/**/*`, { nodir: true }),
+    }),
     new HTMLInlineCSSWebpackPlugin(),
     new HtmlWebpackPlugin({
       template: 'src/index.html',
       inject: true,
       urlBase: process.env['BASE_URL'] || '',
     }),
-  new InlineChunkHtmlPlugin(HtmlWebpackPlugin, [/yarnspinner/]),
+    new InlineChunkHtmlPlugin(HtmlWebpackPlugin, [/yarnspinner/]),
 ]
 };
