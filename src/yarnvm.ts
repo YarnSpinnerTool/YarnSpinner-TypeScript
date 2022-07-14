@@ -336,7 +336,7 @@ export class YarnVM
 
                 let option: OptionItem = {
                     label: label,
-                    line: lineCondition ? this.buildLine(label, parameters) : `${this.buildLine(label, parameters)} [disabled]`, // when an option is disabled it gets given a [disabled] flag at the end of the line, probably should remove this later...
+                    line: lineCondition ? this.buildLine(label, parameters) : `${this.buildLine(label, parameters)}`, // when an option is disabled it gets given a [disabled] flag at the end of the line, probably should remove this later...
                     jump: jump == undefined ? "" : jump,
                     lineCondition: lineCondition
                 };
