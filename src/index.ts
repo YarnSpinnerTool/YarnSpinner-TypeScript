@@ -10,11 +10,13 @@ import { Settings, LineDeliveryMode } from "./settings";
 let currentSettings: Settings = {
     lineDelivery: LineDeliveryMode.OneAtATime,
     showVariables: false,
+    showUnavailableOptions: false,
 };
 
 let settingLinesOneAtATimeButton : HTMLElement
 let settingLinesAllAtOnceButton : HTMLElement
 let settingShowVariablesButton : HTMLElement
+let settingShowUnavailableOptionsButton : HTMLElement
 let variableView : HTMLElement
 let variableTableBody : HTMLElement
 
@@ -49,6 +51,19 @@ function updateShowVariablesUI() {
     }
 }
 
+function updateShowUnavailableOptionsUI() {
+    let showUnavailableOptions = currentSettings.showUnavailableOptions;
+    
+    switch (showUnavailableOptions) {
+        case true:
+            settingShowUnavailableOptionsButton.classList.add("dropdown-item-checked");
+            break;
+        case false:
+            settingShowUnavailableOptionsButton.classList.remove("dropdown-item-checked");
+            break;
+    }
+}
+
 window.addEventListener('load', async function () {
     console.log("window loaded!");
 
@@ -60,6 +75,8 @@ window.addEventListener('load', async function () {
     settingLinesOneAtATimeButton = this.document.getElementById("setting-lines-one-at-a-time")!;
     settingLinesAllAtOnceButton = this.document.getElementById("setting-lines-all-at-once")!;
     settingShowVariablesButton = this.document.getElementById("setting-show-variables")!;
+    settingShowUnavailableOptionsButton = this.document.getElementById("setting-show-unavailable-options")!;
+    
     variableTableBody = this.document.getElementById("variables-body")!;
     variableView = this.document.getElementById("variable-view")!;
     
@@ -75,6 +92,10 @@ window.addEventListener('load', async function () {
         updateSettings({ showVariables: !currentSettings.showVariables });
     });
 
+    settingShowUnavailableOptionsButton.addEventListener("click", () => {
+        updateSettings({ showUnavailableOptions: !currentSettings.showUnavailableOptions });
+    });
+
     updateSettings(currentSettings);
     
     // Immediately start the dialogue when the page loads
@@ -85,6 +106,7 @@ function updateSettings(newSettings: Settings) {
     currentSettings = { ...currentSettings, ...newSettings };
     updateLineDeliveryUI();
     updateShowVariablesUI();
+    updateShowUnavailableOptionsUI();
 }
 
 const dialogueContentsID = "dialogue-contents";
@@ -242,7 +264,14 @@ export function load(stringTable: {[key: string]: string}, data: Uint8Array)
                         button.classList.add("list-group-item", "list-group-item-action");
         
                         if (option.lineCondition == false) {
-                            button.classList.add("list-group-item-unavailable");
+                            if (currentSettings.showUnavailableOptions == false) {
+                                // Do not show this option at all
+                                return;
+                            } else {
+                                // Show this option like the rest, but mark it
+                                // as unavailable
+                                button.classList.add("list-group-item-unavailable");
+                            }
                         }
         
                         optionsList.appendChild(button);

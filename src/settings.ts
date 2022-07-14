@@ -14,4 +14,7 @@ export type Settings = {
 
     /** Controls whether the contents of variables are shown to the user. */
     showVariables?: boolean;
+
+    /** Controls whether options marked as unavailable are shown to the user. */
+    showUnavailableOptions?: boolean;
 };
