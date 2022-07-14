@@ -71,6 +71,18 @@ html,
     background-color: $background-tint;
 }
 
+.navbar, #variable-view {
+    border-color: $darker-green;
+    border-width: 2px;
+}
+
+#variable-view {
+    border-top-style: solid;
+}
+.navbar {
+    border-bottom-style: solid;
+}
+
 .dropdown-menu.dropdown-menu-checkable .dropdown-item {
     padding-left: 30px;
 }
