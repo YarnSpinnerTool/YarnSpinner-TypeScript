@@ -11,7 +11,10 @@
 <body style="padding-top: 70px;" class="pb-2 ">
   <nav class="navbar  fixed-top navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
-      <a class="navbar-brand" href="https://yarnspinner.dev">Yarn Spinner Preview</a>
+      <a class="navbar-brand" href="https://yarnspinner.dev">
+        <img markup-inline height="35px" src="<%= require('./img/yarnspinner.svg') %>" id="logo" />
+        Yarn Spinner Preview
+      </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -62,17 +65,20 @@
     </div>
   </nav>
 
-  <div class="container h-100 d-flex flex-column">
+  <div class="container-fluid h-100 d-flex flex-column">
     <div class="row flex-fill mh-100" style="overflow-y: scroll;">
       <div class="col">
-        <ul class="list-group" id="dialogue-contents">
+        <div class="container">
 
-        </ul>
+          <ul class="list-group" id="dialogue-contents">
+            
+          </ul>
+        </div>
       </div>
     </div>
     <div class="row flex-shrink-0 mt-3 d-none" style="max-height: 25%; overflow-y: scroll;" id="variable-view">
       <div class="col-12">
-        <div id="variables">
+        <div id="variables" class="container">
           <table class="table table-borderless">
             <thead>
               <th>Variable</th>
@@ -85,8 +91,6 @@
       </div>
     </div>
   </div> <!-- /container -->
-
-
 </body>
 
 </html>
