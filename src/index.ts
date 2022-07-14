@@ -5,22 +5,23 @@ import { Program } from "./yarn_spinner";
 import "./yarnspinner.scss";
 import 'bootstrap';
 
-enum LineDeliveryMode {
-    OneAtATime,
-    AllAtOnce
-}
+import { Settings, LineDeliveryMode } from "./settings";
 
-let settings = {
-    lineDelivery: LineDeliveryMode.OneAtATime
+let currentSettings: Settings = {
+    lineDelivery: LineDeliveryMode.OneAtATime,
+    showVariables: false,
 };
 
 let settingLinesOneAtATimeButton : HTMLElement
 let settingLinesAllAtOnceButton : HTMLElement
+let settingShowVariablesButton : HTMLElement
+let variableView : HTMLElement
 let variableTableBody : HTMLElement
 
-function setLineDeliveryMode(mode: LineDeliveryMode) : void {
-    settings.lineDelivery = mode;
-
+function updateLineDeliveryUI(): void {
+    
+    let mode = currentSettings.lineDelivery;
+    
     switch (mode) {
         case LineDeliveryMode.AllAtOnce:
             settingLinesAllAtOnceButton.classList.add("dropdown-item-checked");
@@ -29,6 +30,21 @@ function setLineDeliveryMode(mode: LineDeliveryMode) : void {
         case LineDeliveryMode.OneAtATime:
             settingLinesOneAtATimeButton.classList.add("dropdown-item-checked");
             settingLinesAllAtOnceButton.classList.remove("dropdown-item-checked");
+            break;
+    }
+}
+
+function updateShowVariablesUI() {
+    let showSettings = currentSettings.showVariables;
+
+    switch (showSettings) {
+        case true:
+            settingShowVariablesButton.classList.add("dropdown-item-checked");
+            variableView.classList.remove("d-none");
+            break;
+        case false:
+            settingShowVariablesButton.classList.remove("dropdown-item-checked");
+            variableView.classList.add("d-none");
             break;
     }
 }
@@ -43,21 +59,33 @@ window.addEventListener('load', async function () {
 
     settingLinesOneAtATimeButton = this.document.getElementById("setting-lines-one-at-a-time")!;
     settingLinesAllAtOnceButton = this.document.getElementById("setting-lines-all-at-once")!;
+    settingShowVariablesButton = this.document.getElementById("setting-show-variables")!;
     variableTableBody = this.document.getElementById("variables-body")!;
-
-    settingLinesOneAtATimeButton?.addEventListener("click", () => {
-        setLineDeliveryMode(LineDeliveryMode.OneAtATime);
+    variableView = this.document.getElementById("variable-view")!;
+    
+    settingLinesOneAtATimeButton.addEventListener("click", () => {
+        updateSettings({ lineDelivery: LineDeliveryMode.OneAtATime });
     });
     
-    settingLinesAllAtOnceButton?.addEventListener("click", () => {
-        setLineDeliveryMode(LineDeliveryMode.AllAtOnce);
+    settingLinesAllAtOnceButton.addEventListener("click", () => {
+        updateSettings({ lineDelivery: LineDeliveryMode.AllAtOnce });
+    });
+    
+    settingShowVariablesButton.addEventListener("click", () => {
+        updateSettings({ showVariables: !currentSettings.showVariables });
     });
 
-    setLineDeliveryMode(LineDeliveryMode.OneAtATime);
+    updateSettings(currentSettings);
     
     // Immediately start the dialogue when the page loads
     load(stringTable, data);
 });
+
+function updateSettings(newSettings: Settings) {
+    currentSettings = { ...currentSettings, ...newSettings };
+    updateLineDeliveryUI();
+    updateShowVariablesUI();
+}
 
 const dialogueContentsID = "dialogue-contents";
 
@@ -139,7 +167,7 @@ export function load(stringTable: {[key: string]: string}, data: Uint8Array)
                 {
                     addDialogueText(line).scrollIntoView();
 
-                    if (settings.lineDelivery == LineDeliveryMode.OneAtATime) {
+                    if (currentSettings.lineDelivery == LineDeliveryMode.OneAtATime) {
                         let nextLineButton = addDialogueElement("div", "list-group-item", "list-group-item-action");
                         nextLineButton.innerText = "Continue...";
 
