@@ -236,7 +236,7 @@ export function load(stringTable: {[key: string]: string}, data: Uint8Array)
                     optionsList.classList.add("list-group");
                     optionsContainer.appendChild(optionsList);
         
-                    options.forEach((option, index) => {
+                    options.forEach((option) => {
                         // Create a button in the options container
                         let button = document.createElement("a");
                         button.classList.add("list-group-item", "list-group-item-action");
@@ -262,7 +262,7 @@ export function load(stringTable: {[key: string]: string}, data: Uint8Array)
                                 optionsContainer.remove();
                                 
                                 // Resolve with the option ID that was selected. 
-                                resolve(index);
+                                resolve(option.optionID);
                             });
                         }
                     });

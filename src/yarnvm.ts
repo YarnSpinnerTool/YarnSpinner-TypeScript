@@ -16,7 +16,8 @@ export interface OptionItem
     label: string,
     line: string,
     jump: string,
-    lineCondition: boolean
+    lineCondition: boolean,
+    optionID: number,
 }
 
 export class YarnVM
@@ -338,7 +339,8 @@ export class YarnVM
                     label: label,
                     line: lineCondition ? this.buildLine(label, parameters) : `${this.buildLine(label, parameters)}`, // when an option is disabled it gets given a [disabled] flag at the end of the line, probably should remove this later...
                     jump: jump == undefined ? "" : jump,
-                    lineCondition: lineCondition
+                    lineCondition: lineCondition,
+                    optionID: this.optionSet.length,
                 };
                 this.optionSet.push(option);
 
