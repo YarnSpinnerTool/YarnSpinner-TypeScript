@@ -23,14 +23,14 @@ export interface OptionItem
 export class YarnVM
 {
     private currentNode: Node | null = null;
-    private program: Program;
+    private program?: Program
 
     private stack: (string | boolean | number)[] = [];
     private state: ExecutionState = ExecutionState.Stopped;
     private programCounter = 0;
 
     public variableStorage: VariableStorage = {};
-    private stringTable: { [key: string]: string };
+    private stringTable: { [key: string]: string } = {};
 
     private optionSet: OptionItem[] = [];
 
@@ -44,33 +44,38 @@ export class YarnVM
 
     // public library: { string: Function } | null = null;
 
-    constructor(newProgram: Program, strings: { [key: string]: string })
+    constructor(newProgram?: Program, strings?: { [key: string]: string })
     {
+        if (newProgram && strings) {
+            this.loadProgram(newProgram, strings);
+        }
+    }
+
+    public loadProgram(newProgram: Program, strings: { [key: string]: string; }) {
         this.program = newProgram;
         this.stringTable = strings;
 
-        for (let key in this.program.initialValues)
-        {
+        for (let key in this.program.initialValues) {
             let value = this.unwrap(this.program.initialValues[key]);
             // this.log(`initialising ${key} to be ${value}`);
-            if (value != undefined)
-            {
+            if (value != undefined) {
                 this.variableStorage[key] = value;
             }
         }
     }
 
-    private resetState(): void
+    public resetState(): void
     {
         this.log("resetting state");
         this.stack = [];
         this.programCounter = 0;
         this.optionSet = [];
+        this.currentNode = null;
     }
     
     public setNode(nodeName: string): boolean
     {
-        var node = this.program.nodes[nodeName];
+        var node = this.program?.nodes[nodeName];
         if (node == null)
         {
             return false;
@@ -965,10 +970,10 @@ export class YarnVM
     public printAllInstructions(): void
     {
         console.log("Printing all instructions");
-        for (var node in this.program.nodes)
+        for (var node in this.program?.nodes)
         {
             console.log(`${node}:`);
-            for (var i of this.program.nodes[node].instructions)
+            for (var i of this.program!.nodes[node].instructions)
             {
                 console.log(this.printInstruction(i));
             }

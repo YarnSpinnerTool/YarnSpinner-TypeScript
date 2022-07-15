@@ -4,8 +4,6 @@
 <head>
   <meta charset="utf-8" />
   <title>Yarn JS Test</title>
-  <!-- <script src="data.js"></script>
-  <script src="yarnspinner.js"></script> -->
 </head>
 
 <body style="padding-top: 70px;" class="pb-2 ">
@@ -95,6 +93,14 @@
       </div>
     </div>
   </div> <!-- /container -->
+
+  <script>
+    window.addEventListener("load", () => {
+        window.setup();
+        window.loadProgram(window.data, window.stringTable);
+        window.startDialogue();
+    });
+  </script>
 </body>
 
 </html>

@@ -1,4 +1,3 @@
-import { data, stringTable } from "./data";
 import { YarnVM, OptionItem } from "./yarnvm";
 import { Program } from "./yarn_spinner";
 
@@ -18,7 +17,94 @@ let settingLinesAllAtOnceButton : HTMLElement
 let settingShowVariablesButton : HTMLElement
 let settingShowUnavailableOptionsButton : HTMLElement
 let variableView : HTMLElement
-let variableTableBody : HTMLElement
+let variableTableBody: HTMLElement
+
+const VM = new YarnVM();
+VM.onVariableSet = (name, value) => updateVariableDisplay(VM);
+
+VM.lineCallback = function (line: string) {
+    return new Promise<void>(function (resolve) {
+        addDialogueText(line).scrollIntoView();
+
+        if (currentSettings.lineDelivery == LineDeliveryMode.OneAtATime) {
+            let nextLineButton = addDialogueElement("div", "list-group-item", "list-group-item-action");
+            nextLineButton.innerText = "Continue...";
+
+            nextLineButton.scrollIntoView();
+
+            nextLineButton.addEventListener("click", () => {
+                nextLineButton.remove();
+                resolve();
+            });
+
+        } else {
+            resolve();
+
+        }
+    });
+}
+VM.commandCallback = function (command: string) {
+    return new Promise(function (resolve) {
+        addDialogueText("<<" + command + ">>", "list-group-item-primary").scrollIntoView();
+        resolve();
+    });
+}
+
+VM.optionCallback = function (options: OptionItem[]) {
+    return new Promise<number>((resolve, reject) => {
+
+        // Create a button that resolves this promise with the specified
+        // option index on click. (In other words, onOptions will finish
+        // running when the button is clicked.)
+
+        // Start by creating a container for the options
+        var optionsContainer = addDialogueElement("div", "list-group-item");
+
+        var optionsList = document.createElement("div");
+        optionsList.classList.add("list-group");
+        optionsContainer.appendChild(optionsList);
+
+        options.forEach((option) => {
+            // Create a button in the options container
+            let button = document.createElement("a");
+            button.classList.add("list-group-item", "list-group-item-action");
+
+            if (option.lineCondition == false) {
+                if (currentSettings.showUnavailableOptions == false) {
+                    // Do not show this option at all
+                    return;
+                } else {
+                    // Show this option like the rest, but mark it
+                    // as unavailable
+                    button.classList.add("list-group-item-unavailable");
+                }
+            }
+
+            optionsList.appendChild(button);
+
+            // Set the text of the button to the button itself
+            let text = option.line;
+            button.innerHTML = "<b>&#8594;</b> " + text; // '→'
+
+            // If the option is available, allow the user to select it
+            if (option.lineCondition) {
+                // When the button is clicked, display the selected option and
+                // resolve with its ID.
+                button.addEventListener("click", () => {
+                    // Add the text of the button that was selected, and get rid
+                    // of the buttons.
+                    addDialogueText(text, "selected-option", "list-group-item-secondary");
+                    optionsContainer.remove();
+
+                    // Resolve with the option ID that was selected. 
+                    resolve(option.optionID);
+                });
+            }
+        });
+
+        optionsList.scrollIntoView();
+    });
+}
 
 function updateLineDeliveryUI(): void {
     
@@ -64,21 +150,36 @@ function updateShowUnavailableOptionsUI() {
     }
 }
 
-window.addEventListener('load', async function () {
-    console.log("window loaded!");
+type StringTable = {
+    [key: string]: string;
+};
 
-    this.document.getElementById("start")?.addEventListener("click", () => {
-        clearDialogue();
-        load(stringTable, data);
+declare global {
+
+    interface Window {
+        loadProgram: (programData: Uint8Array, stringTable: StringTable) => void;
+        startDialogue: () => void;
+        setup: () => void;
+    }
+}
+
+window.loadProgram = loadProgram;
+window.startDialogue = startDialogue;
+
+window.setup = () => {
+    console.log("window loaded!");
+    
+    document.getElementById("start")?.addEventListener("click", () => {
+        startDialogue();
     });
 
-    settingLinesOneAtATimeButton = this.document.getElementById("setting-lines-one-at-a-time")!;
-    settingLinesAllAtOnceButton = this.document.getElementById("setting-lines-all-at-once")!;
-    settingShowVariablesButton = this.document.getElementById("setting-show-variables")!;
-    settingShowUnavailableOptionsButton = this.document.getElementById("setting-show-unavailable-options")!;
+    settingLinesOneAtATimeButton = document.getElementById("setting-lines-one-at-a-time")!;
+    settingLinesAllAtOnceButton = document.getElementById("setting-lines-all-at-once")!;
+    settingShowVariablesButton = document.getElementById("setting-show-variables")!;
+    settingShowUnavailableOptionsButton = document.getElementById("setting-show-unavailable-options")!;
     
-    variableTableBody = this.document.getElementById("variables-body")!;
-    variableView = this.document.getElementById("variable-view")!;
+    variableTableBody = document.getElementById("variables-body")!;
+    variableView = document.getElementById("variable-view")!;
     
     settingLinesOneAtATimeButton.addEventListener("click", () => {
         updateSettings({ lineDelivery: LineDeliveryMode.OneAtATime });
@@ -97,10 +198,19 @@ window.addEventListener('load', async function () {
     });
 
     updateSettings(currentSettings);
+};
+
+function loadProgram(programData: Uint8Array, stringTable: StringTable): void {
     
-    // Immediately start the dialogue when the page loads
-    load(stringTable, data);
-});
+    let program = Program.fromBinary(programData);
+
+    if (program) {
+        VM.loadProgram(program, stringTable);
+    } else {
+        window.alert("Failed to load program!");
+    }
+}
+
 
 function updateSettings(newSettings: Settings) {
     currentSettings = { ...currentSettings, ...newSettings };
@@ -166,145 +276,16 @@ function updateVariableDisplay(vm : YarnVM) {
     }
 }
 
-export function load(stringTable: {[key: string]: string}, data: Uint8Array)
-{
-    let program = Program.fromBinary(data);
+export function startDialogue() {
 
-    if (program == undefined)
-    {
-        console.log("well poop");
+    clearDialogue();
+
+    updateVariableDisplay(VM);
+
+    if (!VM.setNode("Start")) {
+        window.alert("Failed to load node \"Start\"");
+        return;
     }
-    else
-    {
-        var VM = new YarnVM(program, stringTable);
 
-        VM.onVariableSet = (name, value) => updateVariableDisplay(VM);
-        updateVariableDisplay(VM);
-
-        if (VM.setNode("Start"))
-        {
-            VM.lineCallback = function (line: string)
-            {
-                return new Promise<void>(function (resolve)
-                {
-                    addDialogueText(line).scrollIntoView();
-
-                    if (currentSettings.lineDelivery == LineDeliveryMode.OneAtATime) {
-                        let nextLineButton = addDialogueElement("div", "list-group-item", "list-group-item-action");
-                        nextLineButton.innerText = "Continue...";
-
-                        nextLineButton.scrollIntoView();
-
-                        nextLineButton.addEventListener("click", () => {
-                            nextLineButton.remove();
-                            resolve();
-                        });
-
-                    } else {
-                        resolve();
-
-                    }
-                });
-            }
-            VM.commandCallback = function (command: string)
-            {
-                return new Promise(function (resolve) {
-                    addDialogueText("<<" + command + ">>", "list-group-item-primary").scrollIntoView();
-                    resolve();
-                });
-            }
-            VM.optionCallback = function (options: OptionItem[])
-            {
-                /*
-                return new Promise<number>(function (resolve)
-                {
-                    var optionContainer = document.createElement("div");
-                    options.forEach((option, index) =>
-                    {
-                        var p = document.createElement("p");
-                        p.innerHTML = `<b>-></b> ${option.line}`;
-                        optionContainer.appendChild(p);
-
-                        var button = document.createElement("button");
-                        button.innerHTML = "Select";
-                        button.classList.add("optionButton");
-                        
-                        optionContainer.appendChild(button);
-
-                        button.addEventListener("click", () =>
-                        {
-                            let buttons = document.querySelectorAll('.optionButton');
-                            buttons.forEach(b =>
-                            {
-                                b.remove();
-                            });
-                            resolve(index);
-                        });
-                    });
-                    document.getElementById("container")?.appendChild(optionContainer);
-                });
-                */
-            
-                return new Promise<number>((resolve, reject) => {
-            
-                    // Create a button that resolves this promise with the specified
-                    // option index on click. (In other words, onOptions will finish
-                    // running when the button is clicked.)
-        
-                    // Start by creating a container for the options
-                    var optionsContainer = addDialogueElement("div", "list-group-item");
-        
-                    var optionsList = document.createElement("div");
-                    optionsList.classList.add("list-group");
-                    optionsContainer.appendChild(optionsList);
-        
-                    options.forEach((option) => {
-                        // Create a button in the options container
-                        let button = document.createElement("a");
-                        button.classList.add("list-group-item", "list-group-item-action");
-        
-                        if (option.lineCondition == false) {
-                            if (currentSettings.showUnavailableOptions == false) {
-                                // Do not show this option at all
-                                return;
-                            } else {
-                                // Show this option like the rest, but mark it
-                                // as unavailable
-                                button.classList.add("list-group-item-unavailable");
-                            }
-                        }
-        
-                        optionsList.appendChild(button);
-        
-                        // Set the text of the button to the button itself
-                        let text = option.line;
-                        button.innerHTML = "<b>&#8594;</b> " + text; // '→'
-        
-                        // If the option is available, allow the user to select it
-                        if (option.lineCondition) {
-                            // When the button is clicked, display the selected option and
-                            // resolve with its ID.
-                            button.addEventListener("click", () => {
-                                // Add the text of the button that was selected, and get rid
-                                // of the buttons.
-                                addDialogueText(text, "selected-option", "list-group-item-secondary");
-                                optionsContainer.remove();
-                                
-                                // Resolve with the option ID that was selected. 
-                                resolve(option.optionID);
-                            });
-                        }
-                    });
-        
-                    optionsList.scrollIntoView();
-                });
-            }
-
-            VM.start();
-        }
-        else
-        {
-            console.error("shit");
-        }
-    }
+    VM.start();
 }
