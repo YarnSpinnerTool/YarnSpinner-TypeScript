@@ -87,6 +87,11 @@ html,
     border-bottom-style: solid;
 }
 
+.dropdown-menu {
+    max-height: 50vh;
+    overflow-y: auto;
+  }
+
 .dropdown-menu.dropdown-menu-checkable .dropdown-item {
     padding-left: 30px;
 }
