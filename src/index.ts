@@ -10,6 +10,7 @@ let currentSettings: Settings = {
     lineDelivery: LineDeliveryMode.OneAtATime,
     showVariables: false,
     showUnavailableOptions: false,
+    startNodeName: "Start",
 };
 
 let settingLinesOneAtATimeButton : HTMLElement
@@ -18,9 +19,13 @@ let settingShowVariablesButton : HTMLElement
 let settingShowUnavailableOptionsButton : HTMLElement
 let variableView : HTMLElement
 let variableTableBody: HTMLElement
+let startNodeCurrentLabel: HTMLElement
+let startNodeDropdown: HTMLElement
 
 const VM = new YarnVM();
 VM.onVariableSet = (name, value) => updateVariableDisplay(VM);
+
+const yarnLoadedEvent = new Event("yarnLoaded");
 
 VM.lineCallback = function (line: string) {
     return new Promise<void>(function (resolve) {
@@ -150,6 +155,51 @@ function updateShowUnavailableOptionsUI() {
     }
 }
 
+function initialiseStartNodeUI(nodeNames: string[]) {
+
+    // Clear the list of yarn nodes
+    while (startNodeDropdown.firstChild) {
+        startNodeDropdown.removeChild(startNodeDropdown.firstChild);
+    }
+
+    // Add a new entry to the list for each node
+    for (let nodeName of nodeNames) {
+
+        let item = document.createElement("li");
+        let link = document.createElement("a");
+        item.appendChild(link);
+        link.classList.add("dropdown-item");
+        link.href = "#";
+
+        link.innerText = nodeName;
+
+        item.dataset["nodeName"] = nodeName;
+
+        link.addEventListener("click", () => {
+            updateSettings({ startNodeName: nodeName });
+            startDialogue();
+        });
+
+        startNodeDropdown.appendChild(item);
+    }
+}
+
+function updateStartNodeUI() {
+
+    for (let item of startNodeDropdown.children) {
+
+        let htmlItem = item as HTMLElement;
+        if (htmlItem.dataset["nodeName"] == currentSettings.startNodeName) {
+            htmlItem.querySelector("a")?.classList.add("dropdown-item-checked");
+        } else {
+            htmlItem.querySelector("a")?.classList.remove("dropdown-item-checked");
+        }
+    }
+
+    startNodeCurrentLabel.innerText = currentSettings.startNodeName ?? "(start node)";
+
+}
+
 type StringTable = {
     [key: string]: string;
 };
@@ -160,6 +210,7 @@ declare global {
         loadProgram: (programData: Uint8Array, stringTable: StringTable) => void;
         startDialogue: () => void;
         setup: () => void;
+        addButton: (text: string, classes: string[], handler: () => void) => void;
     }
 }
 
@@ -177,6 +228,9 @@ window.setup = () => {
     settingLinesAllAtOnceButton = document.getElementById("setting-lines-all-at-once")!;
     settingShowVariablesButton = document.getElementById("setting-show-variables")!;
     settingShowUnavailableOptionsButton = document.getElementById("setting-show-unavailable-options")!;
+
+    startNodeCurrentLabel = document.getElementById("start-node-current")!;
+    startNodeDropdown = document.getElementById("start-node-dropdown")!;
     
     variableTableBody = document.getElementById("variables-body")!;
     variableView = document.getElementById("variable-view")!;
@@ -197,17 +251,64 @@ window.setup = () => {
         updateSettings({ showUnavailableOptions: !currentSettings.showUnavailableOptions });
     });
 
+    
+
     updateSettings(currentSettings);
+
+    window.dispatchEvent(yarnLoadedEvent);
+};
+
+window.addButton = (text: string, classes: string[], handler: () => void) => {
+    var saveButton = document.getElementById("start");
+
+    // <button class="btn btn-outline-success" id="start" type="submit">Restart</button>
+    var newButton = document.createElement("button");
+    newButton.classList.add("btn", ...classes);
+    newButton.innerText = text;
+    newButton.addEventListener("click", handler);
+
+    saveButton?.parentElement?.insertBefore(newButton, saveButton);
 };
 
 function loadProgram(programData: Uint8Array, stringTable: StringTable): void {
-    
+
     let program = Program.fromBinary(programData);
+
+    if (Object.keys(program.nodes).length == 0) {
+        console.error("Loaded program contains no nodes.");
+        return;
+    }
 
     if (program) {
         VM.loadProgram(program, stringTable);
+
+        var nodeNames = Object.keys(program.nodes);
+
+        // If 'Start' is present in the list, move it to the front
+        if (nodeNames.indexOf("Start") != -1) {
+            
+            // Remove 'Start' from the list 
+            nodeNames = nodeNames.filter(n => n != "Start");
+
+            // Put 'Start' at the beginning of the list
+            nodeNames = ["Start"].concat(nodeNames);
+        }
+
+        initialiseStartNodeUI(nodeNames);
+
+        let startNodeName: string;
+
+        // If this program contains a node named Start, then set the start node
+        // to that. Otherwise, pick the first node in the list.
+        if (nodeNames.indexOf("Start") == -1) {
+            startNodeName = nodeNames[0];  
+        } else {
+            startNodeName = "Start";
+        }
+
+        updateSettings({startNodeName: startNodeName})
     } else {
-        window.alert("Failed to load program!");
+        console.error("Failed to load program!");
     }
 }
 
@@ -217,6 +318,7 @@ function updateSettings(newSettings: Settings) {
     updateLineDeliveryUI();
     updateShowVariablesUI();
     updateShowUnavailableOptionsUI();
+    updateStartNodeUI();
 }
 
 const dialogueContentsID = "dialogue-contents";
@@ -282,8 +384,10 @@ export function startDialogue() {
 
     updateVariableDisplay(VM);
 
-    if (!VM.setNode("Start")) {
-        window.alert("Failed to load node \"Start\"");
+    const startNodeName = currentSettings.startNodeName || "Start";
+
+    if (!VM.setNode(startNodeName)) {
+        console.error(`Failed to load node \"${startNodeName}\"`);
         return;
     }
 

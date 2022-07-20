@@ -17,4 +17,8 @@ export type Settings = {
 
     /** Controls whether options marked as unavailable are shown to the user. */
     showUnavailableOptions?: boolean;
+
+    /** Contains the name of the node that will be launched when the page loads,
+     * or when the reload button is clicked. */
+    startNodeName?: string;
 };

@@ -23,7 +23,7 @@ export interface OptionItem
 export class YarnVM
 {
     private currentNode: Node | null = null;
-    private program?: Program
+    public program?: Program
 
     private stack: (string | boolean | number)[] = [];
     private state: ExecutionState = ExecutionState.Stopped;
