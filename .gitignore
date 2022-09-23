@@ -1,2 +1,5 @@
 dist/
 node_modules/
+
+# munger.py typescript file output
+demo/typescript-embeddable.py
