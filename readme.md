@@ -57,7 +57,7 @@ If you wanted to replace the story you would need to do the following:
 
 1. Using ysc compile your yarn into a yarnc and csv file: `ysc compile your_yarn.yarn`
 2. Using `munger.py` create a TypeScript text embeddable version of your compiled story: `python munger.py`
-3. Replace the `stringTable` and `data` variables inside `index.ts` with those created by `munger.py`
+3. Replace the `stringTable` and `data` variables inside `index.ts` with those created by `munger.py`. This step can alternatively be skipped as the `munger.py` output is generated in a file `demo/typescript-embeddable.ts` which is imported into `src/index.ts` by default.
 5. Compile the TypeScript and run webpack to munge everything up into a single js file we can use: `npm run build`
 6. Open `index.html` in your browser and "enjoy"
 
