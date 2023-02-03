@@ -16,7 +16,7 @@
     "csv-parse": "^5.0.4",
     "html-inline-css-webpack-plugin": "^1.11.1",
     "html-webpack-plugin": "^5.5.0",
-    "jest": "^28.1.0",
+    "jest": "^28.1.3",
     "mini-css-extract-plugin": "^2.6.1",
     "purgecss-webpack-plugin": "^4.1.3",
     "react-dev-utils": "^12.0.1",

@@ -64,6 +64,7 @@ describe('YarnVM running Testplans', () => {
             ["VisitCount"],
             ["VisitTracking"],
             ["Visited"],
+            ["InterpolationOrdering"],
             
             // ok I need a test that checks every single maths operator work without needing a custom assert function
             // because why do we have two different test methods?

@@ -558,12 +558,13 @@ export class YarnVM
         if (funcName.startsWith("Number."))
         {
             funcName = funcName.substring(7);
-            if (typeof parameters[0] != "number")
+
+            let first = parameters.pop();
+            if (typeof first != "number")
             {
                 this.logError("asked to perform a number function but the first param is not a number!");
                 return undefined;
             }
-            let first = parameters[0];
 
             // special casing unary minus now
             // because it doesn't need a second parameter so just gets in the way
@@ -572,12 +573,12 @@ export class YarnVM
                 return -1 * first;
             }
 
-            if (typeof parameters[1] != "number")
+            let second = parameters.pop();
+            if (typeof second != "number")
             {
-                this.logError(`asked to perform a number function: ${funcName} but the second param is not a number, its a ${typeof parameters[1]} (${parameters[1]})`);
+                this.logError(`asked to perform a number function: ${funcName} but the second param is not a number, its a ${typeof second} (${second})`);
                 return undefined;
             }
-            let second = parameters[1];
 
             switch (funcName)
             {
@@ -585,25 +586,25 @@ export class YarnVM
                 case "Add":
                     return first + second;
                 case "Minus":
-                    return second - first;
+                    return first - second;
                 case "Multiply":
                     return first * second;
                 case "Divide":
-                    return second / first;
+                    return first / second;
                 case "Modulo":
-                    return second % first;
+                    return first % second;
                 
                 // logical operators
                 case "EqualTo":
                     return first == second;
                 case "GreaterThan":
-                    return second > first;
+                    return first > second;
                 case "GreaterThanOrEqualTo":
-                    return second >= first;
+                    return first >= second;
                 case "LessThan":
-                    return second < first;
+                    return first < second;
                 case "LessThanOrEqualTo":
-                    return second <= first;
+                    return first <= second;
                 case "NotEqualTo":
                     return first != second;
             }
@@ -612,23 +613,27 @@ export class YarnVM
         if (funcName.startsWith("Bool."))
         {
             funcName = funcName.substring(5);
-            if (typeof parameters[0] != "boolean")
+
+            let first = parameters.pop()
+            if (typeof first != "boolean")
             {
                 this.logError("asked to perform a boolean operation but don't have a bool");
                 return undefined;
             }
-            let first = parameters[0];
 
+            // dealing with the unary not function straight up because all others require binary operands
             if (funcName == "Not")
             {
                 return !first;
             }
-            if (typeof parameters[1] != "boolean")
+
+            let second = parameters.pop();
+            if (typeof second != "boolean")
             {
                 this.logError("parameter 2 is not a boolean!");
                 return undefined;
             }
-            let second = parameters[1];
+            // let second = parameters[1];
 
             switch (funcName)
             {
@@ -648,13 +653,14 @@ export class YarnVM
         if (funcName.startsWith("String."))
         {
             funcName = funcName.substring(7);
-            if (typeof parameters[0] != "string" || typeof parameters[1] != "string")
+
+            let first = parameters.pop();
+            let second = parameters.pop();
+            if (typeof first != "string" || typeof second != "string")
             {
                 this.logError("asked to perform a string function but parameters are not strings!");
                 return undefined;
             }
-            let first = parameters[0];
-            let second = parameters[1];
 
             switch (funcName)
             {
@@ -663,7 +669,7 @@ export class YarnVM
                 case "NotEqualTo":
                     return first != second;
                 case "Add":
-                    return second + first;
+                    return first + second;
             }
         }
 
@@ -855,7 +861,9 @@ export class YarnVM
             return lineID;
         }
 
-        for (var i in parameters)
+        // parameters is built like a stack but will we access it like an array
+        // as such its backwards, so we need to reverse it before use
+        for (var i in parameters.reverse())
         {
             let substitution = parameters[i];
             if (typeof substitution == "boolean")
