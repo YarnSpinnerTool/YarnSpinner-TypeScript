@@ -94,7 +94,13 @@ describe('YarnVM running Testplans', () => {
         expect(Object.keys(stringTable).length).toBeGreaterThanOrEqual(0);
         expect(Object.keys(stringTable).length).toEqual(records.length);
 
-        var vm = new YarnVM(program, stringTable);
+        // The following functions are needed for the Inference-FunctionsAndVarsInheritType test
+        var library: Map<string, (string | boolean | number)> = new Map();
+        library.set("dummy_number", 1);
+        library.set("dummy_bool", true);
+        library.set("dummy_string", "string");
+
+        var vm = new YarnVM(program, stringTable, library);
         vm.verboseLogging = false;
     
         vm.lineCallback = function (line: string)

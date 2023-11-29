@@ -42,18 +42,21 @@ export class YarnVM
 
     public onVariableSet: ((variable: string, value: any) => void) | null = null;
 
-    // public library: { string: Function } | null = null;
+    // maps functions to their stub values
+    // intended to be used for testing
+    private library?: Map<string, (string | boolean | number)>
 
-    constructor(newProgram?: Program, strings?: { [key: string]: string })
+    constructor(newProgram?: Program, strings?: { [key: string]: string }, stubLibrary?: Map<string, (string | boolean | number)>)
     {
-        if (newProgram && strings) {
-            this.loadProgram(newProgram, strings);
+        if (newProgram && strings){
+            this.loadProgram(newProgram, strings, stubLibrary);
         }
     }
 
-    public loadProgram(newProgram: Program, strings: { [key: string]: string; }) {
+    public loadProgram(newProgram: Program, strings: { [key: string]: string; }, stubsLibrary?: Map<string, (string | boolean | number)>) {
         this.program = newProgram;
         this.stringTable = strings;
+        this.library = stubsLibrary;
 
         for (let key in this.program.initialValues) {
             let value = this.unwrap(this.program.initialValues[key]);
@@ -829,17 +832,16 @@ export class YarnVM
         }
 
         // HERE IS WHERE YOU WOULD ADD IN ANY CUSTOM FUNCTIONS YOU MIGHT NEED FOR YOUR OWN PROGRAMS
-
-        // The following functions are needed for the Inference-FunctionsAndVarsInheritType test
-        // TODO: REMOVE THIS LATER!
-        switch (funcName)
+        
+        // finally we check the library of stubs
+        if (this.library != undefined)
         {
-            case "dummy_number":
-                return 1;
-            case "dummy_bool":
-                return true;
-            case "dummy_string":
-                return "string";
+            let stub = this.library.get(funcName);
+            if (stub != undefined)
+            {
+                this.log(`running stub function ${funcName}`);
+                return stub;
+            }
         }
 
         // at this point we've either returned the result of the function or had an invalid function
