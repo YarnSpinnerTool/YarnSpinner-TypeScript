@@ -10,8 +10,13 @@ with open('Output.csv', newline='') as csvfile:
         dict.append(f"\"{row['id']}\":\"{text}\"")
 
 output = ",".join(dict)
-opener = "const stringTable: { [key: string]: string } = {";
+opener = "export const stringTable: { [key: string]: string } = {";
 ender = "};"
+
+# create a TS file that exports expected values
+tsCompiledOutput = open('typescript-embeddable.ts', 'w+')
+tsCompiledOutput.write(f'{opener}{output}{ender}')
+tsCompiledOutput.write('\n\n')
 print(f'{opener}{output}{ender}')
 
 hex = []
@@ -20,6 +25,10 @@ with open("Output.yarnc", "rb") as f:
         hex.append("0x" + byte.hex())
 
 output = ",".join(hex)
-opener = "const data = Uint8Array.from([";
+opener = " export const data = Uint8Array.from([";
 ender = "]);";
+tsCompiledOutput.write(f'{opener}{output}{ender}')
 print(f'{opener}{output}{ender}')
+
+# close written typescript file
+tsCompiledOutput.close()

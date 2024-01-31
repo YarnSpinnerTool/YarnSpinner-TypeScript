@@ -1,10 +1,13 @@
 import { YarnVM, OptionItem } from "./yarnvm";
 import { Program } from "./yarn_spinner";
 
+import { stringTable as mungedStringTable, data as mungedProgramData } from "../demo/typescript-embeddable";
+
 import "./yarnspinner.scss";
 import 'bootstrap';
 
 import { Settings, LineDeliveryMode } from "./settings";
+import { stringTable } from "./data";
 
 let currentSettings: Settings = {
     lineDelivery: LineDeliveryMode.OneAtATime,
@@ -211,9 +214,23 @@ declare global {
         startDialogue: () => void;
         setup: () => void;
         addButton: (text: string, classes: string[], handler: () => void) => void;
+        yarnData: {programData: Uint8Array, stringTable: StringTable};
     }
 }
 
+/**
+ * These values may either be replaced with the output value from munger.py
+ * or they will simply be imported from the `demo/typescript-embeddable.ts`
+ * file that munger.py generates.
+ * 
+ * if replacing:
+ * `mungedProgramData` is replaced with "data" value from munger.py output
+ * `mungedStringTable` is replaced with "stringTable" value from munger.py
+ */
+window.yarnData = {
+    programData: mungedProgramData,
+    stringTable: mungedStringTable
+}
 window.loadProgram = loadProgram;
 window.startDialogue = startDialogue;
 
@@ -311,7 +328,6 @@ function loadProgram(programData: Uint8Array, stringTable: StringTable): void {
         console.error("Failed to load program!");
     }
 }
-
 
 function updateSettings(newSettings: Settings) {
     currentSettings = { ...currentSettings, ...newSettings };
