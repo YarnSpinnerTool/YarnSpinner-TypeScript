@@ -1,4 +1,4 @@
-import { YarnVM, OptionItem } from "./yarnvm";
+import { YarnVM, OptionItem, MetadataEntry } from "./yarnvm";
 import { Program } from "./yarn_spinner";
 
 import "./yarnspinner.scss";
@@ -204,10 +204,12 @@ type StringTable = {
     [key: string]: string;
 };
 
+type MetadataTable = Record<string, MetadataEntry>;
+
 declare global {
 
     interface Window {
-        loadProgram: (programData: Uint8Array, stringTable: StringTable) => void;
+        loadProgram: (programData: Uint8Array, stringTable: StringTable, metadataTable: MetadataTable) => void;
         startDialogue: () => void;
         setup: () => void;
         addButton: (text: string, classes: string[], handler: () => void) => void;
@@ -270,7 +272,7 @@ window.addButton = (text: string, classes: string[], handler: () => void) => {
     saveButton?.parentElement?.insertBefore(newButton, saveButton);
 };
 
-function loadProgram(programData: Uint8Array, stringTable: StringTable): void {
+function loadProgram(programData: Uint8Array, stringTable: StringTable, metadataTable: MetadataTable): void {
 
     let program = Program.fromBinary(programData);
 
