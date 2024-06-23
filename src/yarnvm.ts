@@ -1,18 +1,15 @@
 import { Instruction, Program, Node, Operand } from "./yarn_spinner";
 
-enum ExecutionState
-{
+enum ExecutionState {
     Stopped,
     WaitingOnOptionSelection,
     WaitingForContinue,
     Running,
 }
-interface VariableStorage
-{
-    [key: string]: number | string | boolean;
+interface VariableStorage {
+    [key: string]: YarnValue;
 }
-export interface OptionItem
-{
+export interface OptionItem {
     label: string,
     line: string,
     jump: number,
@@ -21,23 +18,23 @@ export interface OptionItem
 }
 
 type CallSite = {
-    nodeName:string;
-    instruction:number;
+    nodeName: string;
+    instruction: number;
 }
 
+type YarnValue = number | string | boolean;
 
 export type MetadataEntry = {
     id: string;
-    node: string; 
-    lineNumber: string; 
+    node: string;
+    lineNumber: string;
     tags: string[],
-    [key:string]: unknown,
+    [key: string]: unknown,
 }
 
-const TrackingVariableNameHeader :  string = "$Yarn.Internal.TrackingVariable";
+const TrackingVariableNameHeader: string = "$Yarn.Internal.TrackingVariable";
 
-export class YarnVM
-{
+export class YarnVM {
     private currentNode: Node | null = null;
     public program?: Program
 
@@ -53,22 +50,21 @@ export class YarnVM
     private optionSet: OptionItem[] = [];
 
     public verboseLogging: boolean = false;
-    
+
     public lineCallback: ((line: string) => Promise<void>) | null = null;
     public commandCallback: ((command: string) => Promise<void>) | null = null;
     public optionCallback: ((options: OptionItem[]) => Promise<number>) | null = null;
     public dialogueCompleteCallback: (() => Promise<void>) | null = null;
-    public nodeCompleteCallback: ((nodeName:string) => Promise<void>) | null = null;
+    public nodeCompleteCallback: ((nodeName: string) => Promise<void>) | null = null;
 
-    public onVariableSet: ((variable: string, value: any) => void) | null = null;
+    public onVariableSet: ((variable: string, value: YarnValue) => void) | null = null;
 
     // maps functions to their stub values
     // intended to be used for testing
     private library?: Map<string, (string | boolean | number)>
 
-    constructor(newProgram?: Program, strings?: { [key: string]: string }, stubLibrary?: Map<string, (string | boolean | number)>, metadataTable?: Record<string,MetadataEntry>)
-    {
-        if (newProgram && strings){
+    constructor(newProgram?: Program, strings?: { [key: string]: string }, stubLibrary?: Map<string, (string | boolean | number)>, metadataTable?: Record<string, MetadataEntry>) {
+        if (newProgram && strings) {
             this.loadProgram(newProgram, strings, stubLibrary, metadataTable);
         }
     }
@@ -79,8 +75,8 @@ export class YarnVM
         this.library = stubsLibrary;
         this.metadataTable = metadataTable ?? {};
 
-        for (let key in this.program.initialValues) {
-            let value = this.unwrap(this.program.initialValues[key]);
+        for (const key in this.program.initialValues) {
+            const value = this.unwrap(this.program.initialValues[key]);
             // this.log(`initialising ${key} to be ${value}`);
             if (value != undefined) {
                 this.variableStorage[key] = value;
@@ -88,20 +84,17 @@ export class YarnVM
         }
     }
 
-    public resetState(): void
-    {
+    public resetState(): void {
         this.log("resetting state");
         this.stack = [];
         this.programCounter = 0;
         this.optionSet = [];
         this.currentNode = null;
     }
-    
-    public setNode(nodeName: string, clearState: boolean = true): boolean
-    {
-        var node = this.program?.nodes[nodeName];
-        if (node == null)
-        {
+
+    public setNode(nodeName: string, clearState: boolean = true): boolean {
+        const node = this.program?.nodes[nodeName];
+        if (node == null) {
             return false;
         }
         if (clearState) {
@@ -112,53 +105,45 @@ export class YarnVM
 
         return true;
     }
-    public stop(): void
-    {
+    public stop(): void {
         this.log("stopping all execution");
         this.state = ExecutionState.Stopped;
         this.resetState();
     }
-    public selectOption(optionIndex: number): void
-    {
+    public selectOption(optionIndex: number): void {
         this.log("selecting option number: " + optionIndex);
 
-        if (this.state != ExecutionState.WaitingOnOptionSelection)
-        {
+        if (this.state != ExecutionState.WaitingOnOptionSelection) {
             this.logError("asked to select option when options are not awaited");
             return;
         }
 
-        if (optionIndex < 0 || optionIndex >= this.optionSet.length)
-        {
+        if (optionIndex < 0 || optionIndex >= this.optionSet.length) {
             this.logError("asked to select an option beyond our comprehension");
             return;
         }
 
-        let destination = this.optionSet[optionIndex].jump;
+        const destination = this.optionSet[optionIndex].jump;
         this.stack.push(destination);
         this.optionSet = [];
         this.state = ExecutionState.WaitingForContinue;
     }
-    public async start(): Promise<void>
-    {
-        if (this.currentNode == null)
-        {
+    public async start(): Promise<void> {
+        if (this.currentNode == null) {
             this.logError("unable to start dialogue, have no node");
             return;
         }
-        
+
         this.log("starting the dialogue");
         this.state = ExecutionState.Running;
 
-        if (this.currentNode == null)
-        {
+        if (this.currentNode == null) {
             this.log("unable to start dialogue, node is null");
             return;
         }
 
         while (this.state == ExecutionState.Running) {
-            if (this.currentNode == null || this.programCounter >= this.currentNode.instructions.length)
-            {
+            if (this.currentNode == null || this.programCounter >= this.currentNode.instructions.length) {
                 this.state = ExecutionState.Stopped;
                 if (this.dialogueCompleteCallback) {
                     this.dialogueCompleteCallback();
@@ -166,7 +151,7 @@ export class YarnVM
                 return;
             }
 
-            const currentNode : Node | undefined = this.currentNode;
+            const currentNode: Node | undefined = this.currentNode;
             await this.runInstruction(this.currentNode.instructions[this.programCounter]);
 
             if (this.currentNode == currentNode) {
@@ -177,37 +162,39 @@ export class YarnVM
         }
     }
 
-    private async runInstruction(i: Instruction) : Promise<void> {
+    private async runInstruction(i: Instruction): Promise<void> {
         switch (i.instructionType.oneofKind) {
             case "jumpTo":
                 this.programCounter = i.instructionType.jumpTo.destination - 1;
                 break;
             case "peekAndJump":
-                const top = this.stack[this.stack.length - 1]
-                if (typeof top !== "number") {
-                    this.logError(`Error running instruction: top of stack is not a number`)
-                } else {
-                    // Update our program counter.
-                    
-                    // We're staying in the same node, so programCounter will be
-                    // incremented when we return from this function. Because we
-                    // want the next instruction to be the instruction we just
-                    // popped, subtract one from it to compensate.
-                    this.programCounter = top - 1;
+                {
+                    const top = this.stack[this.stack.length - 1]
+                    if (typeof top !== "number") {
+                        this.logError(`Error running instruction: top of stack is not a number`)
+                    } else {
+                        // Update our program counter.
+
+                        // We're staying in the same node, so programCounter will be
+                        // incremented when we return from this function. Because we
+                        // want the next instruction to be the instruction we just
+                        // popped, subtract one from it to compensate.
+                        this.programCounter = top - 1;
+                    }
+                    break;
                 }
-                break;
             case "runLine":
                 {
                     const label = i.instructionType.runLine.lineID;
                     const count = i.instructionType.runLine.substitutionCount;
 
                     this.log("running line " + label);
-                    var parameters: (string | number | boolean)[] = [];
+                    const parameters: YarnValue[] = [];
                     // now to get any replacement values
 
                     if (count != undefined && count > 0) {
-                        for (var j = count - 1; j >= 0; j--) {
-                            let top = this.stack.pop();
+                        for (let j = count - 1; j >= 0; j--) {
+                            const top = this.stack.pop();
                             if (top == undefined) {
                                 this.logError("asked to pop values from stack for inserting into lines, but stack has none!");
                                 break;
@@ -216,7 +203,7 @@ export class YarnVM
                         }
                     }
 
-                    let line = this.buildLine(label, parameters);
+                    const line = this.buildLine(label, parameters);
 
                     // in the c# one we set state to delivered
                     // then to waiting
@@ -224,7 +211,7 @@ export class YarnVM
                     this.state = ExecutionState.WaitingForContinue;
 
                     if (this.lineCallback != null) {
-                        const value = await this.lineCallback(line)
+                        await this.lineCallback(line)
                         this.state = ExecutionState.Running;
                     }
 
@@ -237,11 +224,11 @@ export class YarnVM
 
                     this.log("running command: <<" + command + ">>");
 
-                    var parameters: (string | number | boolean)[] = [];
+                    const parameters: YarnValue[] = [];
                     // now to get any replacement values
                     if (count != undefined) {
                         for (let j = count - 1; j >= 0; j--) {
-                            let top = this.stack.pop();
+                            const top = this.stack.pop();
                             if (top == undefined) {
                                 this.logError("asked to pop values from stack for inserting into commands, but stack has none!");
                                 break;
@@ -259,7 +246,7 @@ export class YarnVM
                     this.state = ExecutionState.WaitingForContinue;
 
                     if (this.commandCallback != null) {
-                        const value = await this.commandCallback(command);
+                        await this.commandCallback(command);
                         this.state = ExecutionState.Running;
                     }
 
@@ -269,18 +256,18 @@ export class YarnVM
                 {
                     this.log("adding option");
 
-                    let label = i.instructionType.addOption.lineID;
+                    const label = i.instructionType.addOption.lineID;
                     if (label == undefined) {
                         this.logError("unable to run line, label is not a string");
                         break;
                     }
 
-                    var parameters: (string | number | boolean)[] = []
+                    const parameters: YarnValue[] = []
                     // now to get any replacement values
-                    let count = i.instructionType.addOption.substitutionCount;
+                    const count = i.instructionType.addOption.substitutionCount;
                     if (count != undefined) {
                         for (let j = count - 1; j >= 0; j--) {
-                            let top = this.stack.pop();
+                            const top = this.stack.pop();
                             if (top != undefined) {
                                 parameters.push(top);
                             }
@@ -289,14 +276,14 @@ export class YarnVM
 
 
                     // the jump point of of our option
-                    var jump = i.instructionType.addOption.destination;
+                    const jump = i.instructionType.addOption.destination;
 
                     // now do we have line condition?
-                    var lineCondition = true;
+                    let lineCondition = true;
 
-                    var valid = i.instructionType.addOption.hasCondition;
+                    const valid = i.instructionType.addOption.hasCondition;
                     if (valid != undefined && valid == true) {
-                        let top = this.stack.pop();
+                        const top = this.stack.pop();
                         if (typeof top == "boolean") {
                             lineCondition = top;
                         }
@@ -305,7 +292,7 @@ export class YarnVM
                     // we then need to configure the option here
                     this.log(`adding option ${label}:${lineCondition}`);
 
-                    let option: OptionItem = {
+                    const option: OptionItem = {
                         label: label,
                         line: lineCondition ? this.buildLine(label, parameters) : `${this.buildLine(label, parameters)}`, // when an option is disabled it gets given a [disabled] flag at the end of the line, probably should remove this later...
                         jump: jump == undefined ? 0 : jump,
@@ -339,7 +326,7 @@ export class YarnVM
 
             case "pushString":
                 {
-                    let value = i.instructionType.pushString.value;
+                    const value = i.instructionType.pushString.value;
                     if (value != undefined) {
                         this.stack.push(value);
                     }
@@ -347,7 +334,7 @@ export class YarnVM
                 }
             case "pushFloat":
                 {
-                    let value = i.instructionType.pushFloat.value;
+                    const value = i.instructionType.pushFloat.value;
                     if (value != undefined) {
                         this.stack.push(value);
                     }
@@ -355,7 +342,7 @@ export class YarnVM
                 }
             case "pushBool":
                 {
-                    let value = i.instructionType.pushBool.value;
+                    const value = i.instructionType.pushBool.value;
                     if (value != undefined) {
                         this.stack.push(value);
                     }
@@ -366,7 +353,7 @@ export class YarnVM
                 }
             case "jumpIfFalse":
                 {
-                    let top = this.top;
+                    const top = this.top;
 
                     if (typeof top == "boolean" && !top) {
                         // The top of the stack is false, so jump to the
@@ -384,9 +371,9 @@ export class YarnVM
 
             case "callFunc":
                 {
-                    let parameterCount = this.stack.pop();
+                    const parameterCount = this.stack.pop();
                     if (parameterCount != undefined && typeof parameterCount == "number") {
-                        var parameters: (string | number | boolean)[] = [];
+                        const parameters: YarnValue[] = [];
                         for (let j = 0; j < parameterCount; j++) {
                             const top = this.stack.pop();
                             if (top === undefined) {
@@ -398,9 +385,9 @@ export class YarnVM
 
                         // ok now we have the name of the function and the the parameters
                         // time to actually perform the function and push its value onto the stack
-                        let functionName = i.instructionType.callFunc.functionName;
+                        const functionName = i.instructionType.callFunc.functionName;
                         if (functionName !== undefined) {
-                            let result = this.runFunc(functionName, parameters);
+                            const result = this.runFunc(functionName, parameters);
                             if (result !== undefined) {
                                 this.stack.push(result);
                             }
@@ -417,9 +404,9 @@ export class YarnVM
                 }
             case "pushVariable":
                 {
-                    let variableName = i.instructionType.pushVariable.variableName;
+                    const variableName = i.instructionType.pushVariable.variableName;
                     if (variableName != undefined) {
-                        let value = this.variableStorage[variableName];
+                        const value = this.variableStorage[variableName];
                         if (value != undefined) {
                             this.stack.push(value);
                         }
@@ -428,8 +415,8 @@ export class YarnVM
                 }
             case "storeVariable":
                 {
-                    let variableName = i.instructionType.storeVariable.variableName;
-                    let value = this.top;
+                    const variableName = i.instructionType.storeVariable.variableName;
+                    const value = this.top;
                     if (variableName != undefined) {
                         this.variableStorage[variableName] = value;
                         if (this.onVariableSet) {
@@ -443,7 +430,7 @@ export class YarnVM
                 {
                     this.state = ExecutionState.Stopped;
                     this.currentNode = null;
-                    break;  
+                    break;
                 }
             case "runNode":
                 {
@@ -482,7 +469,7 @@ export class YarnVM
                     }
 
                     this.returnFromNode(this.currentNode);
-                    let returnSite = this.callStack.pop();
+                    const returnSite = this.callStack.pop();
 
 
                     if (!returnSite) {
@@ -494,11 +481,11 @@ export class YarnVM
                     }
 
                     this.setNode(returnSite.nodeName, false);
-                    
+
                     // The stored call site will be the instruction that caused
                     // us to jump into here, so advance to the next instruction
                     // after that
-                    this.programCounter = returnSite.instruction+1;
+                    this.programCounter = returnSite.instruction + 1;
 
                     break;
                 }
@@ -554,7 +541,7 @@ export class YarnVM
         this.programCounter = 0;
     }
 
-    private getTrackingVariableName(node:Node) : string|undefined {
+    private getTrackingVariableName(node: Node): string | undefined {
         for (const header of node.headers) {
             if (header.key == TrackingVariableNameHeader) {
                 return header.value;
@@ -563,7 +550,7 @@ export class YarnVM
         return undefined;
     }
 
-    private  returnFromNode(node:Node) {
+    private returnFromNode(node: Node) {
         if (node == null) {
             // Nothing to do.
             return;
@@ -572,7 +559,7 @@ export class YarnVM
         if (this.nodeCompleteCallback) {
             this.nodeCompleteCallback(node.name);
         }
-        
+
         const nodeTrackingVariable = this.getTrackingVariableName(node);
 
         if (nodeTrackingVariable) {
@@ -589,36 +576,30 @@ export class YarnVM
 
     // haven't really done this in a hugely efficient manner
     // but this was nicer to write in this form than one big switch
-    private runFunc(funcName: string, parameters: (string | boolean | number)[]): string|boolean|number|undefined
-    {
+    private runFunc(funcName: string, parameters: (string | boolean | number)[]): string | boolean | number | undefined {
         // number functions
-        if (funcName.startsWith("Number."))
-        {
+        if (funcName.startsWith("Number.")) {
             funcName = funcName.substring(7);
 
-            let first = parameters.pop();
-            if (typeof first != "number")
-            {
+            const first = parameters.pop();
+            if (typeof first != "number") {
                 this.logError("asked to perform a number function but the first param is not a number!");
                 return undefined;
             }
 
             // special casing unary minus now
             // because it doesn't need a second parameter so just gets in the way
-            if (funcName == "UnaryMinus")
-            {
+            if (funcName == "UnaryMinus") {
                 return -1 * first;
             }
 
-            let second = parameters.pop();
-            if (typeof second != "number")
-            {
+            const second = parameters.pop();
+            if (typeof second != "number") {
                 this.logError(`asked to perform a number function: ${funcName} but the second param is not a number, its a ${typeof second} (${second})`);
                 return undefined;
             }
 
-            switch (funcName)
-            {
+            switch (funcName) {
                 // basic maths operators
                 case "Add":
                     return first + second;
@@ -630,7 +611,7 @@ export class YarnVM
                     return first / second;
                 case "Modulo":
                     return first % second;
-                
+
                 // logical operators
                 case "EqualTo":
                     return first == second;
@@ -647,33 +628,28 @@ export class YarnVM
             }
         }
         // all the boolean functions
-        if (funcName.startsWith("Bool."))
-        {
+        if (funcName.startsWith("Bool.")) {
             funcName = funcName.substring(5);
 
-            let first = parameters.pop()
-            if (typeof first != "boolean")
-            {
+            const first = parameters.pop()
+            if (typeof first != "boolean") {
                 this.logError("asked to perform a boolean operation but don't have a bool");
                 return undefined;
             }
 
             // dealing with the unary not function straight up because all others require binary operands
-            if (funcName == "Not")
-            {
+            if (funcName == "Not") {
                 return !first;
             }
 
-            let second = parameters.pop();
-            if (typeof second != "boolean")
-            {
+            const second = parameters.pop();
+            if (typeof second != "boolean") {
                 this.logError("parameter 2 is not a boolean!");
                 return undefined;
             }
             // let second = parameters[1];
 
-            switch (funcName)
-            {
+            switch (funcName) {
                 case "EqualTo":
                     return first == second;
                 case "NotEqualTo":
@@ -687,20 +663,17 @@ export class YarnVM
             }
         }
         // string functions
-        if (funcName.startsWith("String."))
-        {
+        if (funcName.startsWith("String.")) {
             funcName = funcName.substring(7);
 
-            let first = parameters.pop();
-            let second = parameters.pop();
-            if (typeof first != "string" || typeof second != "string")
-            {
+            const first = parameters.pop();
+            const second = parameters.pop();
+            if (typeof first != "string" || typeof second != "string") {
                 this.logError("asked to perform a string function but parameters are not strings!");
                 return undefined;
             }
 
-            switch (funcName)
-            {
+            switch (funcName) {
                 case "EqualTo":
                     return first == second;
                 case "NotEqualTo":
@@ -713,8 +686,8 @@ export class YarnVM
         if (funcName.startsWith("Enum.")) {
             funcName = funcName.substring("Enum.".length);
 
-            let first = parameters.pop();
-            let second = parameters.pop();
+            const first = parameters.pop();
+            const second = parameters.pop();
 
             switch (funcName) {
                 case "EqualTo": return first == second;
@@ -723,12 +696,9 @@ export class YarnVM
         }
 
         // conversion functions
-        if (funcName == "number")
-        {
-            if (parameters[0] != undefined)
-            {
-                switch (typeof parameters[0])
-                {
+        if (funcName == "number") {
+            if (parameters[0] != undefined) {
+                switch (typeof parameters[0]) {
                     case "string":
                         return parseFloat(parameters[0]);
                     case "boolean":
@@ -738,19 +708,14 @@ export class YarnVM
                 }
             }
         }
-        if (funcName == "string")
-        {
-            if (parameters[0] != undefined)
-            {
+        if (funcName == "string") {
+            if (parameters[0] != undefined) {
                 return `${parameters[0]}`;
             }
         }
-        if (funcName == "bool")
-        {
-            if (parameters[0] != undefined)
-            {
-                switch (typeof parameters[0])
-                {
+        if (funcName == "bool") {
+            if (parameters[0] != undefined) {
+                switch (typeof parameters[0]) {
                     case "boolean":
                         return parameters[0];
                     case "number":
@@ -762,50 +727,41 @@ export class YarnVM
         }
 
         // visitation functions
-        if (funcName == "visited" || funcName == "visited_count")
-        {
-            if (typeof parameters[0] == "string")
-            {
-                let name = `$Yarn.Internal.Visiting.${parameters[0]}`;
-                var count = this.variableStorage[name];
+        if (funcName == "visited" || funcName == "visited_count") {
+            if (typeof parameters[0] == "string") {
+                const name = `$Yarn.Internal.Visiting.${parameters[0]}`;
+                let count = this.variableStorage[name];
 
                 this.log(`visiting ${name}: ${count}`);
-                
-                if (typeof count != "number")
-                {
+
+                if (typeof count != "number") {
                     count = 0;
                 }
 
-                if (funcName == "visited_count")
-                {
+                if (funcName == "visited_count") {
                     return count;
                 }
-                else
-                {
+                else {
                     return count > 0;
                 }
             }
         }
 
         // maths functions
-        switch (funcName)
-        {
+        switch (funcName) {
             case "random":
                 return Math.random();
             case "random_range":
                 {
-                    if (typeof parameters[0] == "number" && typeof parameters[1] == "number")
-                    {
+                    if (typeof parameters[0] == "number" && typeof parameters[1] == "number") {
                         let min: number;
                         let max: number;
 
-                        if (parameters[0] > parameters[1])
-                        {
+                        if (parameters[0] > parameters[1]) {
                             min = parameters[1];
                             max = parameters[0];
                         }
-                        else
-                        {
+                        else {
                             min = parameters[0];
                             max = parameters[1];
                         }
@@ -814,63 +770,54 @@ export class YarnVM
                     break;
                 }
             case "dice":
-                if (typeof parameters[0] == "number" && parameters[0] > 1)
-                {
+                if (typeof parameters[0] == "number" && parameters[0] > 1) {
                     return this.randomRange(1, parameters[0]);
                 }
                 break;
             case "round":
-                if (typeof parameters[0] == "number")
-                {
+                if (typeof parameters[0] == "number") {
                     return Math.round(parameters[0]);
                 }
                 break;
             case "round_places":
-                if (typeof parameters[0] == "number" && typeof parameters[1] == "number")
-                {
+                if (typeof parameters[0] == "number" && typeof parameters[1] == "number") {
                     return +parameters[0].toFixed(parameters[1]);
                 }
                 break;
             case "floor":
-                if (typeof parameters[0] == "number")
-                {
+                if (typeof parameters[0] == "number") {
                     return Math.floor(parameters[0]);
                 }
                 break;
             case "ceil":
-                if (typeof parameters[0] == "number")
-                {
+                if (typeof parameters[0] == "number") {
                     return Math.ceil(parameters[0]);
                 }
                 break;
             case "inc":
                 {
-                    if (typeof parameters[0] == "number")
-                    {
+                    if (typeof parameters[0] == "number") {
                         return Math.round(parameters[0]) + 1;
                     }
                     break;
                 }
             case "dec":
                 {
-                    if (typeof parameters[0] == "number")
-                    {
+                    if (typeof parameters[0] == "number") {
                         return Math.round(parameters[0]) - 1;
                     }
                     break;
                 }
             case "decimal":
                 {
-                    if (typeof parameters[0] == "number")
-                    {
+                    if (typeof parameters[0] == "number") {
                         return parameters[0] % 1;
                     }
                     break;
                 }
             case "int":
                 {
-                    if (typeof parameters[0] == "number")
-                    {
+                    if (typeof parameters[0] == "number") {
                         return Math.trunc(parameters[0]);
                     }
                     break;
@@ -878,13 +825,11 @@ export class YarnVM
         }
 
         // HERE IS WHERE YOU WOULD ADD IN ANY CUSTOM FUNCTIONS YOU MIGHT NEED FOR YOUR OWN PROGRAMS
-        
+
         // finally we check the library of stubs
-        if (this.library != undefined)
-        {
-            let stub = this.library.get(funcName);
-            if (stub != undefined)
-            {
+        if (this.library != undefined) {
+            const stub = this.library.get(funcName);
+            if (stub != undefined) {
                 this.log(`running stub function ${funcName}`);
                 return stub;
             }
@@ -896,16 +841,13 @@ export class YarnVM
         return undefined;
     }
 
-    private randomRange(min: number, max: number): number
-    {
+    private randomRange(min: number, max: number): number {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
-    private buildLine(lineID: string, parameters: (string | boolean | number)[]): string
-    {
-        var line = this.stringTable[lineID];
-        if (line === undefined || line === "")
-        {
+    private buildLine(lineID: string, parameters: (string | boolean | number)[]): string {
+        let line = this.stringTable[lineID];
+        if (line === undefined || line === "") {
             // The line was not present in the string table. It may be in the shadow table.
             const metaEntry = this.metadataTable[lineID]
             if (!metaEntry) {
@@ -929,19 +871,14 @@ export class YarnVM
 
         // parameters is built like a stack but will we access it like an array
         // as such its backwards, so we need to reverse it before use
-        for (var i in parameters.reverse())
-        {
+        for (const i in parameters.reverse()) {
             let substitution = parameters[i];
-            if (typeof substitution == "boolean")
-            {
+            if (typeof substitution == "boolean") {
                 line = line.replace("{" + i + "}", `${substitution == true ? "True" : "False"}`);
             }
-            else
-            {
-                if (typeof substitution == "number")
-                {
-                    if (!Number.isInteger(substitution))
-                    {
+            else {
+                if (typeof substitution == "number") {
+                    if (!Number.isInteger(substitution)) {
                         substitution = substitution.toFixed(1); // not sure how I feel about this but it smoothes out some weirdness
                     }
                 }
@@ -951,18 +888,14 @@ export class YarnVM
 
         return line;
     }
-    private buildCommand(cmd: string, parameters: (string | boolean | number)[]): string
-    {
-        var command = cmd;
-        for (var i in parameters)
-        {
-            let substitution = parameters[i];
-            if (typeof substitution == "boolean")
-            {
+    private buildCommand(cmd: string, parameters: (string | boolean | number)[]): string {
+        let command = cmd;
+        for (const i in parameters) {
+            const substitution = parameters[i];
+            if (typeof substitution == "boolean") {
                 command = command.replace("{" + i + "}", `${substitution == true ? "True" : "False"}`);
             }
-            else
-            {
+            else {
                 command = command.replace("{" + i + "}", `${substitution}`);
             }
         }
@@ -971,10 +904,8 @@ export class YarnVM
 
     // a generic unwrapper that takes an operand and converts it to a concrete type (or undefined)
     // only really useful in a few places compared to the more specific ones
-    private unwrap(op: Operand): string | number | boolean | undefined
-    {
-        switch (op.value.oneofKind)
-        {
+    private unwrap(op: Operand): string | number | boolean | undefined {
+        switch (op.value.oneofKind) {
             case "boolValue":
                 return op.value.boolValue;
             case "floatValue":
@@ -984,60 +915,46 @@ export class YarnVM
         }
         return undefined;
     }
-    private unwrapString(op: Operand): string | undefined
-    {
-        if (op.value.oneofKind === "stringValue")
-        {
+    private unwrapString(op: Operand): string | undefined {
+        if (op.value.oneofKind === "stringValue") {
             return op.value.stringValue;
         }
         return undefined;
     }
-    private unwrapBool(op: Operand): boolean | undefined
-    {
-        if (op.value.oneofKind === "boolValue")
-        {
+    private unwrapBool(op: Operand): boolean | undefined {
+        if (op.value.oneofKind === "boolValue") {
             return op.value.boolValue;
         }
         return undefined;
     }
-    private unwrapNumber(op: Operand): number | undefined
-    {
-        if (op.value.oneofKind === "floatValue")
-        {
+    private unwrapNumber(op: Operand): number | undefined {
+        if (op.value.oneofKind === "floatValue") {
             return op.value.floatValue;
         }
         return undefined;
     }
 
-    private log(message: string): void
-    {
-        if (this.verboseLogging)
-        {
+    private log(message: string): void {
+        if (this.verboseLogging) {
             console.log(message);
         }
     }
-    private logError(message: string): void
-    {
+    private logError(message: string): void {
         console.error(message);
     }
     // push and pop work as expected but at the end of the array
     // this is just to avoid retyping this every time
-    private get top(): (string | number | boolean)
-    {
+    private get top(): (string | number | boolean) {
         return this.stack[this.stack.length - 1];
     }
-    private printInstruction(i: Instruction): string
-    {
+    private printInstruction(i: Instruction): string {
         return JSON.stringify(i);
     }
-    public printAllInstructions(): void
-    {
+    public printAllInstructions(): void {
         console.log("Printing all instructions");
-        for (var node in this.program?.nodes)
-        {
+        for (const node in this.program?.nodes) {
             console.log(`${node}:`);
-            for (var i of this.program!.nodes[node].instructions)
-            {
+            for (const i of this.program!.nodes[node].instructions) {
                 console.log(this.printInstruction(i));
             }
         }

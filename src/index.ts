@@ -13,17 +13,17 @@ let currentSettings: Settings = {
     startNodeName: "Start",
 };
 
-let settingLinesOneAtATimeButton : HTMLElement
-let settingLinesAllAtOnceButton : HTMLElement
-let settingShowVariablesButton : HTMLElement
-let settingShowUnavailableOptionsButton : HTMLElement
-let variableView : HTMLElement
+let settingLinesOneAtATimeButton: HTMLElement
+let settingLinesAllAtOnceButton: HTMLElement
+let settingShowVariablesButton: HTMLElement
+let settingShowUnavailableOptionsButton: HTMLElement
+let variableView: HTMLElement
 let variableTableBody: HTMLElement
 let startNodeCurrentLabel: HTMLElement
 let startNodeDropdown: HTMLElement
 
 const VM = new YarnVM();
-VM.onVariableSet = (name, value) => updateVariableDisplay(VM);
+VM.onVariableSet = () => updateVariableDisplay(VM);
 
 const yarnLoadedEvent = new Event("yarnLoaded");
 
@@ -32,7 +32,7 @@ VM.lineCallback = function (line: string) {
         addDialogueText(line).scrollIntoView();
 
         if (currentSettings.lineDelivery == LineDeliveryMode.OneAtATime) {
-            let nextLineButton = addDialogueElement("div", "list-group-item", "list-group-item-action");
+            const nextLineButton = addDialogueElement("div", "list-group-item", "list-group-item-action");
             nextLineButton.innerText = "Continue...";
 
             nextLineButton.scrollIntoView();
@@ -56,22 +56,22 @@ VM.commandCallback = function (command: string) {
 }
 
 VM.optionCallback = function (options: OptionItem[]) {
-    return new Promise<number>((resolve, reject) => {
+    return new Promise<number>((resolve) => {
 
         // Create a button that resolves this promise with the specified
         // option index on click. (In other words, onOptions will finish
         // running when the button is clicked.)
 
         // Start by creating a container for the options
-        var optionsContainer = addDialogueElement("div", "list-group-item");
+        const optionsContainer = addDialogueElement("div", "list-group-item");
 
-        var optionsList = document.createElement("div");
+        const optionsList = document.createElement("div");
         optionsList.classList.add("list-group");
         optionsContainer.appendChild(optionsList);
 
         options.forEach((option) => {
             // Create a button in the options container
-            let button = document.createElement("a");
+            const button = document.createElement("a");
             button.classList.add("list-group-item", "list-group-item-action");
 
             if (option.lineCondition == false) {
@@ -88,7 +88,7 @@ VM.optionCallback = function (options: OptionItem[]) {
             optionsList.appendChild(button);
 
             // Set the text of the button to the button itself
-            let text = option.line;
+            const text = option.line;
             button.innerHTML = "<b>&#8594;</b> " + text; // '→'
 
             // If the option is available, allow the user to select it
@@ -112,9 +112,9 @@ VM.optionCallback = function (options: OptionItem[]) {
 }
 
 function updateLineDeliveryUI(): void {
-    
-    let mode = currentSettings.lineDelivery;
-    
+
+    const mode = currentSettings.lineDelivery;
+
     switch (mode) {
         case LineDeliveryMode.AllAtOnce:
             settingLinesAllAtOnceButton.classList.add("dropdown-item-checked");
@@ -128,7 +128,7 @@ function updateLineDeliveryUI(): void {
 }
 
 function updateShowVariablesUI() {
-    let showSettings = currentSettings.showVariables;
+    const showSettings = currentSettings.showVariables;
 
     switch (showSettings) {
         case true:
@@ -143,8 +143,8 @@ function updateShowVariablesUI() {
 }
 
 function updateShowUnavailableOptionsUI() {
-    let showUnavailableOptions = currentSettings.showUnavailableOptions;
-    
+    const showUnavailableOptions = currentSettings.showUnavailableOptions;
+
     switch (showUnavailableOptions) {
         case true:
             settingShowUnavailableOptionsButton.classList.add("dropdown-item-checked");
@@ -163,10 +163,10 @@ function initialiseStartNodeUI(nodeNames: string[]) {
     }
 
     // Add a new entry to the list for each node
-    for (let nodeName of nodeNames) {
+    for (const nodeName of nodeNames) {
 
-        let item = document.createElement("li");
-        let link = document.createElement("a");
+        const item = document.createElement("li");
+        const link = document.createElement("a");
         item.appendChild(link);
         link.classList.add("dropdown-item");
         link.href = "#";
@@ -186,9 +186,9 @@ function initialiseStartNodeUI(nodeNames: string[]) {
 
 function updateStartNodeUI() {
 
-    for (let item of startNodeDropdown.children) {
+    for (const item of startNodeDropdown.children) {
 
-        let htmlItem = item as HTMLElement;
+        const htmlItem = item as HTMLElement;
         if (htmlItem.dataset["nodeName"] == currentSettings.startNodeName) {
             htmlItem.querySelector("a")?.classList.add("dropdown-item-checked");
         } else {
@@ -221,7 +221,7 @@ window.startDialogue = startDialogue;
 
 window.setup = () => {
     console.log("window loaded!");
-    
+
     document.getElementById("start")?.addEventListener("click", () => {
         startDialogue();
     });
@@ -233,18 +233,18 @@ window.setup = () => {
 
     startNodeCurrentLabel = document.getElementById("start-node-current")!;
     startNodeDropdown = document.getElementById("start-node-dropdown")!;
-    
+
     variableTableBody = document.getElementById("variables-body")!;
     variableView = document.getElementById("variable-view")!;
-    
+
     settingLinesOneAtATimeButton.addEventListener("click", () => {
         updateSettings({ lineDelivery: LineDeliveryMode.OneAtATime });
     });
-    
+
     settingLinesAllAtOnceButton.addEventListener("click", () => {
         updateSettings({ lineDelivery: LineDeliveryMode.AllAtOnce });
     });
-    
+
     settingShowVariablesButton.addEventListener("click", () => {
         updateSettings({ showVariables: !currentSettings.showVariables });
     });
@@ -253,7 +253,7 @@ window.setup = () => {
         updateSettings({ showUnavailableOptions: !currentSettings.showUnavailableOptions });
     });
 
-    
+
 
     updateSettings(currentSettings);
 
@@ -261,10 +261,10 @@ window.setup = () => {
 };
 
 window.addButton = (text: string, classes: string[], handler: () => void) => {
-    var saveButton = document.getElementById("start");
+    const saveButton = document.getElementById("start");
 
     // <button class="btn btn-outline-success" id="start" type="submit">Restart</button>
-    var newButton = document.createElement("button");
+    const newButton = document.createElement("button");
     newButton.classList.add("btn", ...classes);
     newButton.innerText = text;
     newButton.addEventListener("click", handler);
@@ -274,7 +274,7 @@ window.addButton = (text: string, classes: string[], handler: () => void) => {
 
 function loadProgram(programData: Uint8Array, stringTable: StringTable, metadataTable: MetadataTable): void {
 
-    let program = Program.fromBinary(programData);
+    const program = Program.fromBinary(programData);
 
     if (Object.keys(program.nodes).length == 0) {
         console.error("Loaded program contains no nodes.");
@@ -282,13 +282,13 @@ function loadProgram(programData: Uint8Array, stringTable: StringTable, metadata
     }
 
     if (program) {
-        VM.loadProgram(program, stringTable);
+        VM.loadProgram(program, stringTable, undefined, metadataTable);
 
-        var nodeNames = Object.keys(program.nodes);
+        let nodeNames = Object.keys(program.nodes);
 
         // If 'Start' is present in the list, move it to the front
         if (nodeNames.indexOf("Start") != -1) {
-            
+
             // Remove 'Start' from the list 
             nodeNames = nodeNames.filter(n => n != "Start");
 
@@ -303,12 +303,12 @@ function loadProgram(programData: Uint8Array, stringTable: StringTable, metadata
         // If this program contains a node named Start, then set the start node
         // to that. Otherwise, pick the first node in the list.
         if (nodeNames.indexOf("Start") == -1) {
-            startNodeName = nodeNames[0];  
+            startNodeName = nodeNames[0];
         } else {
             startNodeName = "Start";
         }
 
-        updateSettings({startNodeName: startNodeName})
+        updateSettings({ startNodeName: startNodeName })
     } else {
         console.error("Failed to load program!");
     }
@@ -326,44 +326,44 @@ function updateSettings(newSettings: Settings) {
 const dialogueContentsID = "dialogue-contents";
 
 function clearDialogue() {
-    let log = document.getElementById(dialogueContentsID)!;
+    const log = document.getElementById(dialogueContentsID)!;
     while (log.firstChild) {
         log.removeChild(log.firstChild);
     }
 }
 
-function addDialogueText(text: string, ...classes : string[]) {
-    var logElement = addDialogueElement("div", "list-group-item", ...classes);
+function addDialogueText(text: string, ...classes: string[]) {
+    const logElement = addDialogueElement("div", "list-group-item", ...classes);
     logElement.innerText = text;
     return logElement;
 }
 
-function addDialogueElement(elementType : string, ...classes : string[]) : HTMLElement {
-    let log = document.getElementById(dialogueContentsID)!;
-    var logElement = document.createElement(elementType);
+function addDialogueElement(elementType: string, ...classes: string[]): HTMLElement {
+    const log = document.getElementById(dialogueContentsID)!;
+    const logElement = document.createElement(elementType);
     log.appendChild(logElement);
 
-    for (let logClass of classes) {
+    for (const logClass of classes) {
         logElement.classList.add(logClass);
     }
-    
+
     return logElement;
 }
 
-function updateVariableDisplay(vm : YarnVM) {
+function updateVariableDisplay(vm: YarnVM) {
     while (variableTableBody.firstChild) {
         variableTableBody.removeChild(variableTableBody.firstChild);
     }
 
-    for (let variableName in vm.variableStorage) {
-        let value = vm.variableStorage[variableName];
+    for (const variableName in vm.variableStorage) {
+        const value = vm.variableStorage[variableName];
 
         // Name, type, value
-        let row = variableTableBody.appendChild(document.createElement("tr"));
+        const row = variableTableBody.appendChild(document.createElement("tr"));
 
         row.appendChild(document.createElement("td")).innerText = variableName;
 
-        let typeLabel : string
+        let typeLabel: string
 
         if (typeof value === "string") {
             typeLabel = "string";
@@ -389,7 +389,7 @@ export function startDialogue() {
     const startNodeName = currentSettings.startNodeName || "Start";
 
     if (!VM.setNode(startNodeName)) {
-        console.error(`Failed to load node \"${startNodeName}\"`);
+        console.error(`Failed to load node "${startNodeName}"`);
         return;
     }
 
