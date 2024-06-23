@@ -1,0 +1,16 @@
+id,text,file,node,lineNumber
+line:42994297,This content is only seen once.,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/Once.yarn,Start,4
+line:d4a945e0,This content is seen on all other occasions.,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/Once.yarn,Start,6
+line:6ef84c79,"This content is only seen once, and only if $conditionA is true.",/Users/desplesda/Work/YarnSpinner/Tests/TestCases/Once.yarn,Start,10
+line:f8c84b0e,Option 1,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/Once.yarn,Start,13
+line:5b5d2f90,Option 2,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/Once.yarn,Start,14
+line:cd6d28e7,Option 3,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/Once.yarn,Start,15
+line:773c217e,Option 4,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/Once.yarn,Start,16
+line:e10c2609,Item 1,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/Once.yarn,Start,18
+line:70119999,Item 2,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/Once.yarn,Start,19
+line:e6219eee,Item 3,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/Once.yarn,Start,20
+line:458c8575,Item 4,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/Once.yarn,Start,21
+line:d3bc8202,Line 1,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/Once.yarn,Start,23
+line:69ed8b9b,Line 2,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/Once.yarn,Start,24
+line:ffdd8cec,Line 3,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/Once.yarn,Start,25
+line:5c48e872,Line 4,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/Once.yarn,Start,26

@@ -1,0 +1,34 @@
+id,text,file,node,lineNumber
+line:3b2371b5,Option 1,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/ShortcutOptions.yarn,Start,10
+line:ad1376c2,This line should appear.,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/ShortcutOptions.yarn,Start,12
+line:17427f5b,Sub Option 1,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/ShortcutOptions.yarn,Start,13
+line:8172782c,This line should also appear.,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/ShortcutOptions.yarn,Start,15
+line:22e71cb2,Sub Option 2,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/ShortcutOptions.yarn,Start,17
+line:b4d71bc5,Sub Option 3,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/ShortcutOptions.yarn,Start,18
+line:0e86125c,Option 2,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/ShortcutOptions.yarn,Start,19
+line:98b6152b,This line should not appear.,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/ShortcutOptions.yarn,Start,20
+line:09abaabb,Option 3,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/ShortcutOptions.yarn,Start,21
+line:9f9badcc,This line should not appear.,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/ShortcutOptions.yarn,Start,22
+line:67767e5c,Bea: line text,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/ShortcutOptions.yarn,Start,26
+line:f146792b,option1,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/ShortcutOptions.yarn,Start,27
+line:4b1770b2,option2,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/ShortcutOptions.yarn,Start,28
+line:dd2777c5,Bea: line text2,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/ShortcutOptions.yarn,Start,29
+line:7eb2135b,Bea: indented line text,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/ShortcutOptions.yarn,Start,32
+line:e882142c,indented option1,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/ShortcutOptions.yarn,Start,33
+line:52d31db5,indented option2,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/ShortcutOptions.yarn,Start,34
+line:c4e31ac2,Bea: indented line text2,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/ShortcutOptions.yarn,Start,35
+line:55fea552,Bea: line text,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/ShortcutOptions.yarn,Start,38
+line:c3cea225,indented option1 following unindented line,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/ShortcutOptions.yarn,Start,39
+line:a4255377,indented option2 following unindented line,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/ShortcutOptions.yarn,Start,40
+line:32155400,option2.1,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/ShortcutOptions.yarn,Start,41
+line:88445d99,option2.2,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/ShortcutOptions.yarn,Start,42
+line:1e745aee,option2.3,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/ShortcutOptions.yarn,Start,43
+line:bde13e70,option2.4,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/ShortcutOptions.yarn,Start,44
+line:2bd13907,A,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/ShortcutOptions.yarn,Start,47
+line:9180309e,B,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/ShortcutOptions.yarn,Start,48
+line:0e8a7ce,Option A,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/ShortcutOptions.yarn,Start,53
+line:0405c66,Option B,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/ShortcutOptions.yarn,Start,54
+line:0e8a7cd,Option A,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/ShortcutOptions.yarn,Start,57
+line:0405c67,Option B,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/ShortcutOptions.yarn,Start,58
+line:73244f19,Option1,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/ShortcutOptions.yarn,Start,62
+line:c9754680,Option2,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/ShortcutOptions.yarn,Start,64

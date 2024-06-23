@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
+    "prepare-tests": "node scripts/create-test-data.js",
     "build": "npx webpack --mode=production",
     "start": "npx webpack serve --open"
   },
@@ -12,6 +13,7 @@
   "license": "MIT",
   "devDependencies": {
     "@types/jest": "^27.5.1",
+    "antlr4ng": "^3.0.4",
     "css-loader": "^6.7.1",
     "csv-parse": "^5.0.4",
     "html-inline-css-webpack-plugin": "^1.11.1",

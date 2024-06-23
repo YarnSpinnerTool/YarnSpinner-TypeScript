@@ -1,0 +1,4 @@
+id,text,file,node,lineNumber
+line:4b8d44a0,entered start,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/Visited.yarn,Start,3
+line:ddbd43d7,we have visited Start before,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/Visited.yarn,Start,5
+line:67ec4a4e,we have not visited Start,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/Visited.yarn,Start,7

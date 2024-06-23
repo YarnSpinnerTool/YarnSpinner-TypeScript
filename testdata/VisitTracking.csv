@@ -1,8 +1,0 @@
-id,text,file,node,lineNumber
-line:/Users/McJones/Development/ysc/src/YarnSpinner.Console/bin/Debug/netcoreapp3.1/VisitTracking.yarn-Start-0,beginning,/Users/McJones/Development/ysc/src/YarnSpinner.Console/bin/Debug/netcoreapp3.1/VisitTracking.yarn,Start,3
-line:/Users/McJones/Development/ysc/src/YarnSpinner.Console/bin/Debug/netcoreapp3.1/VisitTracking.yarn-NoTrack-1,entered NoTrack,/Users/McJones/Development/ysc/src/YarnSpinner.Console/bin/Debug/netcoreapp3.1/VisitTracking.yarn,NoTrack,10
-line:/Users/McJones/Development/ysc/src/YarnSpinner.Console/bin/Debug/netcoreapp3.1/VisitTracking.yarn-Track-2,entered Track,/Users/McJones/Development/ysc/src/YarnSpinner.Console/bin/Debug/netcoreapp3.1/VisitTracking.yarn,Track,17
-line:/Users/McJones/Development/ysc/src/YarnSpinner.Console/bin/Debug/netcoreapp3.1/VisitTracking.yarn-End-3,entered End,/Users/McJones/Development/ysc/src/YarnSpinner.Console/bin/Debug/netcoreapp3.1/VisitTracking.yarn,End,23
-line:/Users/McJones/Development/ysc/src/YarnSpinner.Console/bin/Debug/netcoreapp3.1/VisitTracking.yarn-End-4,did we visit NoTrack? {0}!,/Users/McJones/Development/ysc/src/YarnSpinner.Console/bin/Debug/netcoreapp3.1/VisitTracking.yarn,End,24
-line:/Users/McJones/Development/ysc/src/YarnSpinner.Console/bin/Debug/netcoreapp3.1/VisitTracking.yarn-End-5,did we visit Track? {0}!,/Users/McJones/Development/ysc/src/YarnSpinner.Console/bin/Debug/netcoreapp3.1/VisitTracking.yarn,End,25
-line:/Users/McJones/Development/ysc/src/YarnSpinner.Console/bin/Debug/netcoreapp3.1/VisitTracking.yarn-End-6,done,/Users/McJones/Development/ysc/src/YarnSpinner.Console/bin/Debug/netcoreapp3.1/VisitTracking.yarn,End,26

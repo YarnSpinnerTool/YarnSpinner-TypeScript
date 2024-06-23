@@ -1,6 +1,0 @@
-id,text,file,node,lineNumber
-line:/Users/McJones/Development/ysc/src/YarnSpinner.Console/bin/Debug/netcoreapp3.1/Jumps.yarn-Start-0,Start,/Users/McJones/Development/ysc/src/YarnSpinner.Console/bin/Debug/netcoreapp3.1/Jumps.yarn,Start,3
-line:/Users/McJones/Development/ysc/src/YarnSpinner.Console/bin/Debug/netcoreapp3.1/Jumps.yarn-Start-1,Error! This line should not be seen.,/Users/McJones/Development/ysc/src/YarnSpinner.Console/bin/Debug/netcoreapp3.1/Jumps.yarn,Start,6
-line:/Users/McJones/Development/ysc/src/YarnSpinner.Console/bin/Debug/netcoreapp3.1/Jumps.yarn-NodeNameDestination-2,NodeNameDestination,/Users/McJones/Development/ysc/src/YarnSpinner.Console/bin/Debug/netcoreapp3.1/Jumps.yarn,NodeNameDestination,10
-line:/Users/McJones/Development/ysc/src/YarnSpinner.Console/bin/Debug/netcoreapp3.1/Jumps.yarn-NodeNameConstantExpression-3,NodeNameExpression,/Users/McJones/Development/ysc/src/YarnSpinner.Console/bin/Debug/netcoreapp3.1/Jumps.yarn,NodeNameConstantExpression,16
-line:/Users/McJones/Development/ysc/src/YarnSpinner.Console/bin/Debug/netcoreapp3.1/Jumps.yarn-NodeNameVariableExpression-4,NodeNameVariableExpression,/Users/McJones/Development/ysc/src/YarnSpinner.Console/bin/Debug/netcoreapp3.1/Jumps.yarn,NodeNameVariableExpression,23

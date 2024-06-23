@@ -1,0 +1,8 @@
+id,text,file,node,lineNumber
+line:b408a9f3,beginning,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/VisitTracking.yarn,Start,3
+line:1afd91c7,entered NoTrack,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/VisitTracking.yarn,NoTrack,10
+line:596b5c5f,entered Track,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/VisitTracking.yarn,Track,17
+line:27b10ade,entered End,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/VisitTracking.yarn,End,23
+line:84246e40,did we visit NoTrack? {0}!,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/VisitTracking.yarn,End,24
+line:12146937,did we visit Track? {0}!,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/VisitTracking.yarn,End,25
+line:a84560ae,done,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/VisitTracking.yarn,End,26

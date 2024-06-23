@@ -1,0 +1,22 @@
+id,text,file,node,lineNumber
+line:55c31f6c,"Baker: Hey there, friend! Made some fresh pies for you!",/Users/desplesda/Work/YarnSpinner/Tests/TestCases/LineGroups.yarn,Start,11
+line:c3f3181b,"Baker: Hey there! Fresh pies, right out of the oven!",/Users/desplesda/Work/YarnSpinner/Tests/TestCases/LineGroups.yarn,Start,12
+line:79a21182,Baker: Want another?,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/LineGroups.yarn,Start,17
+line:ef9216f5,Baker: How about another pie?,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/LineGroups.yarn,Start,18
+line:4c07726b,Baker: Another pie?,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/LineGroups.yarn,Start,19
+line:da37751c,Baker: Another pie for my best customer?,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/LineGroups.yarn,Start,21
+line:60667c85,Baker: What d'ya say?,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/LineGroups.yarn,Start,23
+line:f6567bf2,Baker: How about it?,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/LineGroups.yarn,Start,24
+line:674bc462,Baker: Want one?,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/LineGroups.yarn,Start,25
+line:f17bc315,Buy Pie,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/LineGroups.yarn,Start,27
+line:d854adf6,Baker: Thank you kindly!,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/LineGroups.yarn,Start,28
+line:4e64aa81,Baker: Pleasure doin' business with you!,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/LineGroups.yarn,Start,29
+line:f435a318,Baker: Enjoy!,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/LineGroups.yarn,Start,30
+line:6205a46f,Don't Buy Pie,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/LineGroups.yarn,Start,32
+line:c190c0f1,"Baker: Aw, that's a shame!",/Users/desplesda/Work/YarnSpinner/Tests/TestCases/LineGroups.yarn,Start,33
+line:57a0c786,"Baker: Dang, no sale today!",/Users/desplesda/Work/YarnSpinner/Tests/TestCases/LineGroups.yarn,Start,34
+line:edf1ce1f,"Baker: Come back another time, then!",/Users/desplesda/Work/YarnSpinner/Tests/TestCases/LineGroups.yarn,Start,35
+line:afee5f46,Baker: Hey there!,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/LineGroups.yarn,BakerSeesPlayer,40
+line:3ef3e0d6,Baker: Fresh pies!,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/LineGroups.yarn,BakerSeesPlayer,41
+line:a8c3e7a1,Baker: Fresh and hot pies!,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/LineGroups.yarn,BakerSeesPlayer,42
+line:cf2816f3,Baker: Popular pies!,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/LineGroups.yarn,BakerSeesPlayer,43

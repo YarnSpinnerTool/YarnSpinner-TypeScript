@@ -1,0 +1,18 @@
+id,text,file,node,lineNumber
+line:3c821e9a,"Select: [select value={0} male=""male"" female=""female"" other=""other""/]",/Users/desplesda/Work/YarnSpinner/Tests/TestCases/FormatFunctions.yarn,Start,11
+line:aab219ed,"Select: [select value={0} male=""male"" female=""female"" other=""other""/]",/Users/desplesda/Work/YarnSpinner/Tests/TestCases/FormatFunctions.yarn,Start,14
+line:10e31074,"Select: [select value={0} male=""male"" female=""female"" other=""other""/]",/Users/desplesda/Work/YarnSpinner/Tests/TestCases/FormatFunctions.yarn,Start,17
+line:86d31703,"Plural: [plural value={0} one=""one"" two=""two"" few=""few"" many=""many"" other=""other""/]",/Users/desplesda/Work/YarnSpinner/Tests/TestCases/FormatFunctions.yarn,Start,21
+line:2546739d,"Plural: [plural value={0} one=""one"" two=""two"" few=""few"" many=""many"" other=""other""/]",/Users/desplesda/Work/YarnSpinner/Tests/TestCases/FormatFunctions.yarn,Start,24
+line:b37674ea,"Plural: [plural value={0} one=""one"" two=""two"" few=""few"" many=""many"" other=""other""/]",/Users/desplesda/Work/YarnSpinner/Tests/TestCases/FormatFunctions.yarn,Start,27
+line:09277d73,"Plural: [plural value={0} one=""one"" two=""two"" few=""few"" many=""many"" other=""other""/]",/Users/desplesda/Work/YarnSpinner/Tests/TestCases/FormatFunctions.yarn,Start,30
+line:9f177a04,"Ordinal: [ordinal value={0} one=""one"" two=""two"" few=""few"" many=""many"" other=""other""/]",/Users/desplesda/Work/YarnSpinner/Tests/TestCases/FormatFunctions.yarn,Start,34
+line:0e0ac594,"Ordinal: [ordinal value={0} one=""one"" two=""two"" few=""few"" many=""many"" other=""other""/]",/Users/desplesda/Work/YarnSpinner/Tests/TestCases/FormatFunctions.yarn,Start,37
+line:983ac2e3,"Ordinal: [ordinal value={0} one=""one"" two=""two"" few=""few"" many=""many"" other=""other""/]",/Users/desplesda/Work/YarnSpinner/Tests/TestCases/FormatFunctions.yarn,Start,40
+line:658c35c2,"Ordinal: [ordinal value={0} one=""one"" two=""two"" few=""few"" many=""many"" other=""other""/]",/Users/desplesda/Work/YarnSpinner/Tests/TestCases/FormatFunctions.yarn,Start,43
+line:f3bc32b5,"[select value={0} male=""male: %"" female=""female: %"" other=""other: %""/]",/Users/desplesda/Work/YarnSpinner/Tests/TestCases/FormatFunctions.yarn,Start,50
+line:49ed3b2c,"Mae: Wow, I came [ordinal value={0} one=""%st"" two=""%nd"" few=""%rd"" other=""%th""/]!",/Users/desplesda/Work/YarnSpinner/Tests/TestCases/FormatFunctions.yarn,Start,53
+line:dfdd3c5b,"[select value={0} male=""male"" female=""female"" other=""other""/]",/Users/desplesda/Work/YarnSpinner/Tests/TestCases/FormatFunctions.yarn,Start,57
+line:7c4858c5,"[plural value={0} one=""one"" few=""few"" many=""many"" other=""other""/]",/Users/desplesda/Work/YarnSpinner/Tests/TestCases/FormatFunctions.yarn,Start,58
+line:ea785fb2,"[ordinal value={0} one=""one"" two=""two"" few=""few"" many=""many"" other=""other""/]",/Users/desplesda/Work/YarnSpinner/Tests/TestCases/FormatFunctions.yarn,Start,59
+line:c84b2f15,>,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/FormatFunctions.yarn,Destination,65

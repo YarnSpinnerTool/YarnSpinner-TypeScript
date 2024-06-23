@@ -1,6 +1,0 @@
-id,text,file,node,lineNumber
-line:/Users/McJones/Development/ysc/src/YarnSpinner.Console/bin/Debug/netcoreapp3.1/Lines.yarn-Start-0,This is a line of dialogue.,/Users/McJones/Development/ysc/src/YarnSpinner.Console/bin/Debug/netcoreapp3.1/Lines.yarn,Start,5
-line:/Users/McJones/Development/ysc/src/YarnSpinner.Console/bin/Debug/netcoreapp3.1/Lines.yarn-Start-1,Mae: <shake=.01>HA HA HA HA HA NO I'M FINE.</shake>,/Users/McJones/Development/ysc/src/YarnSpinner.Console/bin/Debug/netcoreapp3.1/Lines.yarn,Start,7
-line:/Users/McJones/Development/ysc/src/YarnSpinner.Console/bin/Debug/netcoreapp3.1/Lines.yarn-Start-2,Mae: Testing comments after lines,/Users/McJones/Development/ysc/src/YarnSpinner.Console/bin/Debug/netcoreapp3.1/Lines.yarn,Start,10
-line:/Users/McJones/Development/ysc/src/YarnSpinner.Console/bin/Debug/netcoreapp3.1/Lines.yarn-Start-3,Mae: Testing comments after hashtags,/Users/McJones/Development/ysc/src/YarnSpinner.Console/bin/Debug/netcoreapp3.1/Lines.yarn,Start,11
-line:/Users/McJones/Development/ysc/src/YarnSpinner.Console/bin/Debug/netcoreapp3.1/Lines.yarn-Start-4,Mae: Testing comments after line conditions,/Users/McJones/Development/ysc/src/YarnSpinner.Console/bin/Debug/netcoreapp3.1/Lines.yarn,Start,12

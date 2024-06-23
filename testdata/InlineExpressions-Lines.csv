@@ -1,0 +1,12 @@
+id,text,file,node,lineNumber
+line:322ec2b6,Number: {0},/Users/desplesda/Work/YarnSpinner/Tests/TestCases/InlineExpressions.yarn,Start,11
+line:a41ec5c1,Expression: {0},/Users/desplesda/Work/YarnSpinner/Tests/TestCases/InlineExpressions.yarn,Start,12
+line:1e4fcc58,String: {0},/Users/desplesda/Work/YarnSpinner/Tests/TestCases/InlineExpressions.yarn,Start,13
+line:887fcb2f,Bool: {0},/Users/desplesda/Work/YarnSpinner/Tests/TestCases/InlineExpressions.yarn,Start,14
+line:2beaafb1,Variable: {0},/Users/desplesda/Work/YarnSpinner/Tests/TestCases/InlineExpressions.yarn,Start,15
+line:bddaa8c6,{0} is great!,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/InlineExpressions.yarn,Start,18
+line:078ba15f,Option Number: {0},/Users/desplesda/Work/YarnSpinner/Tests/TestCases/InlineExpressions.yarn,Start,21
+line:91bba628,Option Expression: {0},/Users/desplesda/Work/YarnSpinner/Tests/TestCases/InlineExpressions.yarn,Start,22
+line:00a619b8,Option String: {0},/Users/desplesda/Work/YarnSpinner/Tests/TestCases/InlineExpressions.yarn,Start,23
+line:96961ecf,Option Bool: {0},/Users/desplesda/Work/YarnSpinner/Tests/TestCases/InlineExpressions.yarn,Start,24
+line:ce7da125,Option Variable: {0},/Users/desplesda/Work/YarnSpinner/Tests/TestCases/InlineExpressions.yarn,Start,25

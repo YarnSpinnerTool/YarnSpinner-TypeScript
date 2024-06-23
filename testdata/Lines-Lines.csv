@@ -1,0 +1,6 @@
+id,text,file,node,lineNumber
+line:1299f5b9,This is a line of dialogue.,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/Lines.yarn,Start,5
+line:84a9f2ce,Mae: <shake=.01>HA HA HA HA HA NO I'M FINE.</shake>,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/Lines.yarn,Start,7
+line:3ef8fb57,Mae: Testing comments after lines,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/Lines.yarn,Start,10
+line:a8c8fc20,Mae: Testing comments after hashtags,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/Lines.yarn,Start,11
+line:0b5d98be,Mae: Testing comments after line conditions,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/Lines.yarn,Start,12

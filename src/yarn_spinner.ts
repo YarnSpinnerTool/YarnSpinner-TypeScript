@@ -57,44 +57,425 @@ export interface Node {
     /**
      * The list of instructions in this node.
      *
-     * @generated from protobuf field: repeated Yarn.Instruction instructions = 2;
+     * @generated from protobuf field: repeated Yarn.Instruction instructions = 7;
      */
     instructions: Instruction[];
     /**
-     * A jump table, mapping the names of labels to positions in the
-     * instructions list.
+     * The headers present on this node.
      *
-     * @generated from protobuf field: map<string, int32> labels = 3;
+     * @generated from protobuf field: repeated Yarn.Header headers = 6;
      */
-    labels: {
-        [key: string]: number;
-    };
-    /**
-     * The tags associated with this node.
-     *
-     * @generated from protobuf field: repeated string tags = 4;
-     */
-    tags: string[];
-    /**
-     * the entry in the program's string table that contains the original
-     * text of this node; null if this is not available
-     *
-     * @generated from protobuf field: string sourceTextStringID = 5;
-     */
-    sourceTextStringID: string;
+    headers: Header[];
 }
 /**
- * A single Yarn instruction.
- *
+ * @generated from protobuf message Yarn.Header
+ */
+export interface Header {
+    /**
+     * The name of the header.
+     *
+     * @generated from protobuf field: string key = 1;
+     */
+    key: string;
+    /**
+     * The value of the header.
+     *
+     * @generated from protobuf field: string value = 2;
+     */
+    value: string;
+}
+/**
  * @generated from protobuf message Yarn.Instruction
  */
 export interface Instruction {
     /**
+     * @generated from protobuf oneof: InstructionType
+     */
+    instructionType: {
+        oneofKind: "jumpTo";
+        /**
+         * Jumps to a specified position in the current node.
+         *
+         * @generated from protobuf field: Yarn.Instruction.JumpToInstruction jumpTo = 1;
+         */
+        jumpTo: Instruction_JumpToInstruction;
+    } | {
+        oneofKind: "peekAndJump";
+        /**
+         * Peeks a number on the stack, and jumps to that position in the
+         * current node.
+         *
+         * @generated from protobuf field: Yarn.Instruction.PeekAndJumpInstruction peekAndJump = 2;
+         */
+        peekAndJump: Instruction_PeekAndJumpInstruction;
+    } | {
+        oneofKind: "runLine";
+        /**
+         * Runs a line of dialogue.
+         *
+         * @generated from protobuf field: Yarn.Instruction.RunLineInstruction runLine = 3;
+         */
+        runLine: Instruction_RunLineInstruction;
+    } | {
+        oneofKind: "runCommand";
+        /**
+         * Runs a command.
+         *
+         * @generated from protobuf field: Yarn.Instruction.RunCommandInstruction runCommand = 4;
+         */
+        runCommand: Instruction_RunCommandInstruction;
+    } | {
+        oneofKind: "addOption";
+        /**
+         * Adds an option to the 'pending options' list.
+         *
+         * @generated from protobuf field: Yarn.Instruction.AddOptionInstruction addOption = 5;
+         */
+        addOption: Instruction_AddOptionInstruction;
+    } | {
+        oneofKind: "showOptions";
+        /**
+         * Shows all options in the 'pending options' list, then clears the list.
+         *
+         * @generated from protobuf field: Yarn.Instruction.ShowOptionsInstruction showOptions = 6;
+         */
+        showOptions: Instruction_ShowOptionsInstruction;
+    } | {
+        oneofKind: "pushString";
+        /**
+         * Pushes a string onto the stack.
+         *
+         * @generated from protobuf field: Yarn.Instruction.PushStringInstruction pushString = 7;
+         */
+        pushString: Instruction_PushStringInstruction;
+    } | {
+        oneofKind: "pushFloat";
+        /**
+         * Pushes a floating point number onto the stack.
+         *
+         * @generated from protobuf field: Yarn.Instruction.PushFloatInstruction pushFloat = 8;
+         */
+        pushFloat: Instruction_PushFloatInstruction;
+    } | {
+        oneofKind: "pushBool";
+        /**
+         * Pushes a boolean onto the stack.
+         *
+         * @generated from protobuf field: Yarn.Instruction.PushBoolInstruction pushBool = 9;
+         */
+        pushBool: Instruction_PushBoolInstruction;
+    } | {
+        oneofKind: "jumpIfFalse";
+        /**
+         * Peeks a boolean on the stack, and if it's false, jumps to the
+         * indicated position in the current node.
+         *
+         * @generated from protobuf field: Yarn.Instruction.JumpIfFalseInstruction jumpIfFalse = 10;
+         */
+        jumpIfFalse: Instruction_JumpIfFalseInstruction;
+    } | {
+        oneofKind: "pop";
+        /**
+         * Pops a value of any kind off the stack.
+         *
+         * @generated from protobuf field: Yarn.Instruction.PopInstruction pop = 11;
+         */
+        pop: Instruction_PopInstruction;
+    } | {
+        oneofKind: "callFunc";
+        /**
+         * Calls a named function.
+         *
+         * @generated from protobuf field: Yarn.Instruction.CallFunctionInstruction callFunc = 12;
+         */
+        callFunc: Instruction_CallFunctionInstruction;
+    } | {
+        oneofKind: "pushVariable";
+        /**
+         * Pushes the value of the named variable onto the stack.
+         *
+         * @generated from protobuf field: Yarn.Instruction.PushVariableInstruction pushVariable = 13;
+         */
+        pushVariable: Instruction_PushVariableInstruction;
+    } | {
+        oneofKind: "storeVariable";
+        /**
+         * Peeks a value of any kind on the stack, and stores it in the
+         * indicated variable.
+         *
+         * @generated from protobuf field: Yarn.Instruction.StoreVariableInstruction storeVariable = 14;
+         */
+        storeVariable: Instruction_StoreVariableInstruction;
+    } | {
+        oneofKind: "stop";
+        /**
+         * Halts execution.
+         *
+         * @generated from protobuf field: Yarn.Instruction.StopInstruction stop = 15;
+         */
+        stop: Instruction_StopInstruction;
+    } | {
+        oneofKind: "runNode";
+        /**
+         * Jumps to the start of a named node.
+         *
+         * @generated from protobuf field: Yarn.Instruction.RunNodeInstruction runNode = 16;
+         */
+        runNode: Instruction_RunNodeInstruction;
+    } | {
+        oneofKind: "peekAndRunNode";
+        /**
+         * Peeks a string on the stack, and jumps to the start of that node.
+         *
+         * @generated from protobuf field: Yarn.Instruction.PeekAndRunNodeInstruction peekAndRunNode = 17;
+         */
+        peekAndRunNode: Instruction_PeekAndRunNodeInstruction;
+    } | {
+        oneofKind: "detourToNode";
+        /**
+         * @generated from protobuf field: Yarn.Instruction.DetourToNodeInstruction detourToNode = 18;
+         */
+        detourToNode: Instruction_DetourToNodeInstruction;
+    } | {
+        oneofKind: "peekAndDetourToNode";
+        /**
+         * @generated from protobuf field: Yarn.Instruction.PeekAndDetourToNode peekAndDetourToNode = 19;
+         */
+        peekAndDetourToNode: Instruction_PeekAndDetourToNode;
+    } | {
+        oneofKind: "return";
+        /**
+         * @generated from protobuf field: Yarn.Instruction.ReturnInstruction return = 20;
+         */
+        return: Instruction_ReturnInstruction;
+    } | {
+        oneofKind: undefined;
+    };
+}
+/**
+ * @generated from protobuf message Yarn.Instruction.PeekAndJumpInstruction
+ */
+export interface Instruction_PeekAndJumpInstruction {
+}
+/**
+ * @generated from protobuf message Yarn.Instruction.PeekAndRunNodeInstruction
+ */
+export interface Instruction_PeekAndRunNodeInstruction {
+}
+/**
+ * @generated from protobuf message Yarn.Instruction.ShowOptionsInstruction
+ */
+export interface Instruction_ShowOptionsInstruction {
+}
+/**
+ * @generated from protobuf message Yarn.Instruction.PushStringInstruction
+ */
+export interface Instruction_PushStringInstruction {
+    /**
+     * The value to push.
+     *
+     * @generated from protobuf field: string value = 1;
+     */
+    value: string;
+}
+/**
+ * @generated from protobuf message Yarn.Instruction.PushFloatInstruction
+ */
+export interface Instruction_PushFloatInstruction {
+    /**
+     * The value to push.
+     *
+     * @generated from protobuf field: float value = 1;
+     */
+    value: number;
+}
+/**
+ * @generated from protobuf message Yarn.Instruction.PushBoolInstruction
+ */
+export interface Instruction_PushBoolInstruction {
+    /**
+     * The value to push.
+     *
+     * @generated from protobuf field: bool value = 1;
+     */
+    value: boolean;
+}
+/**
+ * @generated from protobuf message Yarn.Instruction.JumpToInstruction
+ */
+export interface Instruction_JumpToInstruction {
+    /**
+     * The instruction number in the current node to jump to.
+     *
+     * @generated from protobuf field: int32 destination = 1;
+     */
+    destination: number;
+}
+/**
+ * @generated from protobuf message Yarn.Instruction.RunLineInstruction
+ */
+export interface Instruction_RunLineInstruction {
+    /**
+     * The ID of the localised content that should be shown for this line.
+     *
+     * @generated from protobuf field: string lineID = 1;
+     */
+    lineID: string;
+    /**
+     * The number of substitutions present in this line that must be popped
+     * off the stack.
+     *
+     * @generated from protobuf field: int32 substitutionCount = 2;
+     */
+    substitutionCount: number;
+}
+/**
+ * @generated from protobuf message Yarn.Instruction.RunCommandInstruction
+ */
+export interface Instruction_RunCommandInstruction {
+    /**
+     * The text of the command to send to the client.
+     *
+     * @generated from protobuf field: string commandText = 1;
+     */
+    commandText: string;
+    /**
+     * The number of substitutions present in this command that must be popped
+     * off the stack.
+     *
+     * @generated from protobuf field: int32 substitutionCount = 2;
+     */
+    substitutionCount: number;
+}
+/**
+ * @generated from protobuf message Yarn.Instruction.AddOptionInstruction
+ */
+export interface Instruction_AddOptionInstruction {
+    /**
+     * The ID of the content that should be shown for this option.
+     *
+     * @generated from protobuf field: string lineID = 1;
+     */
+    lineID: string;
+    /**
+     * The instruction number in the current node to jump to, if this option
+     * is selected.
+     *
+     * @generated from protobuf field: int32 destination = 2;
+     */
+    destination: number;
+    /**
+     * The number of substitutions present in this option that must be popped
+     * off the stack.
+     *
+     * @generated from protobuf field: int32 substitutionCount = 3;
+     */
+    substitutionCount: number;
+    /**
+     * A value indicating whether this instruction has a line condition on
+     * it, whose evaluated value must be popped off the stack.
+     *
+     * @generated from protobuf field: bool hasCondition = 4;
+     */
+    hasCondition: boolean;
+}
+/**
+ * @generated from protobuf message Yarn.Instruction.JumpIfFalseInstruction
+ */
+export interface Instruction_JumpIfFalseInstruction {
+    /**
+     * The instruction number in the current node to jump to.
+     *
+     * @generated from protobuf field: int32 destination = 1;
+     */
+    destination: number;
+}
+/**
+ * @generated from protobuf message Yarn.Instruction.PopInstruction
+ */
+export interface Instruction_PopInstruction {
+}
+/**
+ * @generated from protobuf message Yarn.Instruction.CallFunctionInstruction
+ */
+export interface Instruction_CallFunctionInstruction {
+    /**
+     * The name of the function to call.
+     *
+     * @generated from protobuf field: string functionName = 1;
+     */
+    functionName: string;
+}
+/**
+ * @generated from protobuf message Yarn.Instruction.PushVariableInstruction
+ */
+export interface Instruction_PushVariableInstruction {
+    /**
+     * The name of the variable whose value should be pushed onto the stack.
+     *
+     * @generated from protobuf field: string variableName = 1;
+     */
+    variableName: string;
+}
+/**
+ * @generated from protobuf message Yarn.Instruction.StoreVariableInstruction
+ */
+export interface Instruction_StoreVariableInstruction {
+    /**
+     * The name of the variable whose value should be updated with the value
+     * currently on top of the stack.
+     *
+     * @generated from protobuf field: string variableName = 1;
+     */
+    variableName: string;
+}
+/**
+ * @generated from protobuf message Yarn.Instruction.StopInstruction
+ */
+export interface Instruction_StopInstruction {
+}
+/**
+ * @generated from protobuf message Yarn.Instruction.RunNodeInstruction
+ */
+export interface Instruction_RunNodeInstruction {
+    /**
+     * The name of the node to begin running.
+     *
+     * @generated from protobuf field: string nodeName = 1;
+     */
+    nodeName: string;
+}
+/**
+ * @generated from protobuf message Yarn.Instruction.DetourToNodeInstruction
+ */
+export interface Instruction_DetourToNodeInstruction {
+    /**
+     * @generated from protobuf field: string nodeName = 1;
+     */
+    nodeName: string;
+}
+/**
+ * @generated from protobuf message Yarn.Instruction.PeekAndDetourToNode
+ */
+export interface Instruction_PeekAndDetourToNode {
+}
+/**
+ * @generated from protobuf message Yarn.Instruction.ReturnInstruction
+ */
+export interface Instruction_ReturnInstruction {
+}
+/**
+ * A single Yarn instruction.
+ *
+ * @generated from protobuf message Yarn.InstructionV1
+ */
+export interface InstructionV1 {
+    /**
      * The operation that this instruction will perform.
      *
-     * @generated from protobuf field: Yarn.Instruction.OpCode opcode = 1;
+     * @generated from protobuf field: Yarn.InstructionV1.OpCode opcode = 1;
      */
-    opcode: Instruction_OpCode;
+    opcode: InstructionV1_OpCode;
     /**
      * The list of operands, if any, that this instruction uses.
      *
@@ -105,9 +486,9 @@ export interface Instruction {
 /**
  * The type of instruction that this is.
  *
- * @generated from protobuf enum Yarn.Instruction.OpCode
+ * @generated from protobuf enum Yarn.InstructionV1.OpCode
  */
-export enum Instruction_OpCode {
+export enum InstructionV1_OpCode {
     /**
      * Jumps to a named position in the node.
      * opA = string: label name
@@ -385,14 +766,12 @@ class Node$Type extends MessageType<Node> {
     constructor() {
         super("Yarn.Node", [
             { no: 1, name: "name", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 2, name: "instructions", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => Instruction },
-            { no: 3, name: "labels", kind: "map", K: 9 /*ScalarType.STRING*/, V: { kind: "scalar", T: 5 /*ScalarType.INT32*/ } },
-            { no: 4, name: "tags", kind: "scalar", repeat: 2 /*RepeatType.UNPACKED*/, T: 9 /*ScalarType.STRING*/ },
-            { no: 5, name: "sourceTextStringID", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
+            { no: 7, name: "instructions", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => Instruction },
+            { no: 6, name: "headers", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => Header }
         ]);
     }
     create(value?: PartialMessage<Node>): Node {
-        const message = { name: "", instructions: [], labels: {}, tags: [], sourceTextStringID: "" };
+        const message = { name: "", instructions: [], headers: [] };
         globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
         if (value !== undefined)
             reflectionMergePartial<Node>(this, message, value);
@@ -406,17 +785,11 @@ class Node$Type extends MessageType<Node> {
                 case /* string name */ 1:
                     message.name = reader.string();
                     break;
-                case /* repeated Yarn.Instruction instructions */ 2:
+                case /* repeated Yarn.Instruction instructions */ 7:
                     message.instructions.push(Instruction.internalBinaryRead(reader, reader.uint32(), options));
                     break;
-                case /* map<string, int32> labels */ 3:
-                    this.binaryReadMap3(message.labels, reader, options);
-                    break;
-                case /* repeated string tags */ 4:
-                    message.tags.push(reader.string());
-                    break;
-                case /* string sourceTextStringID */ 5:
-                    message.sourceTextStringID = reader.string();
+                case /* repeated Yarn.Header headers */ 6:
+                    message.headers.push(Header.internalBinaryRead(reader, reader.uint32(), options));
                     break;
                 default:
                     let u = options.readUnknownField;
@@ -429,38 +802,16 @@ class Node$Type extends MessageType<Node> {
         }
         return message;
     }
-    private binaryReadMap3(map: Node["labels"], reader: IBinaryReader, options: BinaryReadOptions): void {
-        let len = reader.uint32(), end = reader.pos + len, key: keyof Node["labels"] | undefined, val: Node["labels"][any] | undefined;
-        while (reader.pos < end) {
-            let [fieldNo, wireType] = reader.tag();
-            switch (fieldNo) {
-                case 1:
-                    key = reader.string();
-                    break;
-                case 2:
-                    val = reader.int32();
-                    break;
-                default: throw new globalThis.Error("unknown map entry field for field Yarn.Node.labels");
-            }
-        }
-        map[key ?? ""] = val ?? 0;
-    }
     internalBinaryWrite(message: Node, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* string name = 1; */
         if (message.name !== "")
             writer.tag(1, WireType.LengthDelimited).string(message.name);
-        /* repeated Yarn.Instruction instructions = 2; */
+        /* repeated Yarn.Instruction instructions = 7; */
         for (let i = 0; i < message.instructions.length; i++)
-            Instruction.internalBinaryWrite(message.instructions[i], writer.tag(2, WireType.LengthDelimited).fork(), options).join();
-        /* map<string, int32> labels = 3; */
-        for (let k of Object.keys(message.labels))
-            writer.tag(3, WireType.LengthDelimited).fork().tag(1, WireType.LengthDelimited).string(k).tag(2, WireType.Varint).int32(message.labels[k]).join();
-        /* repeated string tags = 4; */
-        for (let i = 0; i < message.tags.length; i++)
-            writer.tag(4, WireType.LengthDelimited).string(message.tags[i]);
-        /* string sourceTextStringID = 5; */
-        if (message.sourceTextStringID !== "")
-            writer.tag(5, WireType.LengthDelimited).string(message.sourceTextStringID);
+            Instruction.internalBinaryWrite(message.instructions[i], writer.tag(7, WireType.LengthDelimited).fork(), options).join();
+        /* repeated Yarn.Header headers = 6; */
+        for (let i = 0; i < message.headers.length; i++)
+            Header.internalBinaryWrite(message.headers[i], writer.tag(6, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
@@ -472,15 +823,87 @@ class Node$Type extends MessageType<Node> {
  */
 export const Node = new Node$Type();
 // @generated message type with reflection information, may provide speed optimized methods
+class Header$Type extends MessageType<Header> {
+    constructor() {
+        super("Yarn.Header", [
+            { no: 1, name: "key", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 2, name: "value", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
+        ]);
+    }
+    create(value?: PartialMessage<Header>): Header {
+        const message = { key: "", value: "" };
+        globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
+        if (value !== undefined)
+            reflectionMergePartial<Header>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: Header): Header {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* string key */ 1:
+                    message.key = reader.string();
+                    break;
+                case /* string value */ 2:
+                    message.value = reader.string();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: Header, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* string key = 1; */
+        if (message.key !== "")
+            writer.tag(1, WireType.LengthDelimited).string(message.key);
+        /* string value = 2; */
+        if (message.value !== "")
+            writer.tag(2, WireType.LengthDelimited).string(message.value);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message Yarn.Header
+ */
+export const Header = new Header$Type();
+// @generated message type with reflection information, may provide speed optimized methods
 class Instruction$Type extends MessageType<Instruction> {
     constructor() {
         super("Yarn.Instruction", [
-            { no: 1, name: "opcode", kind: "enum", T: () => ["Yarn.Instruction.OpCode", Instruction_OpCode] },
-            { no: 2, name: "operands", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => Operand }
+            { no: 1, name: "jumpTo", kind: "message", oneof: "instructionType", T: () => Instruction_JumpToInstruction },
+            { no: 2, name: "peekAndJump", kind: "message", oneof: "instructionType", T: () => Instruction_PeekAndJumpInstruction },
+            { no: 3, name: "runLine", kind: "message", oneof: "instructionType", T: () => Instruction_RunLineInstruction },
+            { no: 4, name: "runCommand", kind: "message", oneof: "instructionType", T: () => Instruction_RunCommandInstruction },
+            { no: 5, name: "addOption", kind: "message", oneof: "instructionType", T: () => Instruction_AddOptionInstruction },
+            { no: 6, name: "showOptions", kind: "message", oneof: "instructionType", T: () => Instruction_ShowOptionsInstruction },
+            { no: 7, name: "pushString", kind: "message", oneof: "instructionType", T: () => Instruction_PushStringInstruction },
+            { no: 8, name: "pushFloat", kind: "message", oneof: "instructionType", T: () => Instruction_PushFloatInstruction },
+            { no: 9, name: "pushBool", kind: "message", oneof: "instructionType", T: () => Instruction_PushBoolInstruction },
+            { no: 10, name: "jumpIfFalse", kind: "message", oneof: "instructionType", T: () => Instruction_JumpIfFalseInstruction },
+            { no: 11, name: "pop", kind: "message", oneof: "instructionType", T: () => Instruction_PopInstruction },
+            { no: 12, name: "callFunc", kind: "message", oneof: "instructionType", T: () => Instruction_CallFunctionInstruction },
+            { no: 13, name: "pushVariable", kind: "message", oneof: "instructionType", T: () => Instruction_PushVariableInstruction },
+            { no: 14, name: "storeVariable", kind: "message", oneof: "instructionType", T: () => Instruction_StoreVariableInstruction },
+            { no: 15, name: "stop", kind: "message", oneof: "instructionType", T: () => Instruction_StopInstruction },
+            { no: 16, name: "runNode", kind: "message", oneof: "instructionType", T: () => Instruction_RunNodeInstruction },
+            { no: 17, name: "peekAndRunNode", kind: "message", oneof: "instructionType", T: () => Instruction_PeekAndRunNodeInstruction },
+            { no: 18, name: "detourToNode", kind: "message", oneof: "instructionType", T: () => Instruction_DetourToNodeInstruction },
+            { no: 19, name: "peekAndDetourToNode", kind: "message", oneof: "instructionType", T: () => Instruction_PeekAndDetourToNode },
+            { no: 20, name: "return", kind: "message", oneof: "instructionType", T: () => Instruction_ReturnInstruction }
         ]);
     }
     create(value?: PartialMessage<Instruction>): Instruction {
-        const message = { opcode: 0, operands: [] };
+        const message = { instructionType: { oneofKind: undefined } };
         globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
         if (value !== undefined)
             reflectionMergePartial<Instruction>(this, message, value);
@@ -491,7 +914,1057 @@ class Instruction$Type extends MessageType<Instruction> {
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
-                case /* Yarn.Instruction.OpCode opcode */ 1:
+                case /* Yarn.Instruction.JumpToInstruction jumpTo */ 1:
+                    message.instructionType = {
+                        oneofKind: "jumpTo",
+                        jumpTo: Instruction_JumpToInstruction.internalBinaryRead(reader, reader.uint32(), options, (message.instructionType as any).jumpTo)
+                    };
+                    break;
+                case /* Yarn.Instruction.PeekAndJumpInstruction peekAndJump */ 2:
+                    message.instructionType = {
+                        oneofKind: "peekAndJump",
+                        peekAndJump: Instruction_PeekAndJumpInstruction.internalBinaryRead(reader, reader.uint32(), options, (message.instructionType as any).peekAndJump)
+                    };
+                    break;
+                case /* Yarn.Instruction.RunLineInstruction runLine */ 3:
+                    message.instructionType = {
+                        oneofKind: "runLine",
+                        runLine: Instruction_RunLineInstruction.internalBinaryRead(reader, reader.uint32(), options, (message.instructionType as any).runLine)
+                    };
+                    break;
+                case /* Yarn.Instruction.RunCommandInstruction runCommand */ 4:
+                    message.instructionType = {
+                        oneofKind: "runCommand",
+                        runCommand: Instruction_RunCommandInstruction.internalBinaryRead(reader, reader.uint32(), options, (message.instructionType as any).runCommand)
+                    };
+                    break;
+                case /* Yarn.Instruction.AddOptionInstruction addOption */ 5:
+                    message.instructionType = {
+                        oneofKind: "addOption",
+                        addOption: Instruction_AddOptionInstruction.internalBinaryRead(reader, reader.uint32(), options, (message.instructionType as any).addOption)
+                    };
+                    break;
+                case /* Yarn.Instruction.ShowOptionsInstruction showOptions */ 6:
+                    message.instructionType = {
+                        oneofKind: "showOptions",
+                        showOptions: Instruction_ShowOptionsInstruction.internalBinaryRead(reader, reader.uint32(), options, (message.instructionType as any).showOptions)
+                    };
+                    break;
+                case /* Yarn.Instruction.PushStringInstruction pushString */ 7:
+                    message.instructionType = {
+                        oneofKind: "pushString",
+                        pushString: Instruction_PushStringInstruction.internalBinaryRead(reader, reader.uint32(), options, (message.instructionType as any).pushString)
+                    };
+                    break;
+                case /* Yarn.Instruction.PushFloatInstruction pushFloat */ 8:
+                    message.instructionType = {
+                        oneofKind: "pushFloat",
+                        pushFloat: Instruction_PushFloatInstruction.internalBinaryRead(reader, reader.uint32(), options, (message.instructionType as any).pushFloat)
+                    };
+                    break;
+                case /* Yarn.Instruction.PushBoolInstruction pushBool */ 9:
+                    message.instructionType = {
+                        oneofKind: "pushBool",
+                        pushBool: Instruction_PushBoolInstruction.internalBinaryRead(reader, reader.uint32(), options, (message.instructionType as any).pushBool)
+                    };
+                    break;
+                case /* Yarn.Instruction.JumpIfFalseInstruction jumpIfFalse */ 10:
+                    message.instructionType = {
+                        oneofKind: "jumpIfFalse",
+                        jumpIfFalse: Instruction_JumpIfFalseInstruction.internalBinaryRead(reader, reader.uint32(), options, (message.instructionType as any).jumpIfFalse)
+                    };
+                    break;
+                case /* Yarn.Instruction.PopInstruction pop */ 11:
+                    message.instructionType = {
+                        oneofKind: "pop",
+                        pop: Instruction_PopInstruction.internalBinaryRead(reader, reader.uint32(), options, (message.instructionType as any).pop)
+                    };
+                    break;
+                case /* Yarn.Instruction.CallFunctionInstruction callFunc */ 12:
+                    message.instructionType = {
+                        oneofKind: "callFunc",
+                        callFunc: Instruction_CallFunctionInstruction.internalBinaryRead(reader, reader.uint32(), options, (message.instructionType as any).callFunc)
+                    };
+                    break;
+                case /* Yarn.Instruction.PushVariableInstruction pushVariable */ 13:
+                    message.instructionType = {
+                        oneofKind: "pushVariable",
+                        pushVariable: Instruction_PushVariableInstruction.internalBinaryRead(reader, reader.uint32(), options, (message.instructionType as any).pushVariable)
+                    };
+                    break;
+                case /* Yarn.Instruction.StoreVariableInstruction storeVariable */ 14:
+                    message.instructionType = {
+                        oneofKind: "storeVariable",
+                        storeVariable: Instruction_StoreVariableInstruction.internalBinaryRead(reader, reader.uint32(), options, (message.instructionType as any).storeVariable)
+                    };
+                    break;
+                case /* Yarn.Instruction.StopInstruction stop */ 15:
+                    message.instructionType = {
+                        oneofKind: "stop",
+                        stop: Instruction_StopInstruction.internalBinaryRead(reader, reader.uint32(), options, (message.instructionType as any).stop)
+                    };
+                    break;
+                case /* Yarn.Instruction.RunNodeInstruction runNode */ 16:
+                    message.instructionType = {
+                        oneofKind: "runNode",
+                        runNode: Instruction_RunNodeInstruction.internalBinaryRead(reader, reader.uint32(), options, (message.instructionType as any).runNode)
+                    };
+                    break;
+                case /* Yarn.Instruction.PeekAndRunNodeInstruction peekAndRunNode */ 17:
+                    message.instructionType = {
+                        oneofKind: "peekAndRunNode",
+                        peekAndRunNode: Instruction_PeekAndRunNodeInstruction.internalBinaryRead(reader, reader.uint32(), options, (message.instructionType as any).peekAndRunNode)
+                    };
+                    break;
+                case /* Yarn.Instruction.DetourToNodeInstruction detourToNode */ 18:
+                    message.instructionType = {
+                        oneofKind: "detourToNode",
+                        detourToNode: Instruction_DetourToNodeInstruction.internalBinaryRead(reader, reader.uint32(), options, (message.instructionType as any).detourToNode)
+                    };
+                    break;
+                case /* Yarn.Instruction.PeekAndDetourToNode peekAndDetourToNode */ 19:
+                    message.instructionType = {
+                        oneofKind: "peekAndDetourToNode",
+                        peekAndDetourToNode: Instruction_PeekAndDetourToNode.internalBinaryRead(reader, reader.uint32(), options, (message.instructionType as any).peekAndDetourToNode)
+                    };
+                    break;
+                case /* Yarn.Instruction.ReturnInstruction return */ 20:
+                    message.instructionType = {
+                        oneofKind: "return",
+                        return: Instruction_ReturnInstruction.internalBinaryRead(reader, reader.uint32(), options, (message.instructionType as any).return)
+                    };
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: Instruction, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* Yarn.Instruction.JumpToInstruction jumpTo = 1; */
+        if (message.instructionType.oneofKind === "jumpTo")
+            Instruction_JumpToInstruction.internalBinaryWrite(message.instructionType.jumpTo, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
+        /* Yarn.Instruction.PeekAndJumpInstruction peekAndJump = 2; */
+        if (message.instructionType.oneofKind === "peekAndJump")
+            Instruction_PeekAndJumpInstruction.internalBinaryWrite(message.instructionType.peekAndJump, writer.tag(2, WireType.LengthDelimited).fork(), options).join();
+        /* Yarn.Instruction.RunLineInstruction runLine = 3; */
+        if (message.instructionType.oneofKind === "runLine")
+            Instruction_RunLineInstruction.internalBinaryWrite(message.instructionType.runLine, writer.tag(3, WireType.LengthDelimited).fork(), options).join();
+        /* Yarn.Instruction.RunCommandInstruction runCommand = 4; */
+        if (message.instructionType.oneofKind === "runCommand")
+            Instruction_RunCommandInstruction.internalBinaryWrite(message.instructionType.runCommand, writer.tag(4, WireType.LengthDelimited).fork(), options).join();
+        /* Yarn.Instruction.AddOptionInstruction addOption = 5; */
+        if (message.instructionType.oneofKind === "addOption")
+            Instruction_AddOptionInstruction.internalBinaryWrite(message.instructionType.addOption, writer.tag(5, WireType.LengthDelimited).fork(), options).join();
+        /* Yarn.Instruction.ShowOptionsInstruction showOptions = 6; */
+        if (message.instructionType.oneofKind === "showOptions")
+            Instruction_ShowOptionsInstruction.internalBinaryWrite(message.instructionType.showOptions, writer.tag(6, WireType.LengthDelimited).fork(), options).join();
+        /* Yarn.Instruction.PushStringInstruction pushString = 7; */
+        if (message.instructionType.oneofKind === "pushString")
+            Instruction_PushStringInstruction.internalBinaryWrite(message.instructionType.pushString, writer.tag(7, WireType.LengthDelimited).fork(), options).join();
+        /* Yarn.Instruction.PushFloatInstruction pushFloat = 8; */
+        if (message.instructionType.oneofKind === "pushFloat")
+            Instruction_PushFloatInstruction.internalBinaryWrite(message.instructionType.pushFloat, writer.tag(8, WireType.LengthDelimited).fork(), options).join();
+        /* Yarn.Instruction.PushBoolInstruction pushBool = 9; */
+        if (message.instructionType.oneofKind === "pushBool")
+            Instruction_PushBoolInstruction.internalBinaryWrite(message.instructionType.pushBool, writer.tag(9, WireType.LengthDelimited).fork(), options).join();
+        /* Yarn.Instruction.JumpIfFalseInstruction jumpIfFalse = 10; */
+        if (message.instructionType.oneofKind === "jumpIfFalse")
+            Instruction_JumpIfFalseInstruction.internalBinaryWrite(message.instructionType.jumpIfFalse, writer.tag(10, WireType.LengthDelimited).fork(), options).join();
+        /* Yarn.Instruction.PopInstruction pop = 11; */
+        if (message.instructionType.oneofKind === "pop")
+            Instruction_PopInstruction.internalBinaryWrite(message.instructionType.pop, writer.tag(11, WireType.LengthDelimited).fork(), options).join();
+        /* Yarn.Instruction.CallFunctionInstruction callFunc = 12; */
+        if (message.instructionType.oneofKind === "callFunc")
+            Instruction_CallFunctionInstruction.internalBinaryWrite(message.instructionType.callFunc, writer.tag(12, WireType.LengthDelimited).fork(), options).join();
+        /* Yarn.Instruction.PushVariableInstruction pushVariable = 13; */
+        if (message.instructionType.oneofKind === "pushVariable")
+            Instruction_PushVariableInstruction.internalBinaryWrite(message.instructionType.pushVariable, writer.tag(13, WireType.LengthDelimited).fork(), options).join();
+        /* Yarn.Instruction.StoreVariableInstruction storeVariable = 14; */
+        if (message.instructionType.oneofKind === "storeVariable")
+            Instruction_StoreVariableInstruction.internalBinaryWrite(message.instructionType.storeVariable, writer.tag(14, WireType.LengthDelimited).fork(), options).join();
+        /* Yarn.Instruction.StopInstruction stop = 15; */
+        if (message.instructionType.oneofKind === "stop")
+            Instruction_StopInstruction.internalBinaryWrite(message.instructionType.stop, writer.tag(15, WireType.LengthDelimited).fork(), options).join();
+        /* Yarn.Instruction.RunNodeInstruction runNode = 16; */
+        if (message.instructionType.oneofKind === "runNode")
+            Instruction_RunNodeInstruction.internalBinaryWrite(message.instructionType.runNode, writer.tag(16, WireType.LengthDelimited).fork(), options).join();
+        /* Yarn.Instruction.PeekAndRunNodeInstruction peekAndRunNode = 17; */
+        if (message.instructionType.oneofKind === "peekAndRunNode")
+            Instruction_PeekAndRunNodeInstruction.internalBinaryWrite(message.instructionType.peekAndRunNode, writer.tag(17, WireType.LengthDelimited).fork(), options).join();
+        /* Yarn.Instruction.DetourToNodeInstruction detourToNode = 18; */
+        if (message.instructionType.oneofKind === "detourToNode")
+            Instruction_DetourToNodeInstruction.internalBinaryWrite(message.instructionType.detourToNode, writer.tag(18, WireType.LengthDelimited).fork(), options).join();
+        /* Yarn.Instruction.PeekAndDetourToNode peekAndDetourToNode = 19; */
+        if (message.instructionType.oneofKind === "peekAndDetourToNode")
+            Instruction_PeekAndDetourToNode.internalBinaryWrite(message.instructionType.peekAndDetourToNode, writer.tag(19, WireType.LengthDelimited).fork(), options).join();
+        /* Yarn.Instruction.ReturnInstruction return = 20; */
+        if (message.instructionType.oneofKind === "return")
+            Instruction_ReturnInstruction.internalBinaryWrite(message.instructionType.return, writer.tag(20, WireType.LengthDelimited).fork(), options).join();
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message Yarn.Instruction
+ */
+export const Instruction = new Instruction$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class Instruction_PeekAndJumpInstruction$Type extends MessageType<Instruction_PeekAndJumpInstruction> {
+    constructor() {
+        super("Yarn.Instruction.PeekAndJumpInstruction", []);
+    }
+    create(value?: PartialMessage<Instruction_PeekAndJumpInstruction>): Instruction_PeekAndJumpInstruction {
+        const message = {};
+        globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
+        if (value !== undefined)
+            reflectionMergePartial<Instruction_PeekAndJumpInstruction>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: Instruction_PeekAndJumpInstruction): Instruction_PeekAndJumpInstruction {
+        return target ?? this.create();
+    }
+    internalBinaryWrite(message: Instruction_PeekAndJumpInstruction, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message Yarn.Instruction.PeekAndJumpInstruction
+ */
+export const Instruction_PeekAndJumpInstruction = new Instruction_PeekAndJumpInstruction$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class Instruction_PeekAndRunNodeInstruction$Type extends MessageType<Instruction_PeekAndRunNodeInstruction> {
+    constructor() {
+        super("Yarn.Instruction.PeekAndRunNodeInstruction", []);
+    }
+    create(value?: PartialMessage<Instruction_PeekAndRunNodeInstruction>): Instruction_PeekAndRunNodeInstruction {
+        const message = {};
+        globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
+        if (value !== undefined)
+            reflectionMergePartial<Instruction_PeekAndRunNodeInstruction>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: Instruction_PeekAndRunNodeInstruction): Instruction_PeekAndRunNodeInstruction {
+        return target ?? this.create();
+    }
+    internalBinaryWrite(message: Instruction_PeekAndRunNodeInstruction, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message Yarn.Instruction.PeekAndRunNodeInstruction
+ */
+export const Instruction_PeekAndRunNodeInstruction = new Instruction_PeekAndRunNodeInstruction$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class Instruction_ShowOptionsInstruction$Type extends MessageType<Instruction_ShowOptionsInstruction> {
+    constructor() {
+        super("Yarn.Instruction.ShowOptionsInstruction", []);
+    }
+    create(value?: PartialMessage<Instruction_ShowOptionsInstruction>): Instruction_ShowOptionsInstruction {
+        const message = {};
+        globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
+        if (value !== undefined)
+            reflectionMergePartial<Instruction_ShowOptionsInstruction>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: Instruction_ShowOptionsInstruction): Instruction_ShowOptionsInstruction {
+        return target ?? this.create();
+    }
+    internalBinaryWrite(message: Instruction_ShowOptionsInstruction, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message Yarn.Instruction.ShowOptionsInstruction
+ */
+export const Instruction_ShowOptionsInstruction = new Instruction_ShowOptionsInstruction$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class Instruction_PushStringInstruction$Type extends MessageType<Instruction_PushStringInstruction> {
+    constructor() {
+        super("Yarn.Instruction.PushStringInstruction", [
+            { no: 1, name: "value", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
+        ]);
+    }
+    create(value?: PartialMessage<Instruction_PushStringInstruction>): Instruction_PushStringInstruction {
+        const message = { value: "" };
+        globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
+        if (value !== undefined)
+            reflectionMergePartial<Instruction_PushStringInstruction>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: Instruction_PushStringInstruction): Instruction_PushStringInstruction {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* string value */ 1:
+                    message.value = reader.string();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: Instruction_PushStringInstruction, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* string value = 1; */
+        if (message.value !== "")
+            writer.tag(1, WireType.LengthDelimited).string(message.value);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message Yarn.Instruction.PushStringInstruction
+ */
+export const Instruction_PushStringInstruction = new Instruction_PushStringInstruction$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class Instruction_PushFloatInstruction$Type extends MessageType<Instruction_PushFloatInstruction> {
+    constructor() {
+        super("Yarn.Instruction.PushFloatInstruction", [
+            { no: 1, name: "value", kind: "scalar", T: 2 /*ScalarType.FLOAT*/ }
+        ]);
+    }
+    create(value?: PartialMessage<Instruction_PushFloatInstruction>): Instruction_PushFloatInstruction {
+        const message = { value: 0 };
+        globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
+        if (value !== undefined)
+            reflectionMergePartial<Instruction_PushFloatInstruction>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: Instruction_PushFloatInstruction): Instruction_PushFloatInstruction {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* float value */ 1:
+                    message.value = reader.float();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: Instruction_PushFloatInstruction, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* float value = 1; */
+        if (message.value !== 0)
+            writer.tag(1, WireType.Bit32).float(message.value);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message Yarn.Instruction.PushFloatInstruction
+ */
+export const Instruction_PushFloatInstruction = new Instruction_PushFloatInstruction$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class Instruction_PushBoolInstruction$Type extends MessageType<Instruction_PushBoolInstruction> {
+    constructor() {
+        super("Yarn.Instruction.PushBoolInstruction", [
+            { no: 1, name: "value", kind: "scalar", T: 8 /*ScalarType.BOOL*/ }
+        ]);
+    }
+    create(value?: PartialMessage<Instruction_PushBoolInstruction>): Instruction_PushBoolInstruction {
+        const message = { value: false };
+        globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
+        if (value !== undefined)
+            reflectionMergePartial<Instruction_PushBoolInstruction>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: Instruction_PushBoolInstruction): Instruction_PushBoolInstruction {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* bool value */ 1:
+                    message.value = reader.bool();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: Instruction_PushBoolInstruction, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* bool value = 1; */
+        if (message.value !== false)
+            writer.tag(1, WireType.Varint).bool(message.value);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message Yarn.Instruction.PushBoolInstruction
+ */
+export const Instruction_PushBoolInstruction = new Instruction_PushBoolInstruction$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class Instruction_JumpToInstruction$Type extends MessageType<Instruction_JumpToInstruction> {
+    constructor() {
+        super("Yarn.Instruction.JumpToInstruction", [
+            { no: 1, name: "destination", kind: "scalar", T: 5 /*ScalarType.INT32*/ }
+        ]);
+    }
+    create(value?: PartialMessage<Instruction_JumpToInstruction>): Instruction_JumpToInstruction {
+        const message = { destination: 0 };
+        globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
+        if (value !== undefined)
+            reflectionMergePartial<Instruction_JumpToInstruction>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: Instruction_JumpToInstruction): Instruction_JumpToInstruction {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* int32 destination */ 1:
+                    message.destination = reader.int32();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: Instruction_JumpToInstruction, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* int32 destination = 1; */
+        if (message.destination !== 0)
+            writer.tag(1, WireType.Varint).int32(message.destination);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message Yarn.Instruction.JumpToInstruction
+ */
+export const Instruction_JumpToInstruction = new Instruction_JumpToInstruction$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class Instruction_RunLineInstruction$Type extends MessageType<Instruction_RunLineInstruction> {
+    constructor() {
+        super("Yarn.Instruction.RunLineInstruction", [
+            { no: 1, name: "lineID", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 2, name: "substitutionCount", kind: "scalar", T: 5 /*ScalarType.INT32*/ }
+        ]);
+    }
+    create(value?: PartialMessage<Instruction_RunLineInstruction>): Instruction_RunLineInstruction {
+        const message = { lineID: "", substitutionCount: 0 };
+        globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
+        if (value !== undefined)
+            reflectionMergePartial<Instruction_RunLineInstruction>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: Instruction_RunLineInstruction): Instruction_RunLineInstruction {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* string lineID */ 1:
+                    message.lineID = reader.string();
+                    break;
+                case /* int32 substitutionCount */ 2:
+                    message.substitutionCount = reader.int32();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: Instruction_RunLineInstruction, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* string lineID = 1; */
+        if (message.lineID !== "")
+            writer.tag(1, WireType.LengthDelimited).string(message.lineID);
+        /* int32 substitutionCount = 2; */
+        if (message.substitutionCount !== 0)
+            writer.tag(2, WireType.Varint).int32(message.substitutionCount);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message Yarn.Instruction.RunLineInstruction
+ */
+export const Instruction_RunLineInstruction = new Instruction_RunLineInstruction$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class Instruction_RunCommandInstruction$Type extends MessageType<Instruction_RunCommandInstruction> {
+    constructor() {
+        super("Yarn.Instruction.RunCommandInstruction", [
+            { no: 1, name: "commandText", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 2, name: "substitutionCount", kind: "scalar", T: 5 /*ScalarType.INT32*/ }
+        ]);
+    }
+    create(value?: PartialMessage<Instruction_RunCommandInstruction>): Instruction_RunCommandInstruction {
+        const message = { commandText: "", substitutionCount: 0 };
+        globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
+        if (value !== undefined)
+            reflectionMergePartial<Instruction_RunCommandInstruction>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: Instruction_RunCommandInstruction): Instruction_RunCommandInstruction {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* string commandText */ 1:
+                    message.commandText = reader.string();
+                    break;
+                case /* int32 substitutionCount */ 2:
+                    message.substitutionCount = reader.int32();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: Instruction_RunCommandInstruction, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* string commandText = 1; */
+        if (message.commandText !== "")
+            writer.tag(1, WireType.LengthDelimited).string(message.commandText);
+        /* int32 substitutionCount = 2; */
+        if (message.substitutionCount !== 0)
+            writer.tag(2, WireType.Varint).int32(message.substitutionCount);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message Yarn.Instruction.RunCommandInstruction
+ */
+export const Instruction_RunCommandInstruction = new Instruction_RunCommandInstruction$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class Instruction_AddOptionInstruction$Type extends MessageType<Instruction_AddOptionInstruction> {
+    constructor() {
+        super("Yarn.Instruction.AddOptionInstruction", [
+            { no: 1, name: "lineID", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 2, name: "destination", kind: "scalar", T: 5 /*ScalarType.INT32*/ },
+            { no: 3, name: "substitutionCount", kind: "scalar", T: 5 /*ScalarType.INT32*/ },
+            { no: 4, name: "hasCondition", kind: "scalar", T: 8 /*ScalarType.BOOL*/ }
+        ]);
+    }
+    create(value?: PartialMessage<Instruction_AddOptionInstruction>): Instruction_AddOptionInstruction {
+        const message = { lineID: "", destination: 0, substitutionCount: 0, hasCondition: false };
+        globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
+        if (value !== undefined)
+            reflectionMergePartial<Instruction_AddOptionInstruction>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: Instruction_AddOptionInstruction): Instruction_AddOptionInstruction {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* string lineID */ 1:
+                    message.lineID = reader.string();
+                    break;
+                case /* int32 destination */ 2:
+                    message.destination = reader.int32();
+                    break;
+                case /* int32 substitutionCount */ 3:
+                    message.substitutionCount = reader.int32();
+                    break;
+                case /* bool hasCondition */ 4:
+                    message.hasCondition = reader.bool();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: Instruction_AddOptionInstruction, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* string lineID = 1; */
+        if (message.lineID !== "")
+            writer.tag(1, WireType.LengthDelimited).string(message.lineID);
+        /* int32 destination = 2; */
+        if (message.destination !== 0)
+            writer.tag(2, WireType.Varint).int32(message.destination);
+        /* int32 substitutionCount = 3; */
+        if (message.substitutionCount !== 0)
+            writer.tag(3, WireType.Varint).int32(message.substitutionCount);
+        /* bool hasCondition = 4; */
+        if (message.hasCondition !== false)
+            writer.tag(4, WireType.Varint).bool(message.hasCondition);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message Yarn.Instruction.AddOptionInstruction
+ */
+export const Instruction_AddOptionInstruction = new Instruction_AddOptionInstruction$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class Instruction_JumpIfFalseInstruction$Type extends MessageType<Instruction_JumpIfFalseInstruction> {
+    constructor() {
+        super("Yarn.Instruction.JumpIfFalseInstruction", [
+            { no: 1, name: "destination", kind: "scalar", T: 5 /*ScalarType.INT32*/ }
+        ]);
+    }
+    create(value?: PartialMessage<Instruction_JumpIfFalseInstruction>): Instruction_JumpIfFalseInstruction {
+        const message = { destination: 0 };
+        globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
+        if (value !== undefined)
+            reflectionMergePartial<Instruction_JumpIfFalseInstruction>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: Instruction_JumpIfFalseInstruction): Instruction_JumpIfFalseInstruction {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* int32 destination */ 1:
+                    message.destination = reader.int32();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: Instruction_JumpIfFalseInstruction, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* int32 destination = 1; */
+        if (message.destination !== 0)
+            writer.tag(1, WireType.Varint).int32(message.destination);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message Yarn.Instruction.JumpIfFalseInstruction
+ */
+export const Instruction_JumpIfFalseInstruction = new Instruction_JumpIfFalseInstruction$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class Instruction_PopInstruction$Type extends MessageType<Instruction_PopInstruction> {
+    constructor() {
+        super("Yarn.Instruction.PopInstruction", []);
+    }
+    create(value?: PartialMessage<Instruction_PopInstruction>): Instruction_PopInstruction {
+        const message = {};
+        globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
+        if (value !== undefined)
+            reflectionMergePartial<Instruction_PopInstruction>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: Instruction_PopInstruction): Instruction_PopInstruction {
+        return target ?? this.create();
+    }
+    internalBinaryWrite(message: Instruction_PopInstruction, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message Yarn.Instruction.PopInstruction
+ */
+export const Instruction_PopInstruction = new Instruction_PopInstruction$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class Instruction_CallFunctionInstruction$Type extends MessageType<Instruction_CallFunctionInstruction> {
+    constructor() {
+        super("Yarn.Instruction.CallFunctionInstruction", [
+            { no: 1, name: "functionName", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
+        ]);
+    }
+    create(value?: PartialMessage<Instruction_CallFunctionInstruction>): Instruction_CallFunctionInstruction {
+        const message = { functionName: "" };
+        globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
+        if (value !== undefined)
+            reflectionMergePartial<Instruction_CallFunctionInstruction>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: Instruction_CallFunctionInstruction): Instruction_CallFunctionInstruction {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* string functionName */ 1:
+                    message.functionName = reader.string();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: Instruction_CallFunctionInstruction, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* string functionName = 1; */
+        if (message.functionName !== "")
+            writer.tag(1, WireType.LengthDelimited).string(message.functionName);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message Yarn.Instruction.CallFunctionInstruction
+ */
+export const Instruction_CallFunctionInstruction = new Instruction_CallFunctionInstruction$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class Instruction_PushVariableInstruction$Type extends MessageType<Instruction_PushVariableInstruction> {
+    constructor() {
+        super("Yarn.Instruction.PushVariableInstruction", [
+            { no: 1, name: "variableName", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
+        ]);
+    }
+    create(value?: PartialMessage<Instruction_PushVariableInstruction>): Instruction_PushVariableInstruction {
+        const message = { variableName: "" };
+        globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
+        if (value !== undefined)
+            reflectionMergePartial<Instruction_PushVariableInstruction>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: Instruction_PushVariableInstruction): Instruction_PushVariableInstruction {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* string variableName */ 1:
+                    message.variableName = reader.string();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: Instruction_PushVariableInstruction, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* string variableName = 1; */
+        if (message.variableName !== "")
+            writer.tag(1, WireType.LengthDelimited).string(message.variableName);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message Yarn.Instruction.PushVariableInstruction
+ */
+export const Instruction_PushVariableInstruction = new Instruction_PushVariableInstruction$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class Instruction_StoreVariableInstruction$Type extends MessageType<Instruction_StoreVariableInstruction> {
+    constructor() {
+        super("Yarn.Instruction.StoreVariableInstruction", [
+            { no: 1, name: "variableName", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
+        ]);
+    }
+    create(value?: PartialMessage<Instruction_StoreVariableInstruction>): Instruction_StoreVariableInstruction {
+        const message = { variableName: "" };
+        globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
+        if (value !== undefined)
+            reflectionMergePartial<Instruction_StoreVariableInstruction>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: Instruction_StoreVariableInstruction): Instruction_StoreVariableInstruction {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* string variableName */ 1:
+                    message.variableName = reader.string();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: Instruction_StoreVariableInstruction, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* string variableName = 1; */
+        if (message.variableName !== "")
+            writer.tag(1, WireType.LengthDelimited).string(message.variableName);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message Yarn.Instruction.StoreVariableInstruction
+ */
+export const Instruction_StoreVariableInstruction = new Instruction_StoreVariableInstruction$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class Instruction_StopInstruction$Type extends MessageType<Instruction_StopInstruction> {
+    constructor() {
+        super("Yarn.Instruction.StopInstruction", []);
+    }
+    create(value?: PartialMessage<Instruction_StopInstruction>): Instruction_StopInstruction {
+        const message = {};
+        globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
+        if (value !== undefined)
+            reflectionMergePartial<Instruction_StopInstruction>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: Instruction_StopInstruction): Instruction_StopInstruction {
+        return target ?? this.create();
+    }
+    internalBinaryWrite(message: Instruction_StopInstruction, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message Yarn.Instruction.StopInstruction
+ */
+export const Instruction_StopInstruction = new Instruction_StopInstruction$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class Instruction_RunNodeInstruction$Type extends MessageType<Instruction_RunNodeInstruction> {
+    constructor() {
+        super("Yarn.Instruction.RunNodeInstruction", [
+            { no: 1, name: "nodeName", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
+        ]);
+    }
+    create(value?: PartialMessage<Instruction_RunNodeInstruction>): Instruction_RunNodeInstruction {
+        const message = { nodeName: "" };
+        globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
+        if (value !== undefined)
+            reflectionMergePartial<Instruction_RunNodeInstruction>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: Instruction_RunNodeInstruction): Instruction_RunNodeInstruction {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* string nodeName */ 1:
+                    message.nodeName = reader.string();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: Instruction_RunNodeInstruction, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* string nodeName = 1; */
+        if (message.nodeName !== "")
+            writer.tag(1, WireType.LengthDelimited).string(message.nodeName);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message Yarn.Instruction.RunNodeInstruction
+ */
+export const Instruction_RunNodeInstruction = new Instruction_RunNodeInstruction$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class Instruction_DetourToNodeInstruction$Type extends MessageType<Instruction_DetourToNodeInstruction> {
+    constructor() {
+        super("Yarn.Instruction.DetourToNodeInstruction", [
+            { no: 1, name: "nodeName", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
+        ]);
+    }
+    create(value?: PartialMessage<Instruction_DetourToNodeInstruction>): Instruction_DetourToNodeInstruction {
+        const message = { nodeName: "" };
+        globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
+        if (value !== undefined)
+            reflectionMergePartial<Instruction_DetourToNodeInstruction>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: Instruction_DetourToNodeInstruction): Instruction_DetourToNodeInstruction {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* string nodeName */ 1:
+                    message.nodeName = reader.string();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: Instruction_DetourToNodeInstruction, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* string nodeName = 1; */
+        if (message.nodeName !== "")
+            writer.tag(1, WireType.LengthDelimited).string(message.nodeName);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message Yarn.Instruction.DetourToNodeInstruction
+ */
+export const Instruction_DetourToNodeInstruction = new Instruction_DetourToNodeInstruction$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class Instruction_PeekAndDetourToNode$Type extends MessageType<Instruction_PeekAndDetourToNode> {
+    constructor() {
+        super("Yarn.Instruction.PeekAndDetourToNode", []);
+    }
+    create(value?: PartialMessage<Instruction_PeekAndDetourToNode>): Instruction_PeekAndDetourToNode {
+        const message = {};
+        globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
+        if (value !== undefined)
+            reflectionMergePartial<Instruction_PeekAndDetourToNode>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: Instruction_PeekAndDetourToNode): Instruction_PeekAndDetourToNode {
+        return target ?? this.create();
+    }
+    internalBinaryWrite(message: Instruction_PeekAndDetourToNode, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message Yarn.Instruction.PeekAndDetourToNode
+ */
+export const Instruction_PeekAndDetourToNode = new Instruction_PeekAndDetourToNode$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class Instruction_ReturnInstruction$Type extends MessageType<Instruction_ReturnInstruction> {
+    constructor() {
+        super("Yarn.Instruction.ReturnInstruction", []);
+    }
+    create(value?: PartialMessage<Instruction_ReturnInstruction>): Instruction_ReturnInstruction {
+        const message = {};
+        globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
+        if (value !== undefined)
+            reflectionMergePartial<Instruction_ReturnInstruction>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: Instruction_ReturnInstruction): Instruction_ReturnInstruction {
+        return target ?? this.create();
+    }
+    internalBinaryWrite(message: Instruction_ReturnInstruction, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message Yarn.Instruction.ReturnInstruction
+ */
+export const Instruction_ReturnInstruction = new Instruction_ReturnInstruction$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class InstructionV1$Type extends MessageType<InstructionV1> {
+    constructor() {
+        super("Yarn.InstructionV1", [
+            { no: 1, name: "opcode", kind: "enum", T: () => ["Yarn.InstructionV1.OpCode", InstructionV1_OpCode] },
+            { no: 2, name: "operands", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => Operand }
+        ]);
+    }
+    create(value?: PartialMessage<InstructionV1>): InstructionV1 {
+        const message = { opcode: 0, operands: [] };
+        globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
+        if (value !== undefined)
+            reflectionMergePartial<InstructionV1>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: InstructionV1): InstructionV1 {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* Yarn.InstructionV1.OpCode opcode */ 1:
                     message.opcode = reader.int32();
                     break;
                 case /* repeated Yarn.Operand operands */ 2:
@@ -508,8 +1981,8 @@ class Instruction$Type extends MessageType<Instruction> {
         }
         return message;
     }
-    internalBinaryWrite(message: Instruction, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
-        /* Yarn.Instruction.OpCode opcode = 1; */
+    internalBinaryWrite(message: InstructionV1, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* Yarn.InstructionV1.OpCode opcode = 1; */
         if (message.opcode !== 0)
             writer.tag(1, WireType.Varint).int32(message.opcode);
         /* repeated Yarn.Operand operands = 2; */
@@ -522,9 +1995,9 @@ class Instruction$Type extends MessageType<Instruction> {
     }
 }
 /**
- * @generated MessageType for protobuf message Yarn.Instruction
+ * @generated MessageType for protobuf message Yarn.InstructionV1
  */
-export const Instruction = new Instruction$Type();
+export const InstructionV1 = new InstructionV1$Type();
 // @generated message type with reflection information, may provide speed optimized methods
 class Operand$Type extends MessageType<Operand> {
     constructor() {

@@ -1,0 +1,14 @@
+id,text,file,node,lineNumber
+line:5fb9ab0b,Start of test,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/NodeGroups.yarn,TestCaseDetours,19
+line:c989ac7c,Returned from detoured node group 1,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/NodeGroups.yarn,TestCaseDetours,21
+line:73d8a5e5,Returned from detoured node group 2,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/NodeGroups.yarn,TestCaseDetours,23
+line:4e9e451d,Node group option 1 (A),/Users/desplesda/Work/YarnSpinner/Tests/TestCases/NodeGroups.yarn,NodeGroup,29
+line:ed0b2183,Node group option 2 (always),/Users/desplesda/Work/YarnSpinner/Tests/TestCases/NodeGroups.yarn,NodeGroup,34
+line:7b3b26f4,Node group option 3 (not A),/Users/desplesda/Work/YarnSpinner/Tests/TestCases/NodeGroups.yarn,NodeGroup,39
+line:c16a2f6d,Node group option 4 (B),/Users/desplesda/Work/YarnSpinner/Tests/TestCases/NodeGroups.yarn,NodeGroup,44
+line:575a281a,Node group option 5 (once),/Users/desplesda/Work/YarnSpinner/Tests/TestCases/NodeGroups.yarn,NodeGroup,49
+line:c647978a,Node group option 6 (once if B),/Users/desplesda/Work/YarnSpinner/Tests/TestCases/NodeGroups.yarn,NodeGroup,54
+line:b3034160,Error: Node should not run,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/NodeGroups.yarn,UnRunnableNodegroup,60
+line:1cf60a6e,Error: Node should not run,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/NodeGroups.yarn,UnRunnableNodegroup,66
+line:13f00d83,Detour test 1,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/NodeGroups.yarn,DetourNode,72
+line:a9a1041a,Detour test 2,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/NodeGroups.yarn,DetourNode,78

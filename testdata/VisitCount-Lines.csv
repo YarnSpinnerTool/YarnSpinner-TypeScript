@@ -1,0 +1,6 @@
+id,text,file,node,lineNumber
+line:196c3cd1,entered start,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/VisitCount.yarn,Start,3
+line:8f5c3ba6,seconds visited count is {0},/Users/desplesda/Work/YarnSpinner/Tests/TestCases/VisitCount.yarn,Start,4
+line:d7a08d6e,second visited {0} times,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/VisitCount.yarn,second,11
+line:1048fa78,entered third,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/VisitCount.yarn,third,20
+line:b3dd9ee6,seconds was visited a total of {0} times,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/VisitCount.yarn,third,21
