@@ -55,7 +55,7 @@ export class YarnVM {
     public commandCallback: ((command: string) => Promise<void>) | null = null;
     public optionCallback: ((options: OptionItem[]) => Promise<number>) | null = null;
     public dialogueCompleteCallback: (() => Promise<void>) | null = null;
-    public nodeCompleteCallback: ((nodeName: string) => Promise<void>) | null = null;
+    public nodeCompleteCallback: ((nodeName: string) => void) | null = null;
 
     public onVariableSet: ((variable: string, value: YarnValue) => void) | null = null;
 
