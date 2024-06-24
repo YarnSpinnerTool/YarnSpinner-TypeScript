@@ -491,7 +491,7 @@ export class YarnVM {
                 }
             default:
                 {
-                    this.logError(`Unknown opcode: ${i.instructionType}`);
+                    this.logError(`Unknown opcode: ${i.instructionType.oneofKind}`);
                     this.state = ExecutionState.Stopped;
                 }
         }
@@ -837,7 +837,7 @@ export class YarnVM {
 
         // at this point we've either returned the result of the function or had an invalid function
         // either it doesn't exist or the parameters are incorrect
-        this.logError(`Encountered invalid function: ${funcName} with parameters: (${parameters})`);
+        this.logError(`Encountered invalid function: ${funcName} with parameters: (${JSON.stringify(parameters)})`);
         return undefined;
     }
 
@@ -871,7 +871,9 @@ export class YarnVM {
 
         // parameters is built like a stack but will we access it like an array
         // as such its backwards, so we need to reverse it before use
-        for (const i in parameters.reverse()) {
+        parameters = parameters.slice().reverse();
+
+        for (let i = 0; i < parameters.length; i += 1) {
             let substitution = parameters[i];
             if (typeof substitution == "boolean") {
                 line = line.replace("{" + i + "}", `${substitution == true ? "True" : "False"}`);
@@ -890,7 +892,7 @@ export class YarnVM {
     }
     private buildCommand(cmd: string, parameters: (string | boolean | number)[]): string {
         let command = cmd;
-        for (const i in parameters) {
+        for (let i = 0; i < parameters.length; i += 1) {
             const substitution = parameters[i];
             if (typeof substitution == "boolean") {
                 command = command.replace("{" + i + "}", `${substitution == true ? "True" : "False"}`);
