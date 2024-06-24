@@ -7,7 +7,7 @@ import { ActionJumpToNodeStep, ActionSelectStep, ActionSetSaliencyStep, ActionSe
 
 console.error = (message, ...params) => {
     throw new Error(
-      `Failing due to console.error while running test!\n\n${message}`,
+        `Failing due to console.error while running test!\n\n${message}`,
     )
 }
 
@@ -27,16 +27,16 @@ describe('can parse all testplans', () => {
 describe('all testplans have associated files', () => {
     it.each(allTestPlans)('testplan: %p', (testplan: string) => {
         const testPlanPath = resolve(testDataPath, testplan);
-        
+
         const compiledYarnFile = testPlanPath.replace(/.testplan/, ".yarnc");
         expect(existsSync(compiledYarnFile)).toBeTruthy()
-        
+
         const linesFile = testPlanPath.replace(/.testplan/, "-Lines.csv");
         expect(existsSync(linesFile)).toBeTruthy()
-        
+
         const metadataFile = testPlanPath.replace(/.testplan/, "-Metadata.csv");
         expect(existsSync(metadataFile)).toBeTruthy();
-        
+
     })
 });
 
@@ -71,12 +71,11 @@ describe('all testplans run as expected', () => {
             skipEmptyLines: true,
             delimiter: ",",
         })
-        
+
         // oh poor typescript, look how mean I am to you
         // forgive me
         let stringTable: { [key: string]: string } = {};
-        for (let record of records)
-        {
+        for (let record of records) {
             stringTable[record.id] = record.text;
         }
         expect(Object.keys(stringTable).length).toBeGreaterThanOrEqual(0);
@@ -86,15 +85,14 @@ describe('all testplans run as expected', () => {
             columns: true,
             skipEmptyLines: true,
             delimiter: ",",
-        }) as Record<string,string>[];
+        }) as Record<string, string>[];
 
-        
+
         // oh poor typescript, look how mean I am to you
         // forgive me
         let metadataTable: { [key: string]: MetadataEntry } = {};
-        for (let record of metadataRecords)
-        {
-            let newEntry : MetadataEntry = {
+        for (let record of metadataRecords) {
+            let newEntry: MetadataEntry = {
                 id: record.id,
                 node: record.node,
                 lineNumber: record.lineNumber,
@@ -105,7 +103,7 @@ describe('all testplans run as expected', () => {
         expect(Object.keys(stringTable).length).toBeGreaterThanOrEqual(0);
         expect(Object.keys(stringTable).length).toEqual(records.length);
 
-        
+
 
         // The following functions are needed for the Inference-FunctionsAndVarsInheritType test
         var library: Map<string, (string | boolean | number)> = new Map();
@@ -116,20 +114,20 @@ describe('all testplans run as expected', () => {
         var vm = new YarnVM(program, stringTable, library, metadataTable);
         vm.verboseLogging = false;
 
-        const dontExpectLines = async (line: string): Promise<never> => { 
-            throw Error(`Received line "${line}" when we weren't expecting it`); 
+        const dontExpectLines = async (line: string): Promise<never> => {
+            throw Error(`Received line "${line}" when we weren't expecting it`);
         };
-        const dontExpectOptions = async (options: OptionItem[]): Promise<never> => { 
-            throw Error("Received options when we weren't expecting any"); 
+        const dontExpectOptions = async (options: OptionItem[]): Promise<never> => {
+            throw Error("Received options when we weren't expecting any");
         };
-        const dontExpectCommand = async (command: string): Promise<never> => { 
-            throw Error(`Received command "${command}" when we weren't expecting it`); 
+        const dontExpectCommand = async (command: string): Promise<never> => {
+            throw Error(`Received command "${command}" when we weren't expecting it`);
         };
-        const dontExpectStop = async():Promise<never> => {
-            throw Error("Received dialogue completion when we weren't expecting it"); 
+        const dontExpectStop = async (): Promise<never> => {
+            throw Error("Received dialogue completion when we weren't expecting it");
         }
 
-        let expectedOptions : {line:string, available:boolean, hashtags: string[]}[] = []
+        let expectedOptions: { line: string, available: boolean, hashtags: string[] }[] = []
 
         for (const run of testPlan.runs) {
             let currentStepIndex = 0;
@@ -142,7 +140,7 @@ describe('all testplans run as expected', () => {
                         if (currentStep instanceof ExpectStop) {
                             vm.optionCallback = dontExpectOptions;
                             vm.commandCallback = dontExpectCommand;
-                            vm.dialogueCompleteCallback = async () => {};
+                            vm.dialogueCompleteCallback = async () => { };
                             vm.lineCallback = dontExpectLines;
                         }
                         if (currentStep instanceof ActionJumpToNodeStep) {
@@ -218,7 +216,7 @@ describe('all testplans run as expected', () => {
                 vm.optionCallback = dontExpectOptions;
                 vm.commandCallback = dontExpectCommand;
                 vm.lineCallback = dontExpectLines;
-                vm.dialogueCompleteCallback = async () => {};
+                vm.dialogueCompleteCallback = async () => { };
             }
 
             continueTestPlan();
