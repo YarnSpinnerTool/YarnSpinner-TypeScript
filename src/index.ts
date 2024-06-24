@@ -393,5 +393,5 @@ export function startDialogue() {
         return;
     }
 
-    VM.start();
+    void VM.start();
 }
