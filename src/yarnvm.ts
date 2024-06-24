@@ -146,7 +146,7 @@ export class YarnVM {
             if (this.currentNode == null || this.programCounter >= this.currentNode.instructions.length) {
                 this.state = ExecutionState.Stopped;
                 if (this.dialogueCompleteCallback) {
-                    this.dialogueCompleteCallback();
+                    await this.dialogueCompleteCallback();
                 }
                 return;
             }
