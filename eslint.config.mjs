@@ -15,13 +15,21 @@ export default tseslint.config(
     ...eslint.configs.recommended,
 
   },
-  ...tseslint.configs.recommended.map(c => {
+  ...tseslint.configs.recommendedTypeChecked.map(c => {
     return {
       ...c,
       files,
       ignores
     }
   }),
+  {
+    languageOptions: {
+      parserOptions: {
+        project: true,
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+  },
   {
     files,
     ignores,
