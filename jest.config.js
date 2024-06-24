@@ -5,13 +5,12 @@ module.exports = {
       // testPathIgnorePatterns: ["<rootDir>/**/node_modules"],
       preset: 'ts-jest',
       testEnvironment: 'node',
-      preset: "ts-jest",
-      displayName: "yarnspinner-web-runner",
+      displayName: "core",
 
-      testMatch: ["<rootDir>/packages/yarnspinner-web-runner/tests/**/*.test.ts"],
+      testMatch: ["<rootDir>/packages/core/tests/**/*.test.ts"],
       globals: {
         'ts-jest': {
-          tsconfig: 'packages/yarnspinner-web-runner/tsconfig.json'
+          tsconfig: 'packages/core/tsconfig.json'
         }
       }
     },

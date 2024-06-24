@@ -13,13 +13,24 @@ const { resolve, basename } = require('node:path');
 const { readdirSync, existsSync, copyFileSync } = require('node:fs');
 const { copyFile } = require('node:fs/promises');
 
+const { workspaceRootSync } = require('workspace-root');
+
 const util = require('util');
+const { exit } = require('node:process');
 const exec = util.promisify(require('child_process').exec)
 
+const workspaceRoot = workspaceRootSync()
+
+if (!workspaceRoot) {
+    console.error("Failed to find workspace root!");
+    exit(1);
+}
 
 // TODO: Allow specifying this path as parameter
-const yarnSpinnerTestScriptsLocation = resolve(__filename, '..', '..', '..', 'YarnSpinner/Tests/TestCases')
-const outputLocation = resolve(__filename, '..','..', 'testdata')
+const yarnSpinnerTestScriptsLocation = resolve(workspaceRoot, '..', 'YarnSpinner', 'Tests', 'TestCases')
+const outputLocation = resolve(__filename, '..', '..', 'testdata')
+
+console.log(yarnSpinnerTestScriptsLocation);
 
 
 const files = readdirSync(yarnSpinnerTestScriptsLocation).filter(path => path.endsWith(".yarn")).map(path => resolve(yarnSpinnerTestScriptsLocation, path))
@@ -66,7 +77,7 @@ async function processCase(sourceFile, testCase) {
     // Copy the testplan file into place
     const copyFrom = testCase;
     const copyTo = resolve(outputLocation, basename(testCase))
-    
+
     await copyFile(copyFrom, copyTo)
 
     console.info("✅ " + sourceFile);

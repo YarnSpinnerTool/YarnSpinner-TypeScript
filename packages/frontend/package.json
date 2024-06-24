@@ -1,5 +1,5 @@
 {
-  "name": "yarn-web-runner",
+  "name": "@yarnspinner/standalone-runner",
   "version": "1.0.0",
   "description": "Runs yarn stuff in the browser",
   "main": "index.js",
@@ -7,6 +7,7 @@
     "test": "jest",
     "prepare-tests": "node scripts/create-test-data.js",
     "build": "npx webpack --mode=production",
+    "build:dev": "npx webpack --mode=development",
     "start": "npx webpack serve --open"
   },
   "author": "",
@@ -36,11 +37,13 @@
     "typescript-eslint": "^7.13.1",
     "webpack": "^5.72.1",
     "webpack-cli": "^4.9.2",
-    "webpack-dev-server": "^4.9.3"
+    "webpack-dev-server": "^4.9.3",
+    "workspace-root": "^3.2.0"
   },
   "dependencies": {
     "@popperjs/core": "^2.11.5",
     "@protobuf-ts/plugin": "^2.5.0",
+    "@yarnspinner/core": "^1.0.0",
     "bootstrap": "^5.2.0-beta1"
   }
 }

@@ -1,5 +1,5 @@
 import { Program } from "../src/yarn_spinner";
-import { YarnVM, OptionItem, MetadataEntry } from "../src/yarnvm";
+import { YarnVM, OptionItem, MetadataEntry } from '../src/yarnvm'
 import { readFileSync, readdirSync, existsSync } from "fs";
 import { resolve } from "node:path";
 import { parse as parseCSV } from "csv-parse/sync";

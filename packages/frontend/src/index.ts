@@ -1,5 +1,4 @@
-import { YarnVM, OptionItem, MetadataEntry } from "./yarnvm";
-import { Program } from "./yarn_spinner";
+import { MetadataEntry, OptionItem, Program, YarnVM } from '@yarnspinner/core';
 
 import "./yarnspinner.scss";
 import 'bootstrap';

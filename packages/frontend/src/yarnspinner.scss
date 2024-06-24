@@ -1,0 +1,136 @@
+// 1. Include functions first (so you can manipulate colors, SVGs, calc, etc)
+@import "../../../node_modules/bootstrap/scss/functions";
+
+
+// 2. Customise variables
+
+$blue: #79A5B7;
+$pink: #F2A9A0;
+$red: #D5683F;
+$orange: #fd7e14;
+$yellow: #F5C45A;
+$darker-green: #7AA479;
+$dark-green: #A8BD9B;
+$main-green: #C5E29B;
+$grey: #818582;
+
+$primary: $main-green;
+$secondary: $blue;
+
+$background-tint: #f6f8f4;
+
+$link-color: $darker-green;
+
+@import "../../../node_modules/bootstrap/scss/bootstrap-utilities";
+
+// Layout & components
+@import "../../../node_modules/bootstrap/scss/root";
+@import "../../../node_modules/bootstrap/scss/reboot";
+@import "../../../node_modules/bootstrap/scss/type";
+@import "../../../node_modules/bootstrap/scss/images";
+@import "../../../node_modules/bootstrap/scss/containers";
+@import "../../../node_modules/bootstrap/scss/grid";
+@import "../../../node_modules/bootstrap/scss/tables";
+@import "../../../node_modules/bootstrap/scss/forms";
+@import "../../../node_modules/bootstrap/scss/buttons";
+@import "../../../node_modules/bootstrap/scss/transitions";
+
+/*! purgecss start ignore */
+@import "../../../node_modules/bootstrap/scss/dropdown";
+/*! purgecss end ignore */
+
+@import "../../../node_modules/bootstrap/scss/button-group";
+@import "../../../node_modules/bootstrap/scss/nav";
+@import "../../../node_modules/bootstrap/scss/navbar";
+@import "../../../node_modules/bootstrap/scss/card";
+@import "../../../node_modules/bootstrap/scss/accordion";
+@import "../../../node_modules/bootstrap/scss/breadcrumb";
+@import "../../../node_modules/bootstrap/scss/pagination";
+@import "../../../node_modules/bootstrap/scss/badge";
+@import "../../../node_modules/bootstrap/scss/alert";
+@import "../../../node_modules/bootstrap/scss/progress";
+@import "../../../node_modules/bootstrap/scss/list-group";
+@import "../../../node_modules/bootstrap/scss/close";
+@import "../../../node_modules/bootstrap/scss/toasts";
+@import "../../../node_modules/bootstrap/scss/modal";
+@import "../../../node_modules/bootstrap/scss/tooltip";
+@import "../../../node_modules/bootstrap/scss/popover";
+@import "../../../node_modules/bootstrap/scss/carousel";
+@import "../../../node_modules/bootstrap/scss/spinners";
+@import "../../../node_modules/bootstrap/scss/offcanvas";
+@import "../../../node_modules/bootstrap/scss/placeholders";
+
+// Helpers
+@import "../../../node_modules/bootstrap/scss/helpers";
+
+// Utilities
+@import "../../../node_modules/bootstrap/scss/utilities/api";
+
+html,
+    body {
+      height: 100%;
+    }
+
+#app-header, #app-footer {
+    background-color: $background-tint;
+}
+
+.navbar, #variable-view {
+    border-color: $darker-green;
+    border-width: 2px;
+}
+
+#variable-view {
+    border-top-style: solid;
+}
+.navbar {
+    border-bottom-style: solid;
+}
+
+.dropdown-menu {
+    max-height: 50vh;
+    overflow-y: auto;
+  }
+
+.dropdown-menu.dropdown-menu-checkable .dropdown-item {
+    padding-left: 30px;
+}
+
+.dropdown-menu.dropdown-menu-checkable .dropdown-item-checked::before {
+    position: relative;
+    margin-left: -1rem;
+    content: '✓';
+    font-weight: 600;
+  }
+
+#log .list-group-item {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    cursor: default;
+}
+
+#log .list-group-item-action {
+    cursor: pointer;
+}
+
+#log .list-group-item-danger {
+    // Allow selecting text in errors
+    -webkit-user-select: auto;
+    -moz-user-select: auto;
+    -ms-user-select: auto;
+    user-select: auto;
+    cursor: auto !important;
+}
+
+// Unavailable options are light grey, have a strikethrough, do not change
+// colour on hover, and have a default cursor
+.list-group-item-unavailable,
+.list-group-item-unavailable:hover {
+    color: $grey;
+    text-decoration: line-through;
+    background-color: inherit;
+    cursor: default !important;
+}
