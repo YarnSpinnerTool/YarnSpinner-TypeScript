@@ -3,13 +3,17 @@
   "version": "1.0.0",
   "description": "This is a work-in-progress TypeScript VM and runner of compiled yarn files. ",
   "main": "jest.config.js",
-  "devDependencies": {},
+  "devDependencies": {
+    "@typescript-eslint/utils": "^7.13.1",
+    "eslint-plugin-import": "^2.29.1",
+    "typescript-eslint": "^7.13.1"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "workspaces": [
     "packages/core",
     "packages/frontend"

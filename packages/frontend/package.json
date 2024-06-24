@@ -13,9 +13,7 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "@eslint/js": "^9.5.0",
-    "@types/eslint__js": "^8.42.3",
-    "@types/jest": "^27.5.1",
+    "@types/bootstrap": "^5.2.10",
     "antlr4ng": "^3.0.4",
     "css-loader": "^6.7.1",
     "csv-parse": "^5.0.4",

@@ -1,38 +1,25 @@
-// @ts-check
-
-import eslint from '@eslint/js';
-import tseslint from 'typescript-eslint';
-import eslintConfigPrettier from "eslint-config-prettier";
-
-
-const files = ["src/**/*.ts"]
-const ignores = ["src/yarn_spinner.ts"]
+import pluginJs from "@eslint/js";
+import globals from "globals";
+import tseslint from "typescript-eslint";
 
 export default tseslint.config(
   {
-    files,
-    ignores,
-    ...eslint.configs.recommended,
-
-  },
-  ...tseslint.configs.recommendedTypeChecked.map(c => {
-    return {
-      ...c,
-      files,
-      ignores
-    }
-  }),
-  {
     languageOptions: {
       parserOptions: {
-        project: true,
-        tsconfigRootDir: import.meta.dirname,
+        project: [
+          './packages/*/tsconfig.json'
+        ]
       },
-    },
+      globals: { ...globals.browser, ...globals.node }
+    }
   },
-  {
-    files,
-    ignores,
-    ...eslintConfigPrettier
-  },
-);
+  pluginJs.configs.recommended,
+  ...tseslint.configs.recommendedTypeChecked,
+).map(c => {
+  return {
+    ...c,
+    files: ["packages/*/src/*.ts"],
+    ignores: ["**/yarn_spinner.ts"]
+
+  }
+});

@@ -1,9 +1,9 @@
 import { MetadataEntry, OptionItem, Program, YarnVM } from '@yarnspinner/core';
 
-import "./yarnspinner.scss";
 import 'bootstrap';
+import "./yarnspinner.scss";
 
-import { Settings, LineDeliveryMode } from "./settings";
+import { LineDeliveryMode, Settings } from "./settings";
 
 let currentSettings: Settings = {
     lineDelivery: LineDeliveryMode.OneAtATime,

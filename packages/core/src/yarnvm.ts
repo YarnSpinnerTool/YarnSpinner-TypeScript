@@ -1,4 +1,4 @@
-import { Instruction, Program, Node, Operand } from "./yarn_spinner";
+import { Instruction, Node, Operand, Program } from "./yarn_spinner";
 
 enum ExecutionState {
     Stopped,
@@ -10,17 +10,17 @@ interface VariableStorage {
     [key: string]: YarnValue;
 }
 export interface OptionItem {
-    label: string,
-    line: string,
-    jump: number,
-    lineCondition: boolean,
-    optionID: number,
+    label: string;
+    line: string;
+    jump: number;
+    lineCondition: boolean;
+    optionID: number;
 }
 
 type CallSite = {
     nodeName: string;
     instruction: number;
-}
+};
 
 type YarnValue = number | string | boolean;
 
@@ -28,15 +28,15 @@ export type MetadataEntry = {
     id: string;
     node: string;
     lineNumber: string;
-    tags: string[],
-    [key: string]: unknown,
-}
+    tags: string[];
+    [key: string]: unknown;
+};
 
 const TrackingVariableNameHeader: string = "$Yarn.Internal.TrackingVariable";
 
 export class YarnVM {
     private currentNode: Node | null = null;
-    public program?: Program
+    public program?: Program;
 
     private stack: (string | boolean | number)[] = [];
     private state: ExecutionState = ExecutionState.Stopped;
@@ -45,7 +45,7 @@ export class YarnVM {
 
     public variableStorage: VariableStorage = {};
     private stringTable: { [key: string]: string } = {};
-    private metadataTable: Record<string, MetadataEntry> = {}
+    private metadataTable: Record<string, MetadataEntry> = {};
 
     private optionSet: OptionItem[] = [];
 
@@ -53,23 +53,36 @@ export class YarnVM {
 
     public lineCallback: ((line: string) => Promise<void>) | null = null;
     public commandCallback: ((command: string) => Promise<void>) | null = null;
-    public optionCallback: ((options: OptionItem[]) => Promise<number>) | null = null;
+    public optionCallback: ((options: OptionItem[]) => Promise<number>) | null =
+        null;
     public dialogueCompleteCallback: (() => Promise<void>) | null = null;
     public nodeCompleteCallback: ((nodeName: string) => void) | null = null;
 
-    public onVariableSet: ((variable: string, value: YarnValue) => void) | null = null;
+    public onVariableSet:
+        | ((variable: string, value: YarnValue) => void)
+        | null = null;
 
     // maps functions to their stub values
     // intended to be used for testing
-    private library?: Map<string, (string | boolean | number)>
+    private library?: Map<string, string | boolean | number>;
 
-    constructor(newProgram?: Program, strings?: { [key: string]: string }, stubLibrary?: Map<string, (string | boolean | number)>, metadataTable?: Record<string, MetadataEntry>) {
+    constructor(
+        newProgram?: Program,
+        strings?: { [key: string]: string },
+        stubLibrary?: Map<string, string | boolean | number>,
+        metadataTable?: Record<string, MetadataEntry>,
+    ) {
         if (newProgram && strings) {
             this.loadProgram(newProgram, strings, stubLibrary, metadataTable);
         }
     }
 
-    public loadProgram(newProgram: Program, strings: { [key: string]: string; }, stubsLibrary?: Map<string, (string | boolean | number)>, metadataTable?: Record<string, MetadataEntry> | undefined) {
+    public loadProgram(
+        newProgram: Program,
+        strings: { [key: string]: string },
+        stubsLibrary?: Map<string, string | boolean | number>,
+        metadataTable?: Record<string, MetadataEntry> | undefined,
+    ) {
         this.program = newProgram;
         this.stringTable = strings;
         this.library = stubsLibrary;
@@ -114,7 +127,9 @@ export class YarnVM {
         this.log("selecting option number: " + optionIndex);
 
         if (this.state != ExecutionState.WaitingOnOptionSelection) {
-            this.logError("asked to select option when options are not awaited");
+            this.logError(
+                "asked to select option when options are not awaited",
+            );
             return;
         }
 
@@ -143,7 +158,10 @@ export class YarnVM {
         }
 
         while (this.state == ExecutionState.Running) {
-            if (this.currentNode == null || this.programCounter >= this.currentNode.instructions.length) {
+            if (
+                this.currentNode == null ||
+                this.programCounter >= this.currentNode.instructions.length
+            ) {
                 this.state = ExecutionState.Stopped;
                 if (this.dialogueCompleteCallback) {
                     await this.dialogueCompleteCallback();
@@ -152,13 +170,14 @@ export class YarnVM {
             }
 
             const currentNode: Node | undefined = this.currentNode;
-            await this.runInstruction(this.currentNode.instructions[this.programCounter]);
+            await this.runInstruction(
+                this.currentNode.instructions[this.programCounter],
+            );
 
             if (this.currentNode == currentNode) {
                 // We're still in the same node. Advance to the next instruction.
                 this.programCounter += 1;
             }
-
         }
     }
 
@@ -167,347 +186,353 @@ export class YarnVM {
             case "jumpTo":
                 this.programCounter = i.instructionType.jumpTo.destination - 1;
                 break;
-            case "peekAndJump":
-                {
-                    const top = this.stack[this.stack.length - 1]
-                    if (typeof top !== "number") {
-                        this.logError(`Error running instruction: top of stack is not a number`)
-                    } else {
-                        // Update our program counter.
+            case "peekAndJump": {
+                const top = this.stack[this.stack.length - 1];
+                if (typeof top !== "number") {
+                    this.logError(
+                        `Error running instruction: top of stack is not a number`,
+                    );
+                } else {
+                    // Update our program counter.
 
-                        // We're staying in the same node, so programCounter will be
-                        // incremented when we return from this function. Because we
-                        // want the next instruction to be the instruction we just
-                        // popped, subtract one from it to compensate.
-                        this.programCounter = top - 1;
-                    }
-                    break;
+                    // We're staying in the same node, so programCounter will be
+                    // incremented when we return from this function. Because we
+                    // want the next instruction to be the instruction we just
+                    // popped, subtract one from it to compensate.
+                    this.programCounter = top - 1;
                 }
-            case "runLine":
-                {
-                    const label = i.instructionType.runLine.lineID;
-                    const count = i.instructionType.runLine.substitutionCount;
+                break;
+            }
+            case "runLine": {
+                const label = i.instructionType.runLine.lineID;
+                const count = i.instructionType.runLine.substitutionCount;
 
-                    this.log("running line " + label);
-                    const parameters: YarnValue[] = [];
-                    // now to get any replacement values
+                this.log("running line " + label);
+                const parameters: YarnValue[] = [];
+                // now to get any replacement values
 
-                    if (count != undefined && count > 0) {
-                        for (let j = count - 1; j >= 0; j--) {
-                            const top = this.stack.pop();
-                            if (top == undefined) {
-                                this.logError("asked to pop values from stack for inserting into lines, but stack has none!");
-                                break;
-                            }
-                            parameters.push(top);
-                        }
-                    }
-
-                    const line = this.buildLine(label, parameters);
-
-                    // in the c# one we set state to delivered
-                    // then to waiting
-                    // for this I think we can skip that and go straight to waiting to continue
-                    this.state = ExecutionState.WaitingForContinue;
-
-                    if (this.lineCallback != null) {
-                        await this.lineCallback(line)
-                        this.state = ExecutionState.Running;
-                    }
-
-                    break;
-                }
-            case "runCommand":
-                {
-                    let command = i.instructionType.runCommand.commandText;
-                    const count = i.instructionType.runCommand.substitutionCount;
-
-                    this.log("running command: <<" + command + ">>");
-
-                    const parameters: YarnValue[] = [];
-                    // now to get any replacement values
-                    if (count != undefined) {
-                        for (let j = count - 1; j >= 0; j--) {
-                            const top = this.stack.pop();
-                            if (top == undefined) {
-                                this.logError("asked to pop values from stack for inserting into commands, but stack has none!");
-                                break;
-                            }
-                            parameters.push(top);
-                        }
-                        parameters.reverse();
-                    }
-
-                    command = this.buildCommand(command, parameters);
-
-                    // in the c# one we set state to delivered
-                    // then to waiting
-                    // for this I think we can skip that and go straight to waiting to continue
-                    this.state = ExecutionState.WaitingForContinue;
-
-                    if (this.commandCallback != null) {
-                        await this.commandCallback(command);
-                        this.state = ExecutionState.Running;
-                    }
-
-                    break;
-                }
-            case "addOption":
-                {
-                    this.log("adding option");
-
-                    const label = i.instructionType.addOption.lineID;
-                    if (label == undefined) {
-                        this.logError("unable to run line, label is not a string");
-                        break;
-                    }
-
-                    const parameters: YarnValue[] = []
-                    // now to get any replacement values
-                    const count = i.instructionType.addOption.substitutionCount;
-                    if (count != undefined) {
-                        for (let j = count - 1; j >= 0; j--) {
-                            const top = this.stack.pop();
-                            if (top != undefined) {
-                                parameters.push(top);
-                            }
-                        }
-                    }
-
-
-                    // the jump point of of our option
-                    const jump = i.instructionType.addOption.destination;
-
-                    // now do we have line condition?
-                    let lineCondition = true;
-
-                    const valid = i.instructionType.addOption.hasCondition;
-                    if (valid != undefined && valid == true) {
+                if (count != undefined && count > 0) {
+                    for (let j = count - 1; j >= 0; j--) {
                         const top = this.stack.pop();
-                        if (typeof top == "boolean") {
-                            lineCondition = top;
+                        if (top == undefined) {
+                            this.logError(
+                                "asked to pop values from stack for inserting into lines, but stack has none!",
+                            );
+                            break;
                         }
+                        parameters.push(top);
                     }
-
-                    // we then need to configure the option here
-                    this.log(`adding option ${label}:${lineCondition}`);
-
-                    const option: OptionItem = {
-                        label: label,
-                        line: lineCondition ? this.buildLine(label, parameters) : `${this.buildLine(label, parameters)}`, // when an option is disabled it gets given a [disabled] flag at the end of the line, probably should remove this later...
-                        jump: jump == undefined ? 0 : jump,
-                        lineCondition: lineCondition,
-                        optionID: this.optionSet.length,
-                    };
-                    this.optionSet.push(option);
-
-                    break;
-                }
-            case "showOptions":
-                {
-                    if (this.optionSet.length == 0) {
-                        this.logError("asked to show options but have none");
-                        this.state == ExecutionState.Stopped;
-                        break;
-                    }
-
-                    this.log(`presenting ${this.optionSet.length} options`);
-
-                    this.state = ExecutionState.WaitingOnOptionSelection;
-
-                    if (this.optionCallback != null) {
-                        const index = await this.optionCallback(this.optionSet)
-                        this.selectOption(index);
-                        this.state = ExecutionState.Running;
-                    }
-
-                    break;
                 }
 
-            case "pushString":
-                {
-                    const value = i.instructionType.pushString.value;
-                    if (value != undefined) {
-                        this.stack.push(value);
-                    }
-                    break;
-                }
-            case "pushFloat":
-                {
-                    const value = i.instructionType.pushFloat.value;
-                    if (value != undefined) {
-                        this.stack.push(value);
-                    }
-                    break;
-                }
-            case "pushBool":
-                {
-                    const value = i.instructionType.pushBool.value;
-                    if (value != undefined) {
-                        this.stack.push(value);
-                    }
-                    else {
-                        this.logError(`unable to unwrap instruction ${JSON.stringify(i)} into a number!`);
-                    }
-                    break;
-                }
-            case "jumpIfFalse":
-                {
-                    const top = this.top;
+                const line = this.buildLine(label, parameters);
 
-                    if (typeof top == "boolean" && !top) {
-                        // The top of the stack is false, so jump to the
-                        // destination
-                        this.programCounter = i.instructionType.jumpIfFalse.destination - 1;
-                    }
+                // in the c# one we set state to delivered
+                // then to waiting
+                // for this I think we can skip that and go straight to waiting to continue
+                this.state = ExecutionState.WaitingForContinue;
 
-                    break;
+                if (this.lineCallback != null) {
+                    await this.lineCallback(line);
+                    this.state = ExecutionState.Running;
                 }
-            case "pop":
-                {
-                    this.stack.pop();
+
+                break;
+            }
+            case "runCommand": {
+                let command = i.instructionType.runCommand.commandText;
+                const count = i.instructionType.runCommand.substitutionCount;
+
+                this.log("running command: <<" + command + ">>");
+
+                const parameters: YarnValue[] = [];
+                // now to get any replacement values
+                if (count != undefined) {
+                    for (let j = count - 1; j >= 0; j--) {
+                        const top = this.stack.pop();
+                        if (top == undefined) {
+                            this.logError(
+                                "asked to pop values from stack for inserting into commands, but stack has none!",
+                            );
+                            break;
+                        }
+                        parameters.push(top);
+                    }
+                    parameters.reverse();
+                }
+
+                command = this.buildCommand(command, parameters);
+
+                // in the c# one we set state to delivered
+                // then to waiting
+                // for this I think we can skip that and go straight to waiting to continue
+                this.state = ExecutionState.WaitingForContinue;
+
+                if (this.commandCallback != null) {
+                    await this.commandCallback(command);
+                    this.state = ExecutionState.Running;
+                }
+
+                break;
+            }
+            case "addOption": {
+                this.log("adding option");
+
+                const label = i.instructionType.addOption.lineID;
+                if (label == undefined) {
+                    this.logError("unable to run line, label is not a string");
                     break;
                 }
 
-            case "callFunc":
-                {
-                    const parameterCount = this.stack.pop();
-                    if (parameterCount != undefined && typeof parameterCount == "number") {
-                        const parameters: YarnValue[] = [];
-                        for (let j = 0; j < parameterCount; j++) {
-                            const top = this.stack.pop();
-                            if (top === undefined) {
-                                this.logError(`Internal error: stack was empty when popping parameter`);
-                                return;
-                            }
+                const parameters: YarnValue[] = [];
+                // now to get any replacement values
+                const count = i.instructionType.addOption.substitutionCount;
+                if (count != undefined) {
+                    for (let j = count - 1; j >= 0; j--) {
+                        const top = this.stack.pop();
+                        if (top != undefined) {
                             parameters.push(top);
                         }
-
-                        // ok now we have the name of the function and the the parameters
-                        // time to actually perform the function and push its value onto the stack
-                        const functionName = i.instructionType.callFunc.functionName;
-                        if (functionName !== undefined) {
-                            const result = this.runFunc(functionName, parameters);
-                            if (result !== undefined) {
-                                this.stack.push(result);
-                            }
-                            else {
-                                this.logError(`${functionName} did not return a valid result`);
-                            }
-                        }
                     }
-                    else {
-                        this.logError("top of stack is not a number!");
-                    }
-
-                    break;
                 }
-            case "pushVariable":
-                {
-                    const variableName = i.instructionType.pushVariable.variableName;
-                    if (variableName != undefined) {
-                        const value = this.variableStorage[variableName];
-                        if (value != undefined) {
-                            this.stack.push(value);
-                        }
+
+                // the jump point of of our option
+                const jump = i.instructionType.addOption.destination;
+
+                // now do we have line condition?
+                let lineCondition = true;
+
+                const valid = i.instructionType.addOption.hasCondition;
+                if (valid != undefined && valid == true) {
+                    const top = this.stack.pop();
+                    if (typeof top == "boolean") {
+                        lineCondition = top;
                     }
-                    break;
                 }
-            case "storeVariable":
-                {
-                    const variableName = i.instructionType.storeVariable.variableName;
-                    const value = this.top;
-                    if (variableName != undefined) {
-                        this.variableStorage[variableName] = value;
-                        if (this.onVariableSet) {
-                            this.onVariableSet(variableName, value);
-                        }
-                    }
+
+                // we then need to configure the option here
+                this.log(`adding option ${label}:${lineCondition}`);
+
+                const option: OptionItem = {
+                    label: label,
+                    line: lineCondition
+                        ? this.buildLine(label, parameters)
+                        : `${this.buildLine(label, parameters)}`, // when an option is disabled it gets given a [disabled] flag at the end of the line, probably should remove this later...
+                    jump: jump == undefined ? 0 : jump,
+                    lineCondition: lineCondition,
+                    optionID: this.optionSet.length,
+                };
+                this.optionSet.push(option);
+
+                break;
+            }
+            case "showOptions": {
+                if (this.optionSet.length == 0) {
+                    this.logError("asked to show options but have none");
+                    this.state == ExecutionState.Stopped;
                     break;
                 }
 
-            case "stop":
-                {
-                    this.state = ExecutionState.Stopped;
+                this.log(`presenting ${this.optionSet.length} options`);
+
+                this.state = ExecutionState.WaitingOnOptionSelection;
+
+                if (this.optionCallback != null) {
+                    const index = await this.optionCallback(this.optionSet);
+                    this.selectOption(index);
+                    this.state = ExecutionState.Running;
+                }
+
+                break;
+            }
+
+            case "pushString": {
+                const value = i.instructionType.pushString.value;
+                if (value != undefined) {
+                    this.stack.push(value);
+                }
+                break;
+            }
+            case "pushFloat": {
+                const value = i.instructionType.pushFloat.value;
+                if (value != undefined) {
+                    this.stack.push(value);
+                }
+                break;
+            }
+            case "pushBool": {
+                const value = i.instructionType.pushBool.value;
+                if (value != undefined) {
+                    this.stack.push(value);
+                } else {
+                    this.logError(
+                        `unable to unwrap instruction ${JSON.stringify(i)} into a number!`,
+                    );
+                }
+                break;
+            }
+            case "jumpIfFalse": {
+                const top = this.top;
+
+                if (typeof top == "boolean" && !top) {
+                    // The top of the stack is false, so jump to the
+                    // destination
+                    this.programCounter =
+                        i.instructionType.jumpIfFalse.destination - 1;
+                }
+
+                break;
+            }
+            case "pop": {
+                this.stack.pop();
+                break;
+            }
+
+            case "callFunc": {
+                const parameterCount = this.stack.pop();
+                if (
+                    parameterCount != undefined &&
+                    typeof parameterCount == "number"
+                ) {
+                    const parameters: YarnValue[] = [];
+                    for (let j = 0; j < parameterCount; j++) {
+                        const top = this.stack.pop();
+                        if (top === undefined) {
+                            this.logError(
+                                `Internal error: stack was empty when popping parameter`,
+                            );
+                            return;
+                        }
+                        parameters.push(top);
+                    }
+
+                    // ok now we have the name of the function and the the parameters
+                    // time to actually perform the function and push its value onto the stack
+                    const functionName =
+                        i.instructionType.callFunc.functionName;
+                    if (functionName !== undefined) {
+                        const result = this.runFunc(functionName, parameters);
+                        if (result !== undefined) {
+                            this.stack.push(result);
+                        } else {
+                            this.logError(
+                                `${functionName} did not return a valid result`,
+                            );
+                        }
+                    }
+                } else {
+                    this.logError("top of stack is not a number!");
+                }
+
+                break;
+            }
+            case "pushVariable": {
+                const variableName =
+                    i.instructionType.pushVariable.variableName;
+                if (variableName != undefined) {
+                    const value = this.variableStorage[variableName];
+                    if (value != undefined) {
+                        this.stack.push(value);
+                    }
+                }
+                break;
+            }
+            case "storeVariable": {
+                const variableName =
+                    i.instructionType.storeVariable.variableName;
+                const value = this.top;
+                if (variableName != undefined) {
+                    this.variableStorage[variableName] = value;
+                    if (this.onVariableSet) {
+                        this.onVariableSet(variableName, value);
+                    }
+                }
+                break;
+            }
+
+            case "stop": {
+                this.state = ExecutionState.Stopped;
+                this.currentNode = null;
+                break;
+            }
+            case "runNode": {
+                const currentNode = this.currentNode;
+                this.executeJumpToNode(
+                    i.instructionType.runNode.nodeName,
+                    false,
+                );
+                if (currentNode == this.currentNode) {
+                    // We haven't changed which node we're on, we just
+                    // jumped to instruction 0 of this node.
+                    //
+                    // We will advance to the next instruction when
+                    // returning, but we want to run the first instruction.
+                    // Compensate by decrementing our program counter.
+                    this.programCounter -= 1;
+                }
+                break;
+            }
+            case "peekAndRunNode": {
+                this.executeJumpToNode(null, false);
+                break;
+            }
+            case "detourToNode": {
+                this.executeJumpToNode(
+                    i.instructionType.detourToNode.nodeName,
+                    true,
+                );
+                break;
+            }
+            case "peekAndDetourToNode": {
+                this.executeJumpToNode(null, true);
+                break;
+            }
+            case "return": {
+                if (!this.currentNode) {
+                    throw new Error(
+                        "Internal error: attempted to return, but no node was runnning",
+                    );
+                }
+
+                this.returnFromNode(this.currentNode);
+                const returnSite = this.callStack.pop();
+
+                if (!returnSite) {
+                    // We've reached the top of the call stack, so
+                    // there's nowhere to return to. Stop the program.
                     this.currentNode = null;
+                    this.stack = [];
                     break;
                 }
-            case "runNode":
-                {
-                    const currentNode = this.currentNode;
-                    this.executeJumpToNode(i.instructionType.runNode.nodeName, false);
-                    if (currentNode == this.currentNode) {
-                        // We haven't changed which node we're on, we just
-                        // jumped to instruction 0 of this node. 
-                        //
-                        // We will advance to the next instruction when
-                        // returning, but we want to run the first instruction.
-                        // Compensate by decrementing our program counter.
-                        this.programCounter -= 1;
-                    }
-                    break;
-                }
-            case "peekAndRunNode":
-                {
-                    this.executeJumpToNode(null, false);
-                    break;
-                }
-            case "detourToNode":
-                {
-                    this.executeJumpToNode(i.instructionType.detourToNode.nodeName, true);
-                    break;
-                }
-            case "peekAndDetourToNode":
-                {
-                    this.executeJumpToNode(null, true);
-                    break;
-                }
-            case "return":
-                {
-                    if (!this.currentNode) {
-                        throw new Error("Internal error: attempted to return, but no node was runnning");
-                    }
 
-                    this.returnFromNode(this.currentNode);
-                    const returnSite = this.callStack.pop();
+                this.setNode(returnSite.nodeName, false);
 
+                // The stored call site will be the instruction that caused
+                // us to jump into here, so advance to the next instruction
+                // after that
+                this.programCounter = returnSite.instruction + 1;
 
-                    if (!returnSite) {
-                        // We've reached the top of the call stack, so
-                        // there's nowhere to return to. Stop the program.
-                        this.currentNode = null;
-                        this.stack = []
-                        break;
-                    }
-
-                    this.setNode(returnSite.nodeName, false);
-
-                    // The stored call site will be the instruction that caused
-                    // us to jump into here, so advance to the next instruction
-                    // after that
-                    this.programCounter = returnSite.instruction + 1;
-
-                    break;
-                }
-            default:
-                {
-                    this.logError(`Unknown opcode: ${i.instructionType.oneofKind}`);
-                    this.state = ExecutionState.Stopped;
-                }
+                break;
+            }
+            default: {
+                this.logError(`Unknown opcode: ${i.instructionType.oneofKind}`);
+                this.state = ExecutionState.Stopped;
+            }
         }
     }
 
     private executeJumpToNode(nodeName: string | null, isDetour: boolean) {
         if (!this.currentNode) {
-            throw new Error("Internal error: can't execute a node jump when we aren't currently running a node");
+            throw new Error(
+                "Internal error: can't execute a node jump when we aren't currently running a node",
+            );
         }
 
         if (isDetour) {
             // Preserve our current state.
             this.callStack.push({
                 nodeName: this.currentNode.name,
-                instruction: this.programCounter
-            })
+                instruction: this.programCounter,
+            });
         } else {
             // We are jumping straight to another node. Unwind the current call
             // stack and issue a 'node complete' event for every node.
@@ -517,9 +542,12 @@ export class YarnVM {
                 const currentStackFrame = this.callStack.pop()!;
 
                 if (currentStackFrame.nodeName) {
-                    const node = this.program?.nodes[currentStackFrame.nodeName]
+                    const node =
+                        this.program?.nodes[currentStackFrame.nodeName];
                     if (!node) {
-                        throw new Error(`Internal error: attempted to return to node ${currentStackFrame.nodeName}, but this node is not in the program`);
+                        throw new Error(
+                            `Internal error: attempted to return to node ${currentStackFrame.nodeName}, but this node is not in the program`,
+                        );
                     }
                     this.returnFromNode(node);
                 }
@@ -528,11 +556,13 @@ export class YarnVM {
 
         if (nodeName == null) {
             // The node name wasn't supplied - get it from the top of the stack.
-            const stackTop = this.stack[this.stack.length - 1]
+            const stackTop = this.stack[this.stack.length - 1];
             if (typeof stackTop === "string") {
                 nodeName = stackTop;
             } else {
-                throw new Error("Internal error: top of stack is not a node name");
+                throw new Error(
+                    "Internal error: top of stack is not a node name",
+                );
             }
         }
 
@@ -564,26 +594,32 @@ export class YarnVM {
 
         if (nodeTrackingVariable) {
             let result = this.variableStorage[nodeTrackingVariable];
-            if (typeof result === 'number') {
+            if (typeof result === "number") {
                 result += 1;
                 this.variableStorage[nodeTrackingVariable] = result;
             } else {
-                this.logError(`Failed to get the tracking variable for node ${node.name}`);
+                this.logError(
+                    `Failed to get the tracking variable for node ${node.name}`,
+                );
             }
         }
-
     }
 
     // haven't really done this in a hugely efficient manner
     // but this was nicer to write in this form than one big switch
-    private runFunc(funcName: string, parameters: (string | boolean | number)[]): string | boolean | number | undefined {
+    private runFunc(
+        funcName: string,
+        parameters: (string | boolean | number)[],
+    ): string | boolean | number | undefined {
         // number functions
         if (funcName.startsWith("Number.")) {
             funcName = funcName.substring(7);
 
             const first = parameters.pop();
             if (typeof first != "number") {
-                this.logError("asked to perform a number function but the first param is not a number!");
+                this.logError(
+                    "asked to perform a number function but the first param is not a number!",
+                );
                 return undefined;
             }
 
@@ -595,7 +631,9 @@ export class YarnVM {
 
             const second = parameters.pop();
             if (typeof second != "number") {
-                this.logError(`asked to perform a number function: ${funcName} but the second param is not a number, its a ${typeof second} (${second})`);
+                this.logError(
+                    `asked to perform a number function: ${funcName} but the second param is not a number, its a ${typeof second} (${second})`,
+                );
                 return undefined;
             }
 
@@ -631,9 +669,11 @@ export class YarnVM {
         if (funcName.startsWith("Bool.")) {
             funcName = funcName.substring(5);
 
-            const first = parameters.pop()
+            const first = parameters.pop();
             if (typeof first != "boolean") {
-                this.logError("asked to perform a boolean operation but don't have a bool");
+                this.logError(
+                    "asked to perform a boolean operation but don't have a bool",
+                );
                 return undefined;
             }
 
@@ -669,7 +709,9 @@ export class YarnVM {
             const first = parameters.pop();
             const second = parameters.pop();
             if (typeof first != "string" || typeof second != "string") {
-                this.logError("asked to perform a string function but parameters are not strings!");
+                this.logError(
+                    "asked to perform a string function but parameters are not strings!",
+                );
                 return undefined;
             }
 
@@ -690,8 +732,10 @@ export class YarnVM {
             const second = parameters.pop();
 
             switch (funcName) {
-                case "EqualTo": return first == second;
-                case "NotEqualTo": return first != second;
+                case "EqualTo":
+                    return first == second;
+                case "NotEqualTo":
+                    return first != second;
             }
         }
 
@@ -740,8 +784,7 @@ export class YarnVM {
 
                 if (funcName == "visited_count") {
                     return count;
-                }
-                else {
+                } else {
                     return count > 0;
                 }
             }
@@ -751,24 +794,25 @@ export class YarnVM {
         switch (funcName) {
             case "random":
                 return Math.random();
-            case "random_range":
-                {
-                    if (typeof parameters[0] == "number" && typeof parameters[1] == "number") {
-                        let min: number;
-                        let max: number;
+            case "random_range": {
+                if (
+                    typeof parameters[0] == "number" &&
+                    typeof parameters[1] == "number"
+                ) {
+                    let min: number;
+                    let max: number;
 
-                        if (parameters[0] > parameters[1]) {
-                            min = parameters[1];
-                            max = parameters[0];
-                        }
-                        else {
-                            min = parameters[0];
-                            max = parameters[1];
-                        }
-                        return this.randomRange(min, max);
+                    if (parameters[0] > parameters[1]) {
+                        min = parameters[1];
+                        max = parameters[0];
+                    } else {
+                        min = parameters[0];
+                        max = parameters[1];
                     }
-                    break;
+                    return this.randomRange(min, max);
                 }
+                break;
+            }
             case "dice":
                 if (typeof parameters[0] == "number" && parameters[0] > 1) {
                     return this.randomRange(1, parameters[0]);
@@ -780,7 +824,10 @@ export class YarnVM {
                 }
                 break;
             case "round_places":
-                if (typeof parameters[0] == "number" && typeof parameters[1] == "number") {
+                if (
+                    typeof parameters[0] == "number" &&
+                    typeof parameters[1] == "number"
+                ) {
                     return +parameters[0].toFixed(parameters[1]);
                 }
                 break;
@@ -794,34 +841,30 @@ export class YarnVM {
                     return Math.ceil(parameters[0]);
                 }
                 break;
-            case "inc":
-                {
-                    if (typeof parameters[0] == "number") {
-                        return Math.round(parameters[0]) + 1;
-                    }
-                    break;
+            case "inc": {
+                if (typeof parameters[0] == "number") {
+                    return Math.round(parameters[0]) + 1;
                 }
-            case "dec":
-                {
-                    if (typeof parameters[0] == "number") {
-                        return Math.round(parameters[0]) - 1;
-                    }
-                    break;
+                break;
+            }
+            case "dec": {
+                if (typeof parameters[0] == "number") {
+                    return Math.round(parameters[0]) - 1;
                 }
-            case "decimal":
-                {
-                    if (typeof parameters[0] == "number") {
-                        return parameters[0] % 1;
-                    }
-                    break;
+                break;
+            }
+            case "decimal": {
+                if (typeof parameters[0] == "number") {
+                    return parameters[0] % 1;
                 }
-            case "int":
-                {
-                    if (typeof parameters[0] == "number") {
-                        return Math.trunc(parameters[0]);
-                    }
-                    break;
+                break;
+            }
+            case "int": {
+                if (typeof parameters[0] == "number") {
+                    return Math.trunc(parameters[0]);
                 }
+                break;
+            }
         }
 
         // HERE IS WHERE YOU WOULD ADD IN ANY CUSTOM FUNCTIONS YOU MIGHT NEED FOR YOUR OWN PROGRAMS
@@ -837,7 +880,9 @@ export class YarnVM {
 
         // at this point we've either returned the result of the function or had an invalid function
         // either it doesn't exist or the parameters are incorrect
-        this.logError(`Encountered invalid function: ${funcName} with parameters: (${JSON.stringify(parameters)})`);
+        this.logError(
+            `Encountered invalid function: ${funcName} with parameters: (${JSON.stringify(parameters)})`,
+        );
         return undefined;
     }
 
@@ -845,22 +890,28 @@ export class YarnVM {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
-    private buildLine(lineID: string, parameters: (string | boolean | number)[]): string {
+    private buildLine(
+        lineID: string,
+        parameters: (string | boolean | number)[],
+    ): string {
         let line = this.stringTable[lineID];
         if (line === undefined || line === "") {
             // The line was not present in the string table. It may be in the shadow table.
-            const metaEntry = this.metadataTable[lineID]
+            const metaEntry = this.metadataTable[lineID];
             if (!metaEntry) {
                 // It wasn't found. Return just the line ID.
                 return lineID;
             }
             const SourceTagPrefix = "shadow:";
-            const sourceTag = metaEntry.tags.find(t => t.startsWith(SourceTagPrefix));
+            const sourceTag = metaEntry.tags.find((t) =>
+                t.startsWith(SourceTagPrefix),
+            );
             if (!sourceTag) {
                 // We have a metadata entry for this line, but it doesn't have a source tag.
                 return lineID;
             }
-            const sourceLineID = "line:" + sourceTag.substring(SourceTagPrefix.length);
+            const sourceLineID =
+                "line:" + sourceTag.substring(SourceTagPrefix.length);
             line = this.stringTable[sourceLineID];
 
             if (line === undefined) {
@@ -876,9 +927,11 @@ export class YarnVM {
         for (let i = 0; i < parameters.length; i += 1) {
             let substitution = parameters[i];
             if (typeof substitution == "boolean") {
-                line = line.replace("{" + i + "}", `${substitution == true ? "True" : "False"}`);
-            }
-            else {
+                line = line.replace(
+                    "{" + i + "}",
+                    `${substitution == true ? "True" : "False"}`,
+                );
+            } else {
                 if (typeof substitution == "number") {
                     if (!Number.isInteger(substitution)) {
                         substitution = substitution.toFixed(1); // not sure how I feel about this but it smoothes out some weirdness
@@ -890,14 +943,19 @@ export class YarnVM {
 
         return line;
     }
-    private buildCommand(cmd: string, parameters: (string | boolean | number)[]): string {
+    private buildCommand(
+        cmd: string,
+        parameters: (string | boolean | number)[],
+    ): string {
         let command = cmd;
         for (let i = 0; i < parameters.length; i += 1) {
             const substitution = parameters[i];
             if (typeof substitution == "boolean") {
-                command = command.replace("{" + i + "}", `${substitution == true ? "True" : "False"}`);
-            }
-            else {
+                command = command.replace(
+                    "{" + i + "}",
+                    `${substitution == true ? "True" : "False"}`,
+                );
+            } else {
                 command = command.replace("{" + i + "}", `${substitution}`);
             }
         }
@@ -946,7 +1004,7 @@ export class YarnVM {
     }
     // push and pop work as expected but at the end of the array
     // this is just to avoid retyping this every time
-    private get top(): (string | number | boolean) {
+    private get top(): string | number | boolean {
         return this.stack[this.stack.length - 1];
     }
     private printInstruction(i: Instruction): string {

@@ -1,9 +1,10 @@
-import { Program } from "../src/yarn_spinner";
-import { YarnVM, OptionItem, MetadataEntry } from '../src/yarnvm'
-import { readFileSync, readdirSync, existsSync } from "fs";
-import { resolve } from "node:path";
 import { parse as parseCSV } from "csv-parse/sync";
-import { ActionJumpToNodeStep, ActionSelectStep, ActionSetSaliencyStep, ActionSetVariableStep, ExpectCommandStep, ExpectContentStep, ExpectLineStep, ExpectOptionStep, ExpectStop, TestPlan, TestPlanStep } from "./TestPlan";
+import { existsSync, readFileSync, readdirSync } from "fs";
+import { resolve } from "node:path";
+
+import { Program } from "../src/yarn_spinner";
+import { MetadataEntry, OptionItem, YarnVM } from '../src/yarnvm';
+import { ActionJumpToNodeStep, ActionSelectStep, ActionSetSaliencyStep, ActionSetVariableStep, ExpectCommandStep, ExpectLineStep, ExpectOptionStep, ExpectStop, TestPlan } from "./TestPlan";
 
 console.error = (message, ...params) => {
     throw new Error(

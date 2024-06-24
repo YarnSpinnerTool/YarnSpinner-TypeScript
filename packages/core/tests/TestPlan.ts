@@ -1,9 +1,9 @@
-import * as fs from "node:fs";
-import * as antlr from 'antlr4ng'
-
+import * as antlr from 'antlr4ng';
 import { CharStream, CommonTokenStream } from "antlr4ng";
+import * as fs from "node:fs";
+
 import { YarnSpinnerTestPlanLexer } from "./YarnSpinnerTestPlanLexer";
-import { ActionSetBoolContext, ActionSetNumberContext, LineWithAnyTextExpectedContext, LineWithSpecificTextExpectedContext, TestplanContext, YarnSpinnerTestPlanParser } from "./YarnSpinnerTestPlanParser";
+import { ActionSetBoolContext, ActionSetNumberContext, LineWithAnyTextExpectedContext, LineWithSpecificTextExpectedContext, YarnSpinnerTestPlanParser } from "./YarnSpinnerTestPlanParser";
 
 export abstract class TestPlanStep {
 }
