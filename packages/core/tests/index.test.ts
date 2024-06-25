@@ -2,9 +2,7 @@ import { parse as parseCSV } from "csv-parse/sync";
 import { existsSync, readFileSync, readdirSync } from "fs";
 import { resolve } from "node:path";
 
-import { Program } from "../src/yarn_spinner";
-import { MetadataEntry, OptionItem, YarnVM } from '../src/yarnvm';
-import { ActionJumpToNodeStep, ActionSelectStep, ActionSetSaliencyStep, ActionSetVariableStep, ExpectCommandStep, ExpectLineStep, ExpectOptionStep, ExpectStop, TestPlan } from "./TestPlan";
+import { Program } from "../src/generated/yarn_spinner";
 
 console.error = (message, ...params) => {
     throw new Error(

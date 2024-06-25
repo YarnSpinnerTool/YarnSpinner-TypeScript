@@ -1,4 +1,4 @@
-import { Instruction, Node, Operand, Program } from "./yarn_spinner";
+import { Instruction, Node, Operand, Program } from "./generated/yarn_spinner";
 
 enum ExecutionState {
     Stopped,

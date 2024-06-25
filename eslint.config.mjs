@@ -19,7 +19,7 @@ export default tseslint.config(
   return {
     ...c,
     files: ["packages/*/src/*.ts"],
-    ignores: ["**/yarn_spinner.ts"]
+    ignores: ["**/generated/*"]
 
   }
 });
