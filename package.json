@@ -4,6 +4,7 @@
   "description": "This is a work-in-progress TypeScript VM and runner of compiled yarn files. ",
   "main": "jest.config.js",
   "devDependencies": {
+    "@eslint/js": "^9.6.0",
     "@typescript-eslint/utils": "^7.13.1",
     "eslint-plugin-import": "^2.29.1",
     "typescript-eslint": "^7.13.1"

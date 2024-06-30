@@ -104,7 +104,7 @@ export const selectMarker: ReplacementMarkerFunction = (m: {
 /** An error thrown while parsing markup. */
 export class MarkupParseError extends Error {
     position: number;
-    constructor(message: string, position: number, ...args: any[]) {
+    constructor(message: string, position: number) {
         super(message);
         this.message = message;
         this.position = position;
@@ -192,7 +192,7 @@ export function parseMarkup(
         let noMarkupMode = false;
 
         while (idx < input.length) {
-            let c = input[idx];
+            const c = input[idx];
             if (c == "\\") {
                 // This may be an escaped character, but only if the next
                 // character is [ or ].
@@ -309,7 +309,7 @@ export function parseMarkup(
             let str = match[0].substring(1, quotedString.length - 1);
 
             // Replace escaped characters
-            str = str.replace(/\\(.)/g, (_, group1) => group1);
+            str = str.replace(/\\(.)/g, (_, group1) => group1 as string);
 
             return {
                 result: str,
@@ -318,7 +318,7 @@ export function parseMarkup(
         }
 
         // Match bare strings
-        if ((match = input.match(/^\s*[a-zA-Z0-9_\\\.-]+\s*/))) {
+        if ((match = input.match(/^\s*[a-zA-Z0-9_\\.-]+\s*/))) {
             position += match[0].length;
 
             const str = match[0].trim();
@@ -376,12 +376,15 @@ export function parseMarkup(
         let name: string;
         ({ result: name, remainder: input } = parseID(input));
 
-        let properties: Property[] = [];
+        const properties: Property[] = [];
 
         // Parse either the single shortcut property, or the collection of
-        // properties
+        // properties.
+
         if (lookAhead(input, "=")) {
-            // This is a shortcut option. Parse a single value.
+            // This is a shortcut option.
+
+            // Parse a single value.
             input = expect(input, "=");
 
             let value: MarkupValue;
@@ -402,7 +405,8 @@ export function parseMarkup(
         }
 
         if (lookAhead(input, "/")) {
-            // This is a self-closing tag
+            // This is a self-closing tag.
+
             // Parse the end of the tag
             input = expect(input, "/]");
 
@@ -416,7 +420,8 @@ export function parseMarkup(
                 } satisfies Marker,
             };
         } else {
-            // This is an open tag
+            // This is an open tag.
+
             // Parse the end of the tag
             input = expect(input, "]");
 
@@ -449,7 +454,7 @@ export function parseMarkup(
 
     let workingString = text;
     let output = "";
-    let markers: Marker[] = [];
+    const markers: Marker[] = [];
 
     while (workingString.length > 0) {
         // Attempt to parse some text, stopping at the next marker
@@ -501,7 +506,7 @@ export function parseMarkup(
 
     // We now have our output text, and a collection of markers. First, we'll
     // create attributes from self-closing markers.
-    let attributes: MarkupAttribute[] = [];
+    const attributes: MarkupAttribute[] = [];
 
     attributes.push(
         ...(markers

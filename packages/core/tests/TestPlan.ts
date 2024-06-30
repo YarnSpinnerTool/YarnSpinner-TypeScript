@@ -1,41 +1,44 @@
-import * as antlr from 'antlr4ng';
+import { YarnSpinnerTestPlanLexer } from "./generated/YarnSpinnerTestPlanLexer";
+import {
+    ActionSetBoolContext,
+    ActionSetNumberContext,
+    LineWithAnyTextExpectedContext,
+    LineWithSpecificTextExpectedContext,
+    YarnSpinnerTestPlanParser,
+} from "./generated/YarnSpinnerTestPlanParser";
+import * as antlr from "antlr4ng";
 import { CharStream, CommonTokenStream } from "antlr4ng";
 import * as fs from "node:fs";
 
-import { YarnSpinnerTestPlanLexer } from "./YarnSpinnerTestPlanLexer";
-import { ActionSetBoolContext, ActionSetNumberContext, LineWithAnyTextExpectedContext, LineWithSpecificTextExpectedContext, YarnSpinnerTestPlanParser } from "./YarnSpinnerTestPlanParser";
-
-export abstract class TestPlanStep {
-}
+export abstract class TestPlanStep {}
 
 export abstract class ExpectContentStep extends TestPlanStep {
     public expectedText: string | null = null;
 }
 
 export class TestPlanRun implements Iterable<TestPlanStep> {
-    [Symbol.iterator](): Iterator<TestPlanStep, any, undefined> {
+    [Symbol.iterator](): Iterator<TestPlanStep, unknown, undefined> {
         return this.steps.values();
     }
 
     public startNode: string = "Start";
-    public steps: TestPlanStep[] = []
+    public steps: TestPlanStep[] = [];
 }
 
 export class ExpectLineStep extends ExpectContentStep {
-    public expectedHashTags: string[] = []
+    public expectedHashTags: string[] = [];
 
     constructor(expectedText: string | null, expectedHashtags: string[]) {
-        super()
+        super();
         this.expectedText = expectedText;
         this.expectedHashTags = expectedHashtags;
     }
 
     override toString(): string {
         if (this.expectedHashTags.length > 0) {
-            return `"Line \"${this.expectedText}\" with hashtags ${this.expectedHashTags.join(' ')}`
-        }
-        else {
-            return `"Line \"${this.expectedText}\"`
+            return `"Line "${this.expectedText}" with hashtags ${this.expectedHashTags.join(" ")}`;
+        } else {
+            return `"Line "${this.expectedText}"`;
         }
     }
 }
@@ -44,7 +47,11 @@ export class ExpectOptionStep extends ExpectContentStep {
     public expectedHashtags: string[] = [];
     public expectedAvailability: boolean = true;
 
-    constructor(text: string | null, hashtags: string[], expectedAvailability: boolean) {
+    constructor(
+        text: string | null,
+        hashtags: string[],
+        expectedAvailability: boolean,
+    ) {
         super();
         this.expectedText = text;
         this.expectedHashtags.push(...hashtags);
@@ -54,13 +61,12 @@ export class ExpectOptionStep extends ExpectContentStep {
 
 export class ExpectCommandStep extends ExpectContentStep {
     constructor(text: string) {
-        super()
+        super();
         this.expectedText = text;
     }
-
 }
 
-export class ExpectStop extends TestPlanStep { }
+export class ExpectStop extends TestPlanStep {}
 
 export class ActionSelectStep extends TestPlanStep {
     public selectedIndex: number = 0;
@@ -78,7 +84,7 @@ export class ActionSetSaliencyStep extends TestPlanStep {
     public saliencyMode: SaliencyMode = "unset";
 
     constructor(saliencyMode: SaliencyMode) {
-        super()
+        super();
         this.saliencyMode = saliencyMode;
     }
 }
@@ -88,7 +94,7 @@ export class ActionSetVariableStep extends TestPlanStep {
     public value: YarnValue;
 
     public constructor(variableName: string, value: YarnValue) {
-        super()
+        super();
         this.variableName = variableName;
         this.value = value;
     }
@@ -104,10 +110,20 @@ export class ActionJumpToNodeStep extends TestPlanStep {
 }
 
 class ErrorListener extends antlr.BaseErrorListener {
+    source: string;
+
     constructor(source: string) {
-        super()
+        super();
+        this.source = source;
     }
-    override syntaxError<S extends antlr.Token, T extends antlr.ATNSimulator>(recognizer: antlr.Recognizer<T>, offendingSymbol: S | null, line: number, column: number, msg: string, e: antlr.RecognitionException | null): void {
+    override syntaxError<S extends antlr.Token, T extends antlr.ATNSimulator>(
+        _recognizer: antlr.Recognizer<T>,
+        _offendingSymbol: S | null,
+        _line: number,
+        _column: number,
+        _msg: string,
+        _e: antlr.RecognitionException | null,
+    ): void {
         throw new Error("syntax error");
     }
 }
@@ -136,14 +152,12 @@ function trimCharacters(input: string, characters: string): string {
 }
 
 export class TestPlan implements Iterable<TestPlanRun> {
-
     public runs: TestPlanRun[] = [];
 
+    constructor() {}
 
-    constructor() { }
-
-    [Symbol.iterator](): Iterator<TestPlanRun, any, undefined> {
-        return this.runs.values()
+    [Symbol.iterator](): Iterator<TestPlanRun, TestPlanRun, undefined> {
+        return this.runs.values();
     }
 
     public static fromFile(path: string): TestPlan {
@@ -152,20 +166,20 @@ export class TestPlan implements Iterable<TestPlanRun> {
     }
 
     public static fromString(text: string): TestPlan {
-        var plan = new TestPlan();
-        var charStream = CharStream.fromString(text);
-        var lexer = new YarnSpinnerTestPlanLexer(charStream);
+        const plan = new TestPlan();
+        const charStream = CharStream.fromString(text);
+        const lexer = new YarnSpinnerTestPlanLexer(charStream);
 
-        var tokenStream = new CommonTokenStream(lexer);
-        var parser = new YarnSpinnerTestPlanParser(tokenStream);
+        const tokenStream = new CommonTokenStream(lexer);
+        const parser = new YarnSpinnerTestPlanParser(tokenStream);
         lexer.removeErrorListeners();
         parser.removeErrorListeners();
-        var lexerErrorListener = new ErrorListener("testplan");
-        var parserErrorListener = new ErrorListener("testplan");
+        const lexerErrorListener = new ErrorListener("testplan");
+        const parserErrorListener = new ErrorListener("testplan");
         lexer.addErrorListener(lexerErrorListener);
         parser.addErrorListener(parserErrorListener);
 
-        var testPlanTree = parser.testplan();
+        const testPlanTree = parser.testplan();
 
         // var allDiagnostics = lexerErrorListener.Diagnostics.Concat(parserErrorListener.Diagnostics);
         // if (allDiagnostics.Any(d => d.Severity == Diagnostic.DiagnosticSeverity.Error)) {
@@ -173,73 +187,95 @@ export class TestPlan implements Iterable<TestPlanRun> {
         // }
 
         for (const runContext of testPlanTree.run()) {
-            let run = new TestPlanRun();
-            for (var stepContext of runContext.step()) {
+            const run = new TestPlanRun();
+            for (const stepContext of runContext.step()) {
                 let step: TestPlanStep;
                 if (stepContext.actionJumpToNode() != null) {
-                    step = new ActionJumpToNodeStep(stepContext.actionJumpToNode()?._nodeName?.text ?? "")
-                }
-                else if (stepContext.actionSelect() != null) {
-                    step = new ActionSelectStep(
-                        parseInt(stepContext.actionSelect()?.NUMBER().getText() ?? "error") - 1
+                    step = new ActionJumpToNodeStep(
+                        stepContext.actionJumpToNode()?._nodeName?.text ?? "",
                     );
-                }
-                else if (stepContext.actionSet() != null) {
+                } else if (stepContext.actionSelect() != null) {
+                    step = new ActionSelectStep(
+                        parseInt(
+                            stepContext.actionSelect()?.NUMBER().getText() ??
+                                "error",
+                        ) - 1,
+                    );
+                } else if (stepContext.actionSet() != null) {
                     const set = stepContext.actionSet();
 
                     if (set instanceof ActionSetBoolContext) {
                         step = new ActionSetVariableStep(
                             set._variable?.text ?? "<error>",
                             {
-                                "true": true,
-                                "false": false,
-                            }[(set._value?.text ?? "<error>").toLowerCase()] ?? false
+                                true: true,
+                                false: false,
+                            }[(set._value?.text ?? "<error>").toLowerCase()] ??
+                                false,
                         );
-                    }
-                    else if (set instanceof ActionSetNumberContext) {
+                    } else if (set instanceof ActionSetNumberContext) {
                         step = new ActionSetVariableStep(
                             set._variable?.text ?? "<error>",
-                            parseInt(set._value?.text ?? "<error>")
-                        )
-                    }
-                    else {
-                        throw new Error("Unhandled 'set' type: " + stepContext.getText())
+                            parseInt(set._value?.text ?? "<error>"),
+                        );
+                    } else {
+                        throw new Error(
+                            "Unhandled 'set' type: " + stepContext.getText(),
+                        );
                     }
                 } else if (stepContext.lineExpected()) {
                     const expectation = stepContext.lineExpected()!;
                     if (expectation instanceof LineWithAnyTextExpectedContext) {
                         step = new ExpectLineStep(
                             null,
-                            expectation.hashtag().map(h => h.getText())
-                        )
-                    } else if (expectation instanceof LineWithSpecificTextExpectedContext) {
+                            expectation.hashtag().map((h) => h.getText()),
+                        );
+                    } else if (
+                        expectation instanceof
+                        LineWithSpecificTextExpectedContext
+                    ) {
                         step = new ExpectLineStep(
-                            trimCharacters(expectation.TEXT().getText() ?? "<error>", "`"),
-                            expectation.hashtag().map(h => h.getText())
-                        )
+                            trimCharacters(
+                                expectation.TEXT().getText() ?? "<error>",
+                                "`",
+                            ),
+                            expectation.hashtag().map((h) => h.getText()),
+                        );
                     } else {
-                        throw new Error("Invalid line expectation")
+                        throw new Error("Invalid line expectation");
                     }
                 } else if (stepContext.optionExpected()) {
-
                     step = new ExpectOptionStep(
-                        trimCharacters(stepContext.optionExpected()?.TEXT().getText() ?? "<error>", '`'),
-                        stepContext.optionExpected()?.hashtag().map(h => h.getText()) ?? [],
-                        !stepContext.optionExpected()?._isDisabled
+                        trimCharacters(
+                            stepContext.optionExpected()?.TEXT().getText() ??
+                                "<error>",
+                            "`",
+                        ),
+                        stepContext
+                            .optionExpected()
+                            ?.hashtag()
+                            .map((h) => h.getText()) ?? [],
+                        !stepContext.optionExpected()?._isDisabled,
                     );
                 } else if (stepContext.commandExpected()) {
                     step = new ExpectCommandStep(
-                        trimCharacters(stepContext.commandExpected()?.TEXT().getText() ?? "<error>", '`')
-                    )
+                        trimCharacters(
+                            stepContext.commandExpected()?.TEXT().getText() ??
+                                "<error>",
+                            "`",
+                        ),
+                    );
                 } else if (stepContext.stopExpected()) {
                     step = new ExpectStop();
                 } else if (stepContext.actionSetSaliencyMode()) {
-
                     step = new ActionSetSaliencyStep(
-                        stepContext.actionSetSaliencyMode()?._saliencyMode?.text ?? "<error>"
+                        stepContext.actionSetSaliencyMode()?._saliencyMode
+                            ?.text ?? "<error>",
                     );
                 } else {
-                    throw new Error("Unhandled step type: " + stepContext.getText());
+                    throw new Error(
+                        "Unhandled step type: " + stepContext.getText(),
+                    );
                 }
                 run.steps.push(step);
             }
@@ -285,7 +321,7 @@ export enum StepType {
     /**
      * Runs a new node or sub-test within the current context.
      */
-    Run
+    Run,
 }
 
 export class TestPlanBuilder {
@@ -299,9 +335,12 @@ export class TestPlanBuilder {
         this.testPlan.runs.push(this.currentRun);
     }
 
-    public get testPlan(): TestPlan { return this.testPlan };
-    private set testPlan(value) { this._testPlan = value };
-
+    public get testPlan(): TestPlan {
+        return this.testPlan;
+    }
+    private set testPlan(value) {
+        this._testPlan = value;
+    }
 
     public addLine(line: string) {
         this.currentRun.steps.push(new ExpectLineStep(line, []));

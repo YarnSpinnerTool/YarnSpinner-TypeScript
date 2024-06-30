@@ -1,9 +1,3 @@
-import { parse as parseCSV } from "csv-parse/sync";
-import { existsSync, readFileSync, readdirSync } from "fs";
-import { resolve } from "node:path";
-
-import { Program } from "../src/generated/yarn_spinner";
-import { MetadataEntry, OptionItem, YarnVM } from "../src/yarnvm";
 import {
     ActionJumpToNodeStep,
     ActionSelectStep,
@@ -20,10 +14,15 @@ import {
     englishCardinalPluralMarker,
     englishOrdinalPluralMarker,
 } from "./test-common";
-import { selectMarker } from "../src/markup";
-import { parseMarkup } from "../src/markup";
 
-console.error = (message, ...params) => {
+import { Program } from "../src/generated/yarn_spinner";
+import { MetadataEntry, OptionItem, YarnVM } from "../src/yarnvm";
+import { parseMarkup, selectMarker } from "../src/markup";
+import { parse as parseCSV } from "csv-parse/sync";
+import { existsSync, readFileSync, readdirSync } from "fs";
+import { resolve } from "node:path";
+
+console.error = (message, ..._params) => {
     throw new Error(
         `Failing due to console.error while running test!\n\n${message}`,
     );
@@ -71,7 +70,7 @@ describe("all testplans run as expected", () => {
     // List, and skip, all testplans in the skipped test list
     test.skip.each(allTestPlans.filter((p) => skippedTests.includes(p)))(
         "testplan: %p",
-        async (testplan: string) => {},
+        async (_testplan: string) => {},
     );
 
     // Test all other testplans
@@ -94,35 +93,35 @@ describe("all testplans run as expected", () => {
                 "-Metadata.csv",
             );
 
-            let program = Program.fromBinary(
+            const program = Program.fromBinary(
                 readFileSync(compiledYarnFilePath),
             );
             expect(program).toBeDefined();
 
-            let records = parseCSV(readFileSync(linesFilePath), {
-                columns: true,
-                skipEmptyLines: true,
-                delimiter: ",",
-            });
-
-            // oh poor typescript, look how mean I am to you, forgive me
-            let stringTable: { [key: string]: string } = {};
-            for (let record of records) {
-                stringTable[record.id] = record.text;
-            }
-            expect(Object.keys(stringTable).length).toBeGreaterThanOrEqual(0);
-            expect(Object.keys(stringTable).length).toEqual(records.length);
-
-            let metadataRecords = parseCSV(readFileSync(metadataFilePath), {
+            const records = parseCSV(readFileSync(linesFilePath), {
                 columns: true,
                 skipEmptyLines: true,
                 delimiter: ",",
             }) as Record<string, string>[];
 
             // oh poor typescript, look how mean I am to you, forgive me
-            let metadataTable: { [key: string]: MetadataEntry } = {};
-            for (let record of metadataRecords) {
-                let newEntry: MetadataEntry = {
+            const stringTable: { [key: string]: string } = {};
+            for (const record of records) {
+                stringTable[record.id] = record.text;
+            }
+            expect(Object.keys(stringTable).length).toBeGreaterThanOrEqual(0);
+            expect(Object.keys(stringTable).length).toEqual(records.length);
+
+            const metadataRecords = parseCSV(readFileSync(metadataFilePath), {
+                columns: true,
+                skipEmptyLines: true,
+                delimiter: ",",
+            }) as Record<string, string>[];
+
+            // oh poor typescript, look how mean I am to you, forgive me
+            const metadataTable: { [key: string]: MetadataEntry } = {};
+            for (const record of metadataRecords) {
+                const newEntry: MetadataEntry = {
                     id: record.id,
                     node: record.node,
                     lineNumber: record.lineNumber,
@@ -135,32 +134,30 @@ describe("all testplans run as expected", () => {
 
             // The following functions are needed for the
             // Inference-FunctionsAndVarsInheritType test
-            var library: Map<string, string | boolean | number> = new Map();
+            const library: Map<string, string | boolean | number> = new Map();
             library.set("dummy_number", 1);
             library.set("dummy_bool", true);
             library.set("dummy_string", "string");
 
-            var vm = new YarnVM(program, stringTable, library, metadataTable);
+            const vm = new YarnVM(program, stringTable, library, metadataTable);
             vm.verboseLogging = false;
 
-            const dontExpectLines = async (line: string): Promise<never> => {
+            const dontExpectLines = (line: string): Promise<never> => {
                 throw Error(
                     `Received line "${line}" when we weren't expecting it`,
                 );
             };
-            const dontExpectOptions = async (
-                options: OptionItem[],
+            const dontExpectOptions = (
+                _options: OptionItem[],
             ): Promise<never> => {
                 throw Error("Received options when we weren't expecting any");
             };
-            const dontExpectCommand = async (
-                command: string,
-            ): Promise<never> => {
+            const dontExpectCommand = (command: string): Promise<never> => {
                 throw Error(
                     `Received command "${command}" when we weren't expecting it`,
                 );
             };
-            const dontExpectStop = async (): Promise<never> => {
+            const dontExpectStop = (): Promise<never> => {
                 throw Error(
                     "Received dialogue completion when we weren't expecting it",
                 );
@@ -196,7 +193,7 @@ describe("all testplans run as expected", () => {
                                 vm.optionCallback = dontExpectOptions;
                                 vm.commandCallback = dontExpectCommand;
                                 vm.dialogueCompleteCallback = dontExpectStop;
-                                vm.lineCallback = async (line) => {
+                                vm.lineCallback = (line) => {
                                     const parsedText = parseMarkup(line, {
                                         replacementMarkers: {
                                             select: selectMarker,
@@ -216,18 +213,21 @@ describe("all testplans run as expected", () => {
                                         );
                                     }
                                     continueTestPlan();
+
+                                    return Promise.resolve();
                                 };
                                 return;
                             }
                             if (currentStep instanceof ExpectCommandStep) {
                                 vm.optionCallback = dontExpectOptions;
-                                vm.lineCallback = dontExpectCommand;
+                                vm.lineCallback = dontExpectLines;
                                 vm.dialogueCompleteCallback = dontExpectStop;
-                                vm.commandCallback = async (command) => {
+                                vm.commandCallback = (command) => {
                                     expect(command).toEqual(
                                         currentStep.expectedText,
                                     );
                                     continueTestPlan();
+                                    return Promise.resolve();
                                 };
                                 return;
                             }
@@ -235,7 +235,7 @@ describe("all testplans run as expected", () => {
                                 vm.lineCallback = dontExpectLines;
                                 vm.commandCallback = dontExpectCommand;
                                 vm.dialogueCompleteCallback = dontExpectStop;
-                                vm.optionCallback = async (options) => {
+                                vm.optionCallback = (options) => {
                                     expect(options).toHaveLength(
                                         expectedOptions.length,
                                     );
@@ -273,9 +273,9 @@ describe("all testplans run as expected", () => {
                                     expectedOptions = [];
                                     continueTestPlan();
 
-                                    // test plans select one greater than the
-                                    // options
-                                    return currentStep.selectedIndex;
+                                    return Promise.resolve(
+                                        currentStep.selectedIndex,
+                                    );
                                 };
                                 return;
                             }

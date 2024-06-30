@@ -1,5 +1,5 @@
-import { parseMarkup, MarkupParseError, MarkupValue } from "../src/markup";
 import { englishOrdinalPluralMarker } from "./test-common";
+import { parseMarkup, MarkupParseError, MarkupValue } from "../src/markup";
 import { selectMarker } from "../src/markup";
 
 it("parses markup", () => {

@@ -3,7 +3,12 @@
   "compilerOptions": {
     "outDir": "dist",
     // "sourceRoot": "src/",
-    "rootDir": "src/"
+    "rootDir": "src/",
+    "strict": true,
+    "noImplicitAny": true,
+    // "noImplicitThis": true,
+    // "noUnusedParameters": true,
+    // "noUnusedLocals": true,
   },
   "include": [
     "./src/**/*"

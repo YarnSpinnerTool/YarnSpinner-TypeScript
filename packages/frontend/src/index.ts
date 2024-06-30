@@ -1,9 +1,9 @@
-import { MetadataEntry, OptionItem, Program, YarnVM } from '@yarnspinner/core';
-
-import 'bootstrap';
-import "./yarnspinner.scss";
-
 import { LineDeliveryMode, Settings } from "./settings";
+
+import { MetadataEntry, OptionItem, Program, YarnVM } from "@yarnspinner/core";
+
+import "bootstrap";
+import "./yarnspinner.scss";
 
 let currentSettings: Settings = {
     lineDelivery: LineDeliveryMode.OneAtATime,
@@ -12,14 +12,14 @@ let currentSettings: Settings = {
     startNodeName: "Start",
 };
 
-let settingLinesOneAtATimeButton: HTMLElement
-let settingLinesAllAtOnceButton: HTMLElement
-let settingShowVariablesButton: HTMLElement
-let settingShowUnavailableOptionsButton: HTMLElement
-let variableView: HTMLElement
-let variableTableBody: HTMLElement
-let startNodeCurrentLabel: HTMLElement
-let startNodeDropdown: HTMLElement
+let settingLinesOneAtATimeButton: HTMLElement;
+let settingLinesAllAtOnceButton: HTMLElement;
+let settingShowVariablesButton: HTMLElement;
+let settingShowUnavailableOptionsButton: HTMLElement;
+let variableView: HTMLElement;
+let variableTableBody: HTMLElement;
+let startNodeCurrentLabel: HTMLElement;
+let startNodeDropdown: HTMLElement;
 
 const VM = new YarnVM();
 VM.onVariableSet = () => updateVariableDisplay(VM);
@@ -31,7 +31,11 @@ VM.lineCallback = function (line: string) {
         addDialogueText(line).scrollIntoView();
 
         if (currentSettings.lineDelivery == LineDeliveryMode.OneAtATime) {
-            const nextLineButton = addDialogueElement("div", "list-group-item", "list-group-item-action");
+            const nextLineButton = addDialogueElement(
+                "div",
+                "list-group-item",
+                "list-group-item-action",
+            );
             nextLineButton.innerText = "Continue...";
 
             nextLineButton.scrollIntoView();
@@ -40,23 +44,23 @@ VM.lineCallback = function (line: string) {
                 nextLineButton.remove();
                 resolve();
             });
-
         } else {
             resolve();
-
         }
     });
-}
+};
 VM.commandCallback = function (command: string) {
     return new Promise(function (resolve) {
-        addDialogueText("<<" + command + ">>", "list-group-item-primary").scrollIntoView();
+        addDialogueText(
+            "<<" + command + ">>",
+            "list-group-item-primary",
+        ).scrollIntoView();
         resolve();
     });
-}
+};
 
 VM.optionCallback = function (options: OptionItem[]) {
     return new Promise<number>((resolve) => {
-
         // Create a button that resolves this promise with the specified
         // option index on click. (In other words, onOptions will finish
         // running when the button is clicked.)
@@ -97,10 +101,14 @@ VM.optionCallback = function (options: OptionItem[]) {
                 button.addEventListener("click", () => {
                     // Add the text of the button that was selected, and get rid
                     // of the buttons.
-                    addDialogueText(text, "selected-option", "list-group-item-secondary");
+                    addDialogueText(
+                        text,
+                        "selected-option",
+                        "list-group-item-secondary",
+                    );
                     optionsContainer.remove();
 
-                    // Resolve with the option ID that was selected. 
+                    // Resolve with the option ID that was selected.
                     resolve(option.optionID);
                 });
             }
@@ -108,20 +116,23 @@ VM.optionCallback = function (options: OptionItem[]) {
 
         optionsList.scrollIntoView();
     });
-}
+};
 
 function updateLineDeliveryUI(): void {
-
     const mode = currentSettings.lineDelivery;
 
     switch (mode) {
         case LineDeliveryMode.AllAtOnce:
             settingLinesAllAtOnceButton.classList.add("dropdown-item-checked");
-            settingLinesOneAtATimeButton.classList.remove("dropdown-item-checked");
+            settingLinesOneAtATimeButton.classList.remove(
+                "dropdown-item-checked",
+            );
             break;
         case LineDeliveryMode.OneAtATime:
             settingLinesOneAtATimeButton.classList.add("dropdown-item-checked");
-            settingLinesAllAtOnceButton.classList.remove("dropdown-item-checked");
+            settingLinesAllAtOnceButton.classList.remove(
+                "dropdown-item-checked",
+            );
             break;
     }
 }
@@ -135,7 +146,9 @@ function updateShowVariablesUI() {
             variableView.classList.remove("d-none");
             break;
         case false:
-            settingShowVariablesButton.classList.remove("dropdown-item-checked");
+            settingShowVariablesButton.classList.remove(
+                "dropdown-item-checked",
+            );
             variableView.classList.add("d-none");
             break;
     }
@@ -146,16 +159,19 @@ function updateShowUnavailableOptionsUI() {
 
     switch (showUnavailableOptions) {
         case true:
-            settingShowUnavailableOptionsButton.classList.add("dropdown-item-checked");
+            settingShowUnavailableOptionsButton.classList.add(
+                "dropdown-item-checked",
+            );
             break;
         case false:
-            settingShowUnavailableOptionsButton.classList.remove("dropdown-item-checked");
+            settingShowUnavailableOptionsButton.classList.remove(
+                "dropdown-item-checked",
+            );
             break;
     }
 }
 
 function initialiseStartNodeUI(nodeNames: string[]) {
-
     // Clear the list of yarn nodes
     while (startNodeDropdown.firstChild) {
         startNodeDropdown.removeChild(startNodeDropdown.firstChild);
@@ -163,7 +179,6 @@ function initialiseStartNodeUI(nodeNames: string[]) {
 
     // Add a new entry to the list for each node
     for (const nodeName of nodeNames) {
-
         const item = document.createElement("li");
         const link = document.createElement("a");
         item.appendChild(link);
@@ -184,19 +199,19 @@ function initialiseStartNodeUI(nodeNames: string[]) {
 }
 
 function updateStartNodeUI() {
-
     for (const item of startNodeDropdown.children) {
-
         const htmlItem = item as HTMLElement;
         if (htmlItem.dataset["nodeName"] == currentSettings.startNodeName) {
             htmlItem.querySelector("a")?.classList.add("dropdown-item-checked");
         } else {
-            htmlItem.querySelector("a")?.classList.remove("dropdown-item-checked");
+            htmlItem
+                .querySelector("a")
+                ?.classList.remove("dropdown-item-checked");
         }
     }
 
-    startNodeCurrentLabel.innerText = currentSettings.startNodeName ?? "(start node)";
-
+    startNodeCurrentLabel.innerText =
+        currentSettings.startNodeName ?? "(start node)";
 }
 
 type StringTable = {
@@ -206,12 +221,19 @@ type StringTable = {
 type MetadataTable = Record<string, MetadataEntry>;
 
 declare global {
-
     interface Window {
-        loadProgram: (programData: Uint8Array, stringTable: StringTable, metadataTable: MetadataTable) => void;
+        loadProgram: (
+            programData: Uint8Array,
+            stringTable: StringTable,
+            metadataTable: MetadataTable,
+        ) => void;
         startDialogue: () => void;
         setup: () => void;
-        addButton: (text: string, classes: string[], handler: () => void) => void;
+        addButton: (
+            text: string,
+            classes: string[],
+            handler: () => void,
+        ) => void;
     }
 }
 
@@ -225,10 +247,18 @@ window.setup = () => {
         startDialogue();
     });
 
-    settingLinesOneAtATimeButton = document.getElementById("setting-lines-one-at-a-time")!;
-    settingLinesAllAtOnceButton = document.getElementById("setting-lines-all-at-once")!;
-    settingShowVariablesButton = document.getElementById("setting-show-variables")!;
-    settingShowUnavailableOptionsButton = document.getElementById("setting-show-unavailable-options")!;
+    settingLinesOneAtATimeButton = document.getElementById(
+        "setting-lines-one-at-a-time",
+    )!;
+    settingLinesAllAtOnceButton = document.getElementById(
+        "setting-lines-all-at-once",
+    )!;
+    settingShowVariablesButton = document.getElementById(
+        "setting-show-variables",
+    )!;
+    settingShowUnavailableOptionsButton = document.getElementById(
+        "setting-show-unavailable-options",
+    )!;
 
     startNodeCurrentLabel = document.getElementById("start-node-current")!;
     startNodeDropdown = document.getElementById("start-node-dropdown")!;
@@ -249,10 +279,10 @@ window.setup = () => {
     });
 
     settingShowUnavailableOptionsButton.addEventListener("click", () => {
-        updateSettings({ showUnavailableOptions: !currentSettings.showUnavailableOptions });
+        updateSettings({
+            showUnavailableOptions: !currentSettings.showUnavailableOptions,
+        });
     });
-
-
 
     updateSettings(currentSettings);
 
@@ -271,8 +301,11 @@ window.addButton = (text: string, classes: string[], handler: () => void) => {
     saveButton?.parentElement?.insertBefore(newButton, saveButton);
 };
 
-function loadProgram(programData: Uint8Array, stringTable: StringTable, metadataTable: MetadataTable): void {
-
+function loadProgram(
+    programData: Uint8Array,
+    stringTable: StringTable,
+    metadataTable: MetadataTable,
+): void {
     const program = Program.fromBinary(programData);
 
     if (Object.keys(program.nodes).length == 0) {
@@ -287,9 +320,8 @@ function loadProgram(programData: Uint8Array, stringTable: StringTable, metadata
 
         // If 'Start' is present in the list, move it to the front
         if (nodeNames.indexOf("Start") != -1) {
-
-            // Remove 'Start' from the list 
-            nodeNames = nodeNames.filter(n => n != "Start");
+            // Remove 'Start' from the list
+            nodeNames = nodeNames.filter((n) => n != "Start");
 
             // Put 'Start' at the beginning of the list
             nodeNames = ["Start"].concat(nodeNames);
@@ -307,12 +339,11 @@ function loadProgram(programData: Uint8Array, stringTable: StringTable, metadata
             startNodeName = "Start";
         }
 
-        updateSettings({ startNodeName: startNodeName })
+        updateSettings({ startNodeName: startNodeName });
     } else {
         console.error("Failed to load program!");
     }
 }
-
 
 function updateSettings(newSettings: Settings) {
     currentSettings = { ...currentSettings, ...newSettings };
@@ -337,7 +368,10 @@ function addDialogueText(text: string, ...classes: string[]) {
     return logElement;
 }
 
-function addDialogueElement(elementType: string, ...classes: string[]): HTMLElement {
+function addDialogueElement(
+    elementType: string,
+    ...classes: string[]
+): HTMLElement {
     const log = document.getElementById(dialogueContentsID)!;
     const logElement = document.createElement(elementType);
     log.appendChild(logElement);
@@ -362,7 +396,7 @@ function updateVariableDisplay(vm: YarnVM) {
 
         row.appendChild(document.createElement("td")).innerText = variableName;
 
-        let typeLabel: string
+        let typeLabel: string;
 
         if (typeof value === "string") {
             typeLabel = "string";
@@ -375,12 +409,12 @@ function updateVariableDisplay(vm: YarnVM) {
         }
 
         row.appendChild(document.createElement("td")).innerText = typeLabel; // TODO: add value
-        row.appendChild(document.createElement("td")).innerText = value.toString();
+        row.appendChild(document.createElement("td")).innerText =
+            value.toString();
     }
 }
 
 export function startDialogue() {
-
     clearDialogue();
 
     updateVariableDisplay(VM);
