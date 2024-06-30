@@ -16,6 +16,13 @@ import {
     TestPlan,
 } from "./TestPlan";
 
+import {
+    englishCardinalPluralMarker,
+    englishOrdinalPluralMarker,
+} from "./test-common";
+import { selectMarker } from "../src/markup";
+import { parseMarkup } from "../src/markup";
+
 console.error = (message, ...params) => {
     throw new Error(
         `Failing due to console.error while running test!\n\n${message}`,
@@ -54,8 +61,6 @@ describe("all testplans have associated files", () => {
 
 // The following tests are on the skip list. TODO: Make these tests pass!
 const skippedTests = [
-    "Escaping.testplan", // Markup not supported
-    "FormatFunctions.testplan", // Markup not supported
     "LineGroups.testplan", // saliency not supported
     "NodeGroups.testplan", // saliency not supported
     "NodeGroupsWithImplicitDeclarations.testplan", // saliency not supported
@@ -192,7 +197,15 @@ describe("all testplans run as expected", () => {
                                 vm.commandCallback = dontExpectCommand;
                                 vm.dialogueCompleteCallback = dontExpectStop;
                                 vm.lineCallback = async (line) => {
-                                    expect(line).toEqual(
+                                    const parsedText = parseMarkup(line, {
+                                        replacementMarkers: {
+                                            select: selectMarker,
+                                            plural: englishCardinalPluralMarker,
+                                            ordinal: englishOrdinalPluralMarker,
+                                        },
+                                    });
+
+                                    expect(parsedText.text).toEqual(
                                         currentStep.expectedText,
                                     );
                                     if (
@@ -230,7 +243,20 @@ describe("all testplans run as expected", () => {
                                         const option = options[i];
                                         const expectedOption =
                                             expectedOptions[i];
-                                        expect(option.line).toEqual(
+
+                                        const parsedText = parseMarkup(
+                                            option.line,
+                                            {
+                                                replacementMarkers: {
+                                                    select: selectMarker,
+                                                    plural: englishCardinalPluralMarker,
+                                                    ordinal:
+                                                        englishOrdinalPluralMarker,
+                                                },
+                                            },
+                                        );
+
+                                        expect(parsedText.text).toEqual(
                                             expectedOption.line,
                                         );
                                         expect(option.lineCondition).toEqual(
