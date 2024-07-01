@@ -16,7 +16,13 @@ import {
 } from "./test-common";
 
 import { Program } from "../src/generated/yarn_spinner";
-import { MetadataEntry, OptionItem, YarnVM } from "../src/yarnvm";
+import {
+    MetadataEntry,
+    OptionItem,
+    YarnFunction,
+    YarnLibrary,
+    YarnVM,
+} from "../src/yarnvm";
 import { parseMarkup, selectMarker } from "../src/markup";
 import { parse as parseCSV } from "csv-parse/sync";
 import { existsSync, readFileSync, readdirSync } from "fs";
@@ -132,12 +138,15 @@ describe("all testplans run as expected", () => {
             expect(Object.keys(stringTable).length).toBeGreaterThanOrEqual(0);
             expect(Object.keys(stringTable).length).toEqual(records.length);
 
-            // The following functions are needed for the
-            // Inference-FunctionsAndVarsInheritType test
-            const library: Map<string, string | boolean | number> = new Map();
-            library.set("dummy_number", 1);
-            library.set("dummy_bool", true);
-            library.set("dummy_string", "string");
+            const library: YarnLibrary = new Map(
+                Object.entries({
+                    // The following functions are needed for the
+                    // Inference-FunctionsAndVarsInheritType test
+                    dummy_number: () => 1,
+                    dummy_bool: () => true,
+                    dummy_string: () => "string",
+                } satisfies Record<string, YarnFunction>),
+            );
 
             const vm = new YarnVM(program, stringTable, library, metadataTable);
             vm.verboseLogging = false;

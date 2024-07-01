@@ -6,9 +6,11 @@ enum ExecutionState {
     WaitingForContinue,
     Running,
 }
+
 interface VariableStorage {
     [key: string]: YarnValue;
 }
+
 export interface OptionItem {
     label: string;
     line: string;
@@ -22,7 +24,13 @@ type CallSite = {
     instruction: number;
 };
 
-type YarnValue = number | string | boolean;
+export type YarnValue = number | string | boolean;
+
+export type YarnFunction = (
+    ...parameters: YarnValue[]
+) => YarnValue | undefined;
+
+export type YarnLibrary = Map<string, YarnFunction>;
 
 export type MetadataEntry = {
     id: string;
@@ -33,6 +41,10 @@ export type MetadataEntry = {
 };
 
 const TrackingVariableNameHeader: string = "$Yarn.Internal.TrackingVariable";
+
+function randomRange(min: number, max: number): number {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
 export class YarnVM {
     private currentNode: Node | null = null;
@@ -64,28 +76,34 @@ export class YarnVM {
 
     // maps functions to their stub values
     // intended to be used for testing
-    private library?: Map<string, string | boolean | number>;
+    private library?: YarnLibrary;
 
     constructor(
         newProgram?: Program,
         strings?: { [key: string]: string },
-        stubLibrary?: Map<string, string | boolean | number>,
+        library?: YarnLibrary,
         metadataTable?: Record<string, MetadataEntry>,
     ) {
         if (newProgram && strings) {
-            this.loadProgram(newProgram, strings, stubLibrary, metadataTable);
+            this.loadProgram(newProgram, strings, library, metadataTable);
         }
     }
 
     public loadProgram(
         newProgram: Program,
         strings: { [key: string]: string },
-        stubsLibrary?: Map<string, string | boolean | number>,
+        library?: YarnLibrary,
         metadataTable?: Record<string, MetadataEntry> | undefined,
     ) {
         this.program = newProgram;
         this.stringTable = strings;
-        this.library = stubsLibrary;
+
+        this.library = new Map([
+            // Take the user-provided library of functions
+            ...(library?.entries() ?? []),
+            // Add it to our own library
+            ...this.getLibrary().entries(),
+        ]);
         this.metadataTable = metadataTable ?? {};
 
         for (const key in this.program.initialValues) {
@@ -611,7 +629,299 @@ export class YarnVM {
                     `Failed to get the tracking variable for node ${node.name}`,
                 );
             }
+            this.variableStorage[nodeTrackingVariable] = result;
         }
+    }
+
+    private getLibrary(): YarnLibrary {
+        function checkNumber(value: YarnValue): asserts value is number {
+            typeCheck(value, "number");
+        }
+        function checkString(value: YarnValue): asserts value is string {
+            typeCheck(value, "string");
+        }
+        function checkBoolean(value: YarnValue): asserts value is boolean {
+            typeCheck(value, "boolean");
+        }
+
+        const typeCheck = (
+            value: YarnValue,
+            type: "number" | "string" | "boolean",
+        ): void => {
+            if (typeof value !== type) {
+                throw new Error("Expected parameter of type " + type);
+            }
+        };
+
+        const numberFunctions: Record<string, YarnFunction> = {
+            // Arithmetic operators
+            "Number.UnaryMinus": (a) => {
+                checkNumber(a);
+                return -a;
+            },
+            "Number.Add": (a, b) => {
+                checkNumber(a);
+                checkNumber(b);
+                return a + b;
+            },
+            "Number.Minus": (a, b) => {
+                checkNumber(a);
+                checkNumber(b);
+                return a - b;
+            },
+            "Number.Multiply": (a, b) => {
+                checkNumber(a);
+                checkNumber(b);
+                return a * b;
+            },
+            "Number.Divide": (a, b) => {
+                checkNumber(a);
+                checkNumber(b);
+                return a / b;
+            },
+            "Number.Modulo": (a, b) => {
+                checkNumber(a);
+                checkNumber(b);
+                return a % b;
+            },
+            // Comparison operators
+            "Number.EqualTo": (a, b) => {
+                checkNumber(a);
+                checkNumber(b);
+                return a === b;
+            },
+            "Number.GreaterThan": (a, b) => {
+                checkNumber(a);
+                checkNumber(b);
+                return a > b;
+            },
+            "Number.GreaterThanOrEqualTo": (a, b) => {
+                checkNumber(a);
+                checkNumber(b);
+                return a >= b;
+            },
+            "Number.LessThan": (a, b) => {
+                checkNumber(a);
+                checkNumber(b);
+                return a < b;
+            },
+            "Number.LessThanOrEqualTo": (a, b) => {
+                checkNumber(a);
+                checkNumber(b);
+                return a <= b;
+            },
+            "Number.NotEqualTo": (a, b) => {
+                checkNumber(a);
+                checkNumber(b);
+                return a !== b;
+            },
+        };
+
+        const booleanFunctions: Record<string, YarnFunction> = {
+            "Bool.Not": (a) => {
+                checkBoolean(a);
+                return !a;
+            },
+            "Bool.EqualTo": (a, b) => {
+                checkBoolean(a);
+                checkBoolean(b);
+                return a === b;
+            },
+            "Bool.NotEqualTo": (a, b) => {
+                checkBoolean(a);
+                checkBoolean(b);
+                return a !== b;
+            },
+            "Bool.Or": (a, b) => {
+                checkBoolean(a);
+                checkBoolean(b);
+                return a || b;
+            },
+            "Bool.And": (a, b) => {
+                checkBoolean(a);
+                checkBoolean(b);
+                return a && b;
+            },
+            "Bool.Xor": (a, b) => {
+                checkBoolean(a);
+                checkBoolean(b);
+                // JS has no boolean xor, but xor is equivalent to not-equal-to
+                return a !== b;
+            },
+        };
+
+        const stringFunctions: Record<string, YarnFunction> = {
+            "String.EqualTo": (a, b) => {
+                checkString(a);
+                checkString(b);
+                return a === b;
+            },
+            "String.NotEqualTo": (a, b) => {
+                checkString(a);
+                checkString(b);
+                return a !== b;
+            },
+            "String.Add": (a, b) => {
+                checkString(a);
+                checkString(b);
+                return a + b;
+            },
+        };
+
+        const enumFunctions: Record<string, YarnFunction> = {
+            "Enum.EqualTo": (a, b) => {
+                if (typeof a !== typeof b) {
+                    throw new Error(
+                        `Can't compare ${a} and ${b}, because they are of different underlying types`,
+                    );
+                }
+                return a === b;
+            },
+            "Enum.NotEqualTo": (a, b) => {
+                if (typeof a !== typeof b) {
+                    throw new Error(
+                        `Can't compare ${a} and ${b}, because they are of different underlying types`,
+                    );
+                }
+                return a !== b;
+            },
+        };
+
+        const conversionFunctions: Record<string, YarnFunction> = {
+            number: (value) => {
+                if (value === undefined) {
+                    throw new Error(
+                        "Can't convert to number: undefined value provided",
+                    );
+                }
+                switch (typeof value) {
+                    case "string":
+                        return parseFloat(value);
+                    case "boolean":
+                        return value ? 1 : 0;
+                    case "number":
+                        return value;
+                }
+            },
+            string: (value) => {
+                if (value === undefined) {
+                    throw new Error(
+                        "Can't convert to string: undefined value provided",
+                    );
+                }
+                return `${value}`;
+            },
+            bool: (value) => {
+                if (value === undefined) {
+                    throw new Error(
+                        "Can't convert to bool: undefined value provided",
+                    );
+                }
+                switch (typeof value) {
+                    case "boolean":
+                        return value;
+                    case "number":
+                        return value >= 1;
+                    case "string":
+                        return value === "true";
+                }
+            },
+        };
+
+        const visitationFunctions: Record<string, YarnFunction> = {
+            visited: (nodeName) => {
+                checkString(nodeName);
+                const name = `$Yarn.Internal.Visiting.${nodeName}`;
+
+                let count = this.variableStorage[name];
+
+                if (typeof count != "number") {
+                    count = 0;
+                }
+                return count > 0;
+            },
+            visited_count: (nodeName) => {
+                checkString(nodeName);
+                const name = `$Yarn.Internal.Visiting.${nodeName}`;
+
+                let count = this.variableStorage[name];
+
+                if (typeof count != "number") {
+                    count = 0;
+                }
+                return count;
+            },
+        };
+
+        const mathsFunctions: Record<string, YarnFunction> = {
+            random: () => Math.random(),
+            random_range: (from, to) => {
+                checkNumber(from);
+                checkNumber(to);
+
+                const min: number = Math.min(from, to);
+                const max: number = Math.max(from, to);
+
+                return randomRange(min, max);
+            },
+
+            dice: (sides) => {
+                checkNumber(sides);
+                if (sides < 1) {
+                    throw new Error(
+                        "dice() must be called with a number greater than zero",
+                    );
+                }
+                return randomRange(1, sides);
+            },
+            round: (value) => {
+                checkNumber(value);
+                return Math.round(value);
+            },
+            round_places: (value, places) => {
+                checkNumber(value);
+                checkNumber(places);
+                return +value.toFixed(places);
+            },
+            floor: (value) => {
+                checkNumber(value);
+                return Math.floor(value);
+            },
+            ceil: (value) => {
+                checkNumber(value);
+                return Math.ceil(value);
+            },
+            inc: (value) => {
+                checkNumber(value);
+                return Math.round(value) + 1;
+            },
+            dec: (value) => {
+                checkNumber(value);
+                return Math.round(value) - 1;
+            },
+            decimal: (value) => {
+                checkNumber(value);
+                return value % 1;
+            },
+            int: (value) => {
+                checkNumber(value);
+                return Math.trunc(value);
+            },
+        };
+
+        const library: YarnLibrary = new Map(
+            Object.entries({
+                ...numberFunctions,
+                ...stringFunctions,
+                ...booleanFunctions,
+                ...conversionFunctions,
+                ...mathsFunctions,
+                ...enumFunctions,
+                ...visitationFunctions,
+            }),
+        );
+
+        return library;
     }
 
     // haven't really done this in a hugely efficient manner
@@ -620,283 +930,19 @@ export class YarnVM {
         funcName: string,
         parameters: (string | boolean | number)[],
     ): string | boolean | number | undefined {
-        // number functions
-        if (funcName.startsWith("Number.")) {
-            funcName = funcName.substring(7);
+        // Check our library, and run the function from that.
+        const func = this.library?.get(funcName);
 
-            const first = parameters.pop();
-            if (typeof first != "number") {
-                this.logError(
-                    "asked to perform a number function but the first param is not a number!",
-                );
-                return undefined;
-            }
+        if (func != undefined) {
+            return func(...parameters);
+        } else {
+            // We failed to find a function to run.
+            this.logError(
+                `Encountered invalid function: ${funcName} with parameters: (${JSON.stringify(parameters)})`,
+            );
 
-            // special casing unary minus now
-            // because it doesn't need a second parameter so just gets in the way
-            if (funcName == "UnaryMinus") {
-                return -1 * first;
-            }
-
-            const second = parameters.pop();
-            if (typeof second != "number") {
-                this.logError(
-                    `asked to perform a number function: ${funcName} but the second param is not a number, its a ${typeof second} (${second})`,
-                );
-                return undefined;
-            }
-
-            switch (funcName) {
-                // basic maths operators
-                case "Add":
-                    return first + second;
-                case "Minus":
-                    return first - second;
-                case "Multiply":
-                    return first * second;
-                case "Divide":
-                    return first / second;
-                case "Modulo":
-                    return first % second;
-
-                // logical operators
-                case "EqualTo":
-                    return first == second;
-                case "GreaterThan":
-                    return first > second;
-                case "GreaterThanOrEqualTo":
-                    return first >= second;
-                case "LessThan":
-                    return first < second;
-                case "LessThanOrEqualTo":
-                    return first <= second;
-                case "NotEqualTo":
-                    return first != second;
-            }
+            return undefined;
         }
-        // all the boolean functions
-        if (funcName.startsWith("Bool.")) {
-            funcName = funcName.substring(5);
-
-            const first = parameters.pop();
-            if (typeof first != "boolean") {
-                this.logError(
-                    "asked to perform a boolean operation but don't have a bool",
-                );
-                return undefined;
-            }
-
-            // dealing with the unary not function straight up because all others require binary operands
-            if (funcName == "Not") {
-                return !first;
-            }
-
-            const second = parameters.pop();
-            if (typeof second != "boolean") {
-                this.logError("parameter 2 is not a boolean!");
-                return undefined;
-            }
-            // let second = parameters[1];
-
-            switch (funcName) {
-                case "EqualTo":
-                    return first == second;
-                case "NotEqualTo":
-                    return first != second;
-                case "Or":
-                    return first || second;
-                case "And":
-                    return first && second;
-                case "Xor":
-                    return first != second;
-            }
-        }
-        // string functions
-        if (funcName.startsWith("String.")) {
-            funcName = funcName.substring(7);
-
-            const first = parameters.pop();
-            const second = parameters.pop();
-            if (typeof first != "string" || typeof second != "string") {
-                this.logError(
-                    "asked to perform a string function but parameters are not strings!",
-                );
-                return undefined;
-            }
-
-            switch (funcName) {
-                case "EqualTo":
-                    return first == second;
-                case "NotEqualTo":
-                    return first != second;
-                case "Add":
-                    return first + second;
-            }
-        }
-        // enum function
-        if (funcName.startsWith("Enum.")) {
-            funcName = funcName.substring("Enum.".length);
-
-            const first = parameters.pop();
-            const second = parameters.pop();
-
-            switch (funcName) {
-                case "EqualTo":
-                    return first == second;
-                case "NotEqualTo":
-                    return first != second;
-            }
-        }
-
-        // conversion functions
-        if (funcName == "number") {
-            if (parameters[0] != undefined) {
-                switch (typeof parameters[0]) {
-                    case "string":
-                        return parseFloat(parameters[0]);
-                    case "boolean":
-                        return parameters[0] ? 1 : 0;
-                    case "number":
-                        return parameters[0];
-                }
-            }
-        }
-        if (funcName == "string") {
-            if (parameters[0] != undefined) {
-                return `${parameters[0]}`;
-            }
-        }
-        if (funcName == "bool") {
-            if (parameters[0] != undefined) {
-                switch (typeof parameters[0]) {
-                    case "boolean":
-                        return parameters[0];
-                    case "number":
-                        return parameters[0] >= 1;
-                    case "string":
-                        return parameters[0] == "true";
-                }
-            }
-        }
-
-        // visitation functions
-        if (funcName == "visited" || funcName == "visited_count") {
-            if (typeof parameters[0] == "string") {
-                const name = `$Yarn.Internal.Visiting.${parameters[0]}`;
-                let count = this.variableStorage[name];
-
-                this.log(`visiting ${name}: ${count}`);
-
-                if (typeof count != "number") {
-                    count = 0;
-                }
-
-                if (funcName == "visited_count") {
-                    return count;
-                } else {
-                    return count > 0;
-                }
-            }
-        }
-
-        // maths functions
-        switch (funcName) {
-            case "random":
-                return Math.random();
-            case "random_range": {
-                if (
-                    typeof parameters[0] == "number" &&
-                    typeof parameters[1] == "number"
-                ) {
-                    let min: number;
-                    let max: number;
-
-                    if (parameters[0] > parameters[1]) {
-                        min = parameters[1];
-                        max = parameters[0];
-                    } else {
-                        min = parameters[0];
-                        max = parameters[1];
-                    }
-                    return this.randomRange(min, max);
-                }
-                break;
-            }
-            case "dice":
-                if (typeof parameters[0] == "number" && parameters[0] > 1) {
-                    return this.randomRange(1, parameters[0]);
-                }
-                break;
-            case "round":
-                if (typeof parameters[0] == "number") {
-                    return Math.round(parameters[0]);
-                }
-                break;
-            case "round_places":
-                if (
-                    typeof parameters[0] == "number" &&
-                    typeof parameters[1] == "number"
-                ) {
-                    return +parameters[0].toFixed(parameters[1]);
-                }
-                break;
-            case "floor":
-                if (typeof parameters[0] == "number") {
-                    return Math.floor(parameters[0]);
-                }
-                break;
-            case "ceil":
-                if (typeof parameters[0] == "number") {
-                    return Math.ceil(parameters[0]);
-                }
-                break;
-            case "inc": {
-                if (typeof parameters[0] == "number") {
-                    return Math.round(parameters[0]) + 1;
-                }
-                break;
-            }
-            case "dec": {
-                if (typeof parameters[0] == "number") {
-                    return Math.round(parameters[0]) - 1;
-                }
-                break;
-            }
-            case "decimal": {
-                if (typeof parameters[0] == "number") {
-                    return parameters[0] % 1;
-                }
-                break;
-            }
-            case "int": {
-                if (typeof parameters[0] == "number") {
-                    return Math.trunc(parameters[0]);
-                }
-                break;
-            }
-        }
-
-        // HERE IS WHERE YOU WOULD ADD IN ANY CUSTOM FUNCTIONS YOU MIGHT NEED FOR YOUR OWN PROGRAMS
-
-        // finally we check the library of stubs
-        if (this.library != undefined) {
-            const stub = this.library.get(funcName);
-            if (stub != undefined) {
-                this.log(`running stub function ${funcName}`);
-                return stub;
-            }
-        }
-
-        // at this point we've either returned the result of the function or had an invalid function
-        // either it doesn't exist or the parameters are incorrect
-        this.logError(
-            `Encountered invalid function: ${funcName} with parameters: (${JSON.stringify(parameters)})`,
-        );
-        return undefined;
-    }
-
-    private randomRange(min: number, max: number): number {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
     private buildLine(
