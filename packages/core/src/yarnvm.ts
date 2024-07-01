@@ -594,9 +594,18 @@ export class YarnVM {
 
         if (nodeTrackingVariable) {
             let result = this.variableStorage[nodeTrackingVariable];
+            if (result === undefined) {
+                const initialValue =
+                    this.program?.initialValues[nodeTrackingVariable].value;
+                if (initialValue?.oneofKind !== "floatValue") {
+                    throw new Error(
+                        `Internal error: tracking variable for node ${node.name} was not declared as a float`,
+                    );
+                }
+                result = initialValue.floatValue;
+            }
             if (typeof result === "number") {
                 result += 1;
-                this.variableStorage[nodeTrackingVariable] = result;
             } else {
                 this.logError(
                     `Failed to get the tracking variable for node ${node.name}`,
