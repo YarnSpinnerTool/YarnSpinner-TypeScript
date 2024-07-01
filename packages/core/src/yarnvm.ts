@@ -402,7 +402,7 @@ export class YarnVM {
                             );
                             return;
                         }
-                        parameters.push(top);
+                        parameters.unshift(top);
                     }
 
                     // ok now we have the name of the function and the the parameters
