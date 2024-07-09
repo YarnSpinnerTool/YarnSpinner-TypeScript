@@ -108,8 +108,8 @@ export class YarnVM {
 
         for (const key in this.program.initialValues) {
             const value = this.unwrap(this.program.initialValues[key]);
-            // this.log(`initialising ${key} to be ${value}`);
-            if (value != undefined) {
+
+            if (value !== undefined) {
                 this.variableStorage[key] = value;
             }
         }
