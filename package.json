@@ -10,6 +10,7 @@
     "typescript-eslint": "^7.13.1"
   },
   "scripts": {
+    "setup-tests": "node packages/core/scripts/create-test-data.js",
     "test": "jest"
   },
   "keywords": [],
