@@ -21,6 +21,7 @@ import {
     OptionItem,
     YarnFunction,
     YarnLibrary,
+    YarnValue,
     YarnVM,
 } from "../src/yarnvm";
 import { parseMarkup, selectMarker } from "../src/markup";
@@ -65,11 +66,11 @@ describe("all testplans have associated files", () => {
 });
 
 // The following tests are on the skip list. TODO: Make these tests pass!
-const skippedTests = [
-    "LineGroups.testplan", // saliency not supported
-    "NodeGroups.testplan", // saliency not supported
-    "NodeGroupsWithImplicitDeclarations.testplan", // saliency not supported
-    "Once.testplan", // saliency not supported
+const skippedTests: string[] = [
+    // "LineGroups.testplan", // saliency not supported
+    // "NodeGroups.testplan", // saliency not supported
+    // "NodeGroupsWithImplicitDeclarations.testplan", // saliency not supported
+    // "Once.testplan", // saliency not supported
 ];
 
 describe("all testplans run as expected", () => {
@@ -145,6 +146,15 @@ describe("all testplans run as expected", () => {
                     dummy_number: () => 1,
                     dummy_bool: () => true,
                     dummy_string: () => "string",
+
+                    // assert(x)
+                    assert: (value: YarnValue) => {
+                        if (typeof value === "boolean" && value) {
+                            return true;
+                        } else {
+                            throw new Error("Assertion error");
+                        }
+                    },
                 } satisfies Record<string, YarnFunction>),
             );
 
@@ -192,12 +202,15 @@ describe("all testplans run as expected", () => {
                                 vm.dialogueCompleteCallback = async () => {};
                                 vm.lineCallback = dontExpectLines;
                             }
+
                             if (currentStep instanceof ActionJumpToNodeStep) {
                                 vm.setNode(currentStep.nodeName);
                             }
+
                             if (currentStep instanceof ActionSetSaliencyStep) {
                                 throw new Error("not implemented");
                             }
+
                             if (currentStep instanceof ExpectLineStep) {
                                 vm.optionCallback = dontExpectOptions;
                                 vm.commandCallback = dontExpectCommand;
@@ -227,6 +240,7 @@ describe("all testplans run as expected", () => {
                                 };
                                 return;
                             }
+
                             if (currentStep instanceof ExpectCommandStep) {
                                 vm.optionCallback = dontExpectOptions;
                                 vm.lineCallback = dontExpectLines;
@@ -240,6 +254,7 @@ describe("all testplans run as expected", () => {
                                 };
                                 return;
                             }
+
                             if (currentStep instanceof ActionSelectStep) {
                                 vm.lineCallback = dontExpectLines;
                                 vm.commandCallback = dontExpectCommand;
@@ -288,10 +303,12 @@ describe("all testplans run as expected", () => {
                                 };
                                 return;
                             }
+
                             if (currentStep instanceof ActionSetVariableStep) {
                                 vm.variableStorage[currentStep.variableName] =
                                     currentStep.value;
                             }
+
                             if (currentStep instanceof ExpectOptionStep) {
                                 expectedOptions.push({
                                     line: currentStep.expectedText ?? "<error>",

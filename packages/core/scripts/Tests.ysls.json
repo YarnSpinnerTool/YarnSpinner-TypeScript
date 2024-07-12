@@ -1,0 +1,40 @@
+{
+    "Functions": [
+        {
+            "Documentation": "Throws an exception if value is not true.",
+            "Signature": "assert(bool)",
+            "YarnName": "assert",
+            "ReturnType": "bool",
+            "Parameters": [
+                {
+                    "Name": "value",
+                    "Type": "bool"
+                }
+            ]
+        },
+        {
+            "Documentation": "Example method that takes a string.",
+            
+            "YarnName": "set_objective_complete",
+            "ReturnType": "bool",
+            "Parameters": [
+                {
+                    "Name": "value",
+                    "Type": "string"
+                }
+            ]
+        },
+        {
+            "Documentation": "Example method that takes a string.",
+            
+            "YarnName": "is_objective_active",
+            "ReturnType": "bool",
+            "Parameters": [
+                {
+                    "Name": "value",
+                    "Type": "string"
+                }
+            ]
+        }
+    ]
+}

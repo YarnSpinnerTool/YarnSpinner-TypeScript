@@ -9,9 +9,10 @@
 // `.testplan` file is copied to this output location. The script logs progress
 // for each processed case and concludes with a summary upon completion.
 
-const { resolve, basename } = require('node:path');
-const { readdirSync, existsSync, copyFileSync } = require('node:fs');
+const { resolve, basename, join } = require('node:path');
+const { readdirSync, existsSync, copyFileSync, writeFileSync, unlinkSync } = require('node:fs');
 const { copyFile } = require('node:fs/promises');
+const { v4: uuidv4 } = require('uuid');
 
 const { workspaceRootSync } = require('workspace-root');
 
@@ -25,6 +26,7 @@ if (!workspaceRoot) {
     console.error("Failed to find workspace root!");
     exit(1);
 }
+
 
 // TODO: Allow specifying this path as parameter
 const yarnSpinnerTestScriptsLocation = resolve(workspaceRoot, '..', 'YarnSpinner', 'Tests', 'TestCases')
@@ -44,6 +46,17 @@ const testCases = files.map(file => [file, file.replace(/\.yarn/, '.testplan')])
 /** @type{Promise<void>[]} */
 const operations = []
 
+// Create a template .yarnproject that we'll create copies of for each test
+const yarnProjectTemplate = {
+    "baseLanguage": "en",
+    /** @type string[] */
+    "sourceFiles": [],
+    "localisation": {},
+    "projectFileVersion": 2,
+    "compilerOptions": {},
+    "definitions": join(__dirname, "Tests.ysls.json"),
+}
+
 /** Given a source file and a testplan file, attempts to compile the script. If
  * it succeeds, the output and the testplan file are copied into the output
  * directory.
@@ -61,7 +74,17 @@ async function processCase(sourceFile, testCase) {
         throw new Error(`Path ${testCase[0]} does not exist`)
     }
 
-    const compileCommand = `ysc compile -p -o '${outputLocation}' '${sourceFile}'`
+    // Generate a unique .yarnproject filename using a UUID
+    const uniqueFilename = `${uuidv4()}.yarnproject`;
+    
+    // Make this file be in the current directory
+    const tempProjectFile = join(__dirname, uniqueFilename);
+
+    const project = structuredClone(yarnProjectTemplate);
+    project.sourceFiles = [sourceFile];
+    writeFileSync(tempProjectFile, JSON.stringify(project));
+
+    const compileCommand = `ysc compile -p -o '${outputLocation}' -n '${basename(sourceFile).replace(".yarn", "")}' '${tempProjectFile}'`
 
     try {
         const result = await exec(compileCommand)
@@ -72,6 +95,9 @@ async function processCase(sourceFile, testCase) {
         // now.
         console.info("❓ " + sourceFile);
         return;
+    } finally {
+        // Clean up the yarn project file we wrote
+        unlinkSync(tempProjectFile);
     }
 
     // Copy the testplan file into place
