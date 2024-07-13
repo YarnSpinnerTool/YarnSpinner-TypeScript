@@ -161,26 +161,35 @@ describe("all testplans run as expected", () => {
             const vm = new YarnVM(program, stringTable, library, metadataTable);
             vm.verboseLogging = false;
 
-            const dontExpectLines = (line: string): Promise<never> => {
-                throw Error(
-                    `Received line "${line}" when we weren't expecting it`,
-                );
-            };
-            const dontExpectOptions = (
-                _options: OptionItem[],
-            ): Promise<never> => {
-                throw Error("Received options when we weren't expecting any");
-            };
-            const dontExpectCommand = (command: string): Promise<never> => {
-                throw Error(
-                    `Received command "${command}" when we weren't expecting it`,
-                );
-            };
-            const dontExpectStop = (): Promise<never> => {
-                throw Error(
-                    "Received dialogue completion when we weren't expecting it",
-                );
-            };
+            const dontExpectLines =
+                (expectation: string) =>
+                (line: string): Promise<never> => {
+                    throw Error(
+                        `Received line "${line}" when we were expecting ${expectation}`,
+                    );
+                };
+
+            const dontExpectOptions =
+                (expectation: string) =>
+                (_options: OptionItem[]): Promise<never> => {
+                    throw Error(
+                        `Received options ${_options.map((o) => o.line).join(", ")} when we were expecting ${expectation}`,
+                    );
+                };
+            const dontExpectCommand =
+                (expectation: string) =>
+                (command: string): Promise<never> => {
+                    throw Error(
+                        `Received command "${command}" when we were expecting ${expectation}`,
+                    );
+                };
+
+            const dontExpectStop =
+                (expectation: string) => (): Promise<never> => {
+                    throw Error(
+                        `Received dialogue completion when we were expecting ${expectation}`,
+                    );
+                };
 
             let expectedOptions: {
                 line: string;
@@ -197,10 +206,14 @@ describe("all testplans run as expected", () => {
 
                         try {
                             if (currentStep instanceof ExpectStop) {
-                                vm.optionCallback = dontExpectOptions;
-                                vm.commandCallback = dontExpectCommand;
+                                const expectation = "stop";
+                                vm.optionCallback =
+                                    dontExpectOptions(expectation);
+                                vm.commandCallback =
+                                    dontExpectCommand(expectation);
+                                vm.lineCallback = dontExpectLines(expectation);
+
                                 vm.dialogueCompleteCallback = async () => {};
-                                vm.lineCallback = dontExpectLines;
                             }
 
                             if (currentStep instanceof ActionJumpToNodeStep) {
@@ -208,13 +221,32 @@ describe("all testplans run as expected", () => {
                             }
 
                             if (currentStep instanceof ActionSetSaliencyStep) {
-                                throw new Error("not implemented");
+                                if (
+                                    !(
+                                        currentStep.saliencyMode in
+                                        saliencyStrategies
+                                    )
+                                ) {
+                                    throw new Error(
+                                        "Unknown saliency strategy " +
+                                            currentStep.saliencyMode,
+                                    );
+                                }
+                                vm.saliencyStrategy =
+                                    saliencyStrategies[
+                                        currentStep.saliencyMode
+                                    ];
                             }
 
                             if (currentStep instanceof ExpectLineStep) {
-                                vm.optionCallback = dontExpectOptions;
-                                vm.commandCallback = dontExpectCommand;
-                                vm.dialogueCompleteCallback = dontExpectStop;
+                                const expectation = `line "${currentStep.expectedText}"`;
+
+                                vm.optionCallback =
+                                    dontExpectOptions(expectation);
+                                vm.commandCallback =
+                                    dontExpectCommand(expectation);
+                                vm.dialogueCompleteCallback =
+                                    dontExpectStop(expectation);
                                 vm.lineCallback = (line) => {
                                     const parsedText = parseMarkup(line, {
                                         replacementMarkers: {
@@ -242,9 +274,13 @@ describe("all testplans run as expected", () => {
                             }
 
                             if (currentStep instanceof ExpectCommandStep) {
-                                vm.optionCallback = dontExpectOptions;
-                                vm.lineCallback = dontExpectLines;
-                                vm.dialogueCompleteCallback = dontExpectStop;
+                                const expectation = `command ${currentStep.expectedText}`;
+                                vm.optionCallback =
+                                    dontExpectOptions(expectation);
+                                vm.lineCallback = dontExpectLines(expectation);
+                                vm.dialogueCompleteCallback =
+                                    dontExpectStop(expectation);
+
                                 vm.commandCallback = (command) => {
                                     expect(command).toEqual(
                                         currentStep.expectedText,
@@ -256,9 +292,12 @@ describe("all testplans run as expected", () => {
                             }
 
                             if (currentStep instanceof ActionSelectStep) {
-                                vm.lineCallback = dontExpectLines;
-                                vm.commandCallback = dontExpectCommand;
-                                vm.dialogueCompleteCallback = dontExpectStop;
+                                const expectation = `options ${expectedOptions.map((o) => o.line).join(", ")}`;
+                                vm.lineCallback = dontExpectLines(expectation);
+                                vm.commandCallback =
+                                    dontExpectCommand(expectation);
+                                vm.dialogueCompleteCallback =
+                                    dontExpectStop(expectation);
                                 vm.optionCallback = (options) => {
                                     expect(options).toHaveLength(
                                         expectedOptions.length,
