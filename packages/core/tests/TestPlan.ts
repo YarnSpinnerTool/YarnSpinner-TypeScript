@@ -10,7 +10,9 @@ import * as antlr from "antlr4ng";
 import { CharStream, CommonTokenStream } from "antlr4ng";
 import * as fs from "node:fs";
 
-export abstract class TestPlanStep {}
+export abstract class TestPlanStep {
+    public abstract toString(): string;
+}
 
 export abstract class ExpectContentStep extends TestPlanStep {
     public expectedText: string | null = null;
@@ -35,11 +37,7 @@ export class ExpectLineStep extends ExpectContentStep {
     }
 
     override toString(): string {
-        if (this.expectedHashTags.length > 0) {
-            return `"Line "${this.expectedText}" with hashtags ${this.expectedHashTags.join(" ")}`;
-        } else {
-            return `"Line "${this.expectedText}"`;
-        }
+        return `"line: "${this.expectedText} ${this.expectedHashTags.join(" ")}`.trim();
     }
 }
 
@@ -57,6 +55,10 @@ export class ExpectOptionStep extends ExpectContentStep {
         this.expectedHashtags.push(...hashtags);
         this.expectedAvailability = expectedAvailability;
     }
+
+    override toString(): string {
+        return `option: ${this.expectedText} ${this.expectedHashtags.join(" ")} ${this.expectedAvailability ? "" : "(unavailable)"}`.trim();
+    }
 }
 
 export class ExpectCommandStep extends ExpectContentStep {
@@ -64,9 +66,17 @@ export class ExpectCommandStep extends ExpectContentStep {
         super();
         this.expectedText = text;
     }
+
+    override toString(): string {
+        return `command: ${this.expectedText}`;
+    }
 }
 
-export class ExpectStop extends TestPlanStep {}
+export class ExpectStop extends TestPlanStep {
+    override toString(): string {
+        return "stop";
+    }
+}
 
 export class ActionSelectStep extends TestPlanStep {
     public selectedIndex: number = 0;
@@ -74,6 +84,10 @@ export class ActionSelectStep extends TestPlanStep {
     constructor(selectedIndex: number) {
         super();
         this.selectedIndex = selectedIndex;
+    }
+
+    override toString(): string {
+        return `select: ${this.selectedIndex}`;
     }
 }
 
@@ -87,6 +101,10 @@ export class ActionSetSaliencyStep extends TestPlanStep {
         super();
         this.saliencyMode = saliencyMode;
     }
+
+    override toString(): string {
+        return `set_saliency_mode: ${this.saliencyMode}`;
+    }
 }
 
 export class ActionSetVariableStep extends TestPlanStep {
@@ -98,6 +116,10 @@ export class ActionSetVariableStep extends TestPlanStep {
         this.variableName = variableName;
         this.value = value;
     }
+
+    override toString(): string {
+        return `set: ${this.variableName} = ${this.value.toString()}`;
+    }
 }
 
 export class ActionJumpToNodeStep extends TestPlanStep {
@@ -106,6 +128,10 @@ export class ActionJumpToNodeStep extends TestPlanStep {
     constructor(nodeName: string) {
         super();
         this.nodeName = nodeName;
+    }
+
+    override toString(): string {
+        return `jump: ${this.nodeName}`;
     }
 }
 
