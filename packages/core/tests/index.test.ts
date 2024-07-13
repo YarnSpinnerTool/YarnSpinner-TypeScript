@@ -368,8 +368,8 @@ describe("all testplans run as expected", () => {
                     vm.dialogueCompleteCallback = () => Promise.resolve();
                 };
 
-                continueTestPlan();
                 vm.setNode(run.startNode);
+                continueTestPlan();
                 await vm.start();
             }
         },
