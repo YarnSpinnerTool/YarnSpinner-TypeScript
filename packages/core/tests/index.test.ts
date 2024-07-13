@@ -69,23 +69,8 @@ describe("all testplans have associated files", () => {
     });
 });
 
-// The following tests are on the skip list. TODO: Make these tests pass!
-const skippedTests: string[] = [
-    // "LineGroups.testplan", // saliency not supported
-    // "NodeGroups.testplan", // saliency not supported
-    // "NodeGroupsWithImplicitDeclarations.testplan", // saliency not supported
-    // "Once.testplan", // saliency not supported
-];
-
 describe("all testplans run as expected", () => {
-    // List, and skip, all testplans in the skipped test list
-    test.skip.each(allTestPlans.filter((p) => skippedTests.includes(p)))(
-        "testplan: %p",
-        async (_testplan: string) => {},
-    );
-
-    // Test all other testplans
-    test.each(allTestPlans.filter((p) => !skippedTests.includes(p)))(
+    test.each(allTestPlans)(
         "testplan: %p",
         async (testplan: string) => {
             const testPlanPath = resolve(testDataPath, testplan);
