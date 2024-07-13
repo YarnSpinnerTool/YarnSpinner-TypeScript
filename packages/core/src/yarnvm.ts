@@ -7,7 +7,7 @@ enum ExecutionState {
     Running,
 }
 
-interface VariableStorage {
+export interface VariableStorage {
     [key: string]: YarnValue;
 }
 
@@ -302,6 +302,10 @@ export class BestLeastRecentlyViewedSalienceStrategy
 }
 
 const TrackingVariableNameHeader: string = "$Yarn.Internal.TrackingVariable";
+const ContentSaliencyConditionVariablesHeader =
+    "$Yarn.Internal.ContentSaliencyVariables";
+const ContentSaliencyConditionComplexityScoreHeader =
+    "$Yarn.Internal.ContentSaliencyComplexity";
 
 function randomRange(min: number, max: number): number {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -803,6 +807,28 @@ export class YarnVM {
                 newCandidate.destination = info.destination;
                 newCandidate.passingConditionValueCount = passed ? 1 : 0;
                 newCandidate.failingConditionValueCount = passed ? 0 : 1;
+
+                this.contentSaliencyCandidates.push(newCandidate);
+                break;
+            }
+            case "addSaliencyCandidateFromNode": {
+                const info = i.instructionType.addSaliencyCandidateFromNode;
+
+                const node = this.program!.nodes[info.nodeName];
+
+                if (!node) {
+                    throw new Error(`Unknown node ${info.nodeName}`);
+                }
+
+                const { pass, fail } =
+                    this.evaluateSaliencyWhenClausesForNode(node);
+                const complexity = this.getSaliencyComplexityForNode(node);
+
+                const newCandidate = new ContentSaliencyOption(node.name);
+                newCandidate.passingConditionValueCount = pass;
+                newCandidate.failingConditionValueCount = fail;
+                newCandidate.complexityScore = complexity;
+                newCandidate.destination = info.destination;
 
                 this.contentSaliencyCandidates.push(newCandidate);
                 break;
@@ -1320,7 +1346,7 @@ export class YarnVM {
 
     // a generic unwrapper that takes an operand and converts it to a concrete type (or undefined)
     // only really useful in a few places compared to the more specific ones
-    private unwrap(op: Operand): string | number | boolean | undefined {
+    private unwrap(op: Operand): string | number | boolean {
         switch (op.value.oneofKind) {
             case "boolValue":
                 return op.value.boolValue;
@@ -1469,24 +1495,62 @@ export class YarnVM {
 
         return stack[0];
     }
+
+    private getHeaderValueForNode(
+        node: Node,
+        header: string,
+    ): string | undefined {
+        return node.headers.find((h) => h.key === header)?.value;
     }
-    private unwrapString(op: Operand): string | undefined {
-        if (op.value.oneofKind === "stringValue") {
-            return op.value.stringValue;
-        }
-        return undefined;
+
+    private getHeaderValuesForNode(node: Node, header: string): string[] {
+        return node.headers.filter((h) => h.key === header).map((h) => h.value);
     }
-    private unwrapBool(op: Operand): boolean | undefined {
-        if (op.value.oneofKind === "boolValue") {
-            return op.value.boolValue;
+
+    private getSaliencyComplexityForNode(node: Node): number {
+        const complexity = this.getHeaderValueForNode(
+            node,
+            ContentSaliencyConditionComplexityScoreHeader,
+        );
+        if (complexity === undefined) {
+            throw new Error(
+                "Can't get saliency complexity for node " +
+                    node.name +
+                    ": missing complexity score header",
+            );
         }
-        return undefined;
+        return parseInt(complexity);
     }
-    private unwrapNumber(op: Operand): number | undefined {
-        if (op.value.oneofKind === "floatValue") {
-            return op.value.floatValue;
+
+    private evaluateSaliencyWhenClausesForNode(node: Node): {
+        pass: number;
+        fail: number;
+    } {
+        const variableNameHeader = this.getHeaderValueForNode(
+            node,
+            ContentSaliencyConditionVariablesHeader,
+        );
+        if (variableNameHeader === undefined) {
+            throw new Error(
+                `Can't get saliency variables for node ${node.name}: missing complexity score header`,
+            );
         }
-        return undefined;
+        const result = {
+            pass: 0,
+            fail: 0,
+        };
+        const variableNames = variableNameHeader.split(";");
+        for (const variable of variableNames) {
+            const value = this.evaluateSmartVariable(variable);
+            if (typeof value !== "boolean") {
+                throw new Error(
+                    `Can't get saliency variables for node ${node.name}: when clause header ${variable} did not evaluate to a bool`,
+                );
+            }
+            result.pass += value ? 1 : 0;
+            result.fail += value ? 0 : 1;
+        }
+        return result;
     }
 
     private log(message: string): void {
