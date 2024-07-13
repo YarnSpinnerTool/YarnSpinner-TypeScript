@@ -40,6 +40,267 @@ export type MetadataEntry = {
     [key: string]: unknown;
 };
 
+/**
+ * Contains methods for choosing a piece of content from a collection of
+ * options.
+ */
+export interface ContentSaliencyStrategy {
+    /**
+     * Chooses an item from content that is the most appropriate (or salient)
+     * for the user's current context.
+     * @remarks Implementations of this method should not modify any state -
+     * that is, they should be 'read-only' operations. If a strategy needs to
+     * record information about when a piece of content has been selected, it
+     * should do it in the {@link contentWasSelected} method.
+     * @param content A collection of content items. This collection may be
+     * empty.
+     * @returns An item from {@link content} that is the most appropriate
+     * for display, or null if no content should be displayed.
+     */
+    queryBestContent(
+        content: ContentSaliencyOption[],
+    ): ContentSaliencyOption | null;
+
+    /**
+     * Called by Yarn Spinner to indicate that a piece of salient content has
+     * been selected, and this system should update any state related to how it
+     * selects content.
+     * @remarks If a content saliency strategy does not need to keep track of
+     * any state, then this method can be empty.
+     * @param content The content that has been selected.
+     */
+    contentWasSelected(content: ContentSaliencyOption): void;
+}
+
+/**
+ * Indicates what type of content a <see cref="ContentSaliencyOption"/>
+ * represents.
+ * @see ContentSaliencyOption.contentType
+ */
+export const enum ContentSaliencyContentType {
+    /** The content represents a node in a node group. */
+    Node = "node",
+
+    /** The content represents a line in a line group. */
+    Line = "line",
+}
+
+/**
+ * Represents a piece of content that may be selected by a content saliency strategy.
+ */
+export class ContentSaliencyOption {
+    /**
+     * Initializes a new instance of the ContentSaliencyOption class with the
+     * specified content ID.
+     * @param id A string representing the unique identifier for the content.
+     * @throws {Error} Thrown when the provided ID is null.
+     */
+    constructor(id: string) {
+        if (id === null) {
+            throw new Error("The content ID cannot be null.");
+        }
+        this.contentID = id;
+    }
+
+    /**
+     * Gets the number of conditions that passed for this piece of content.
+     */
+    public passingConditionValueCount: number = 0;
+
+    /**
+     * Get the number of conditions that failed for this piece of content.
+     */
+    public failingConditionValueCount: number = 0;
+
+    /**
+     * Gets a string that uniquely identifies this content.
+     */
+    public contentID: string;
+
+    /**
+     * Gets the complexity score of this option.
+     */
+    public complexityScore: number = 0;
+
+    /**
+     * Gets the type of content that this option represents.
+     * @remarks This information may be used by custom
+     * {@link ContentSaliencyStrategy} classes to allow them to have different
+     * behaviour depending on the type of the content.
+     */
+    public contentType: ContentSaliencyContentType =
+        ContentSaliencyContentType.Line;
+
+    /**
+     * Gets a unique variable name that can be used for tracking the view count
+     * of a specific piece of content.
+     */
+    public get viewCountKey(): string {
+        if (this.contentID === null || this.contentID === "") {
+            throw new Error(
+                "Internal error: content has a null or empty ContentID",
+            );
+        }
+        return `$Yarn.Internal.Content.ViewCount.${this.contentID}`;
+    }
+
+    /**
+     * The destination instruction that the virtual machine will jump to if this
+     * option is selected.
+     * @remarks This property is internal to Yarn Spinner, and is used by the
+     * {@link YarnVM} class.
+     */
+    destination: number = 0;
+}
+
+export class FirstSaliencyStrategy implements ContentSaliencyStrategy {
+    queryBestContent(
+        content: ContentSaliencyOption[],
+    ): ContentSaliencyOption | null {
+        // Filter out any options who have a failing condition and return the
+        // first one, if any
+        content = content.filter((c) => c.failingConditionValueCount == 0);
+
+        if (content.length == 0) {
+            return null;
+        }
+        return content[0];
+    }
+
+    contentWasSelected(_content: ContentSaliencyOption): void {
+        // No-op.
+    }
+}
+
+export class BestSaliencyStrategy implements ContentSaliencyStrategy {
+    queryBestContent(
+        content: ContentSaliencyOption[],
+    ): ContentSaliencyOption | null {
+        // Filter out any options who have a failing condition and return the
+        // one with the highest complexity, if any
+        content = content.filter((c) => c.failingConditionValueCount == 0);
+        content.sort((a, b) => b.complexityScore - a.complexityScore);
+
+        if (content.length == 0) {
+            return null;
+        }
+        return content[0];
+    }
+
+    contentWasSelected(_content: ContentSaliencyOption): void {
+        // No-op.
+    }
+}
+
+function orderBy<T>(
+    collection: T[],
+    predicate: (element: T) => number,
+    options: { ascending?: boolean } = {},
+): T[] {
+    const { ascending = true } = options;
+
+    return collection.slice().sort((a, b) => {
+        const valueA = predicate(a);
+        const valueB = predicate(b);
+
+        if (valueA < valueB) return ascending ? -1 : 1;
+        if (valueA > valueB) return ascending ? 1 : -1;
+        return 0;
+    });
+}
+
+function groupBy<Value, GroupKey>(
+    collection: Value[],
+    predicate: (item: Value) => GroupKey,
+): Map<GroupKey, Value[]> {
+    const result = new Map<GroupKey, Value[]>();
+
+    for (const item of collection) {
+        const key = predicate(item);
+        if (result.has(key) == false) {
+            result.set(key, []);
+        }
+
+        result.get(key)!.push(item);
+    }
+
+    return result;
+}
+
+export class BestLeastRecentlyViewedSalienceStrategy
+    implements ContentSaliencyStrategy
+{
+    private storage: VariableStorage;
+
+    constructor(storage: VariableStorage) {
+        this.storage = storage;
+    }
+
+    queryBestContent(
+        content: ContentSaliencyOption[],
+    ): ContentSaliencyOption | null {
+        // First, filter out any content that has a failing condition.
+        content = content.filter((c) => c.failingConditionValueCount == 0);
+
+        // Next, find the view count for every option.
+        const optionsAndViewCounts: {
+            opt: ContentSaliencyOption;
+            viewCount: number;
+        }[] = content.map((c) => {
+            if (
+                c.viewCountKey in this.storage &&
+                typeof this.storage[c.viewCountKey] === "number"
+            ) {
+                return {
+                    opt: c,
+                    viewCount: this.storage[c.viewCountKey] as number,
+                };
+            } else {
+                return { opt: c, viewCount: 0 };
+            }
+        });
+
+        const groups = groupBy(optionsAndViewCounts, (c) => c.viewCount);
+        let lowest: { opts: ContentSaliencyOption[]; viewCount: number } = {
+            opts: [],
+            viewCount: Infinity,
+        };
+
+        // Get the group of items with the least number of views
+        for (const [key, group] of groups.entries()) {
+            if (key < lowest.viewCount) {
+                lowest = { opts: group.map((i) => i.opt), viewCount: key };
+            }
+        }
+
+        // Get the item in the group with the highest complexity
+        const best = orderBy(lowest.opts, (o) => o.complexityScore, {
+            ascending: false,
+        })[0];
+
+        if (best) {
+            return best;
+        } else {
+            return null;
+        }
+    }
+
+    contentWasSelected(c: ContentSaliencyOption): void {
+        // A piece of content was selected. Update its view count.
+
+        let previousViewCount: number = 0;
+
+        if (
+            c.viewCountKey in this.storage &&
+            typeof this.storage[c.viewCountKey] === "number"
+        ) {
+            previousViewCount = this.storage[c.viewCountKey] as number;
+        }
+
+        this.storage[c.viewCountKey] = previousViewCount + 1;
+    }
+}
+
 const TrackingVariableNameHeader: string = "$Yarn.Internal.TrackingVariable";
 
 function randomRange(min: number, max: number): number {
@@ -73,6 +334,11 @@ export class YarnVM {
     public onVariableSet:
         | ((variable: string, value: YarnValue) => void)
         | null = null;
+
+    public saliencyStrategy: ContentSaliencyStrategy =
+        new FirstSaliencyStrategy();
+
+    private contentSaliencyCandidates: ContentSaliencyOption[] = [];
 
     // maps functions to their stub values
     // intended to be used for testing
@@ -528,6 +794,52 @@ export class YarnVM {
                 // us to jump into here, so advance to the next instruction
                 // after that
                 this.programCounter = returnSite.instruction + 1;
+
+                break;
+            }
+            case "addSaliencyCandidate": {
+                const info = i.instructionType.addSaliencyCandidate;
+
+                // The top of the stack contains a bool indicating whether the condition passed or not
+                const passed = this.stack.pop();
+                if (typeof passed !== "boolean") {
+                    throw new Error("Expected top of stack to be boolean");
+                }
+
+                const newCandidate = new ContentSaliencyOption(info.contentID);
+
+                newCandidate.contentType = ContentSaliencyContentType.Line;
+                newCandidate.complexityScore = info.complexityScore;
+
+                newCandidate.destination = info.destination;
+                newCandidate.passingConditionValueCount = passed ? 1 : 0;
+                newCandidate.failingConditionValueCount = passed ? 0 : 1;
+
+                this.contentSaliencyCandidates.push(newCandidate);
+                break;
+            }
+            case "selectSaliencyCandidate": {
+                const selectedOption = this.saliencyStrategy.queryBestContent(
+                    this.contentSaliencyCandidates,
+                );
+
+                if (selectedOption === null) {
+                    // Push false to indicate that we didn't select any content
+                    this.stack.push(false);
+                    break;
+                }
+
+                // We selected content! Push the destination to jump to,
+                // followed by a 'true' value to indicate that we selected
+                // something.
+                this.stack.push(selectedOption.destination);
+                this.stack.push(true);
+
+                // Tell the saliency strategy that we are running this content
+                this.saliencyStrategy.contentWasSelected(selectedOption);
+
+                // Clear the accumulated list of options
+                this.contentSaliencyCandidates = [];
 
                 break;
             }

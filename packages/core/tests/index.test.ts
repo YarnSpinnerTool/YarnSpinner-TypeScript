@@ -17,6 +17,10 @@ import {
 
 import { Program } from "../src/generated/yarn_spinner";
 import {
+    BestLeastRecentlyViewedSalienceStrategy,
+    BestSaliencyStrategy,
+    ContentSaliencyStrategy,
+    FirstSaliencyStrategy,
     MetadataEntry,
     OptionItem,
     YarnFunction,
@@ -196,6 +200,16 @@ describe("all testplans run as expected", () => {
                 available: boolean;
                 hashtags: string[];
             }[] = [];
+
+            const saliencyStrategies: Record<string, ContentSaliencyStrategy> =
+                {
+                    first: new FirstSaliencyStrategy(),
+                    best: new BestSaliencyStrategy(),
+                    best_least_recently_seen:
+                        new BestLeastRecentlyViewedSalienceStrategy(
+                            vm.variableStorage,
+                        ),
+                };
 
             for (const run of testPlan.runs) {
                 let currentStepIndex = 0;
