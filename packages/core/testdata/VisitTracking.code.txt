@@ -1,0 +1,32 @@
+Node Start:
+     0       RunLine         line:b408a9f3                            ; "beginning"
+             RunNode         NoTrack                                  ; Clears stack
+     2       Return                                                             
+
+Node NoTrack:
+     0       RunLine         line:1afd91c7                            ; "entered NoTrack"
+             RunNode         Track                                    ; Clears stack
+     2       Return                                                             
+
+Node Track:
+     0       RunLine         line:596b5c5f                            ; "entered Track"
+             RunNode         End                                      ; Clears stack
+     2       Return                                                             
+
+Node End:
+     0       RunLine         line:27b10ade                            ; "entered End"
+             PushString      NoTrack                                  ; Pushes 1, "NoTrack"
+             PushFloat       1                                        ; Pushes 1
+             CallFunc        visited                                            
+             RunLine         line:84246e40                            ; "did we visit NoTrack? {0}!"
+     5       PushString      Trac                                     ; Pushes 1, "Trac"
+             PushString      k                                        ; Pushes 1, "k"
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        String.Add                                         
+             PushFloat       1                                        ; Pushes 1
+    10       CallFunc        visited                                            
+             RunLine         line:12146937                            ; "did we visit Track? {0}!"
+             RunLine         line:a84560ae                            ; "done"  
+    13       Return                                                             
+
+

@@ -1,0 +1,31 @@
+Node Start:
+     0       PushFloat       1                                        ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+             PushFloat       4                                        ; Pushes 1
+             PushFloat       1                                        ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+     5       CallFunc        Number.Multiply                                    
+             PushFloat       3                                        ; Pushes 1
+             CallFunc        add_three_operands                                 
+             PushFloat       7                                        ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+    10       CallFunc        Number.EqualTo                                     
+             PushFloat       1                                        ; Pushes 1
+             CallFunc        assert                                             
+             PushFloat       1                                        ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+    15       PushFloat       1                                        ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+             PushFloat       3                                        ; Pushes 1
+             PushFloat       3                                        ; Pushes 1
+             CallFunc        add_three_operands                                 
+    20       PushFloat       3                                        ; Pushes 1
+             CallFunc        add_three_operands                                 
+             PushFloat       9                                        ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        Number.EqualTo                                     
+    25       PushFloat       1                                        ; Pushes 1
+             CallFunc        assert                                             
+    27       Return                                                             
+
+

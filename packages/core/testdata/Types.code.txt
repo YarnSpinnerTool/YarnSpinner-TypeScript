@@ -1,0 +1,76 @@
+Node Start:
+     0       PushString      test                                     ; Pushes 1, "test"
+             PushString      test                                     ; Pushes 1, "test"
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        String.EqualTo                                     
+             PushFloat       1                                        ; Pushes 1
+     5       CallFunc        assert                                             
+             PushString      test                                     ; Pushes 1, "test"
+             PushString      test                                     ; Pushes 1, "test"
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        String.EqualTo                                     
+    10       PushFloat       1                                        ; Pushes 1
+             CallFunc        assert                                             
+             PushString      hi                                       ; Pushes 1, "hi"
+             PushString      HI                                       ; Pushes 1, "HI"
+             PushFloat       2                                        ; Pushes 1
+    15       CallFunc        String.NotEqualTo                                  
+             PushFloat       1                                        ; Pushes 1
+             CallFunc        assert                                             
+             PushString      hi                                       ; Pushes 1, "hi"
+             PushString      HI                                       ; Pushes 1, "HI"
+    20       PushFloat       2                                        ; Pushes 1
+             CallFunc        String.NotEqualTo                                  
+             PushFloat       1                                        ; Pushes 1
+             CallFunc        assert                                             
+             PushFloat       3                                        ; Pushes 1
+    25       PushFloat       2                                        ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        Number.GreaterThan                                 
+             PushFloat       1                                        ; Pushes 1
+             CallFunc        assert                                             
+    30       PushFloat       3                                        ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        Number.GreaterThan                                 
+             PushFloat       1                                        ; Pushes 1
+    35       CallFunc        assert                                             
+             PushFloat       1                                        ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        Number.LessThan                                    
+    40       PushFloat       1                                        ; Pushes 1
+             CallFunc        assert                                             
+             PushFloat       1                                        ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+    45       CallFunc        Number.LessThan                                    
+             PushFloat       1                                        ; Pushes 1
+             CallFunc        assert                                             
+             PushFloat       2                                        ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+    50       PushFloat       2                                        ; Pushes 1
+             CallFunc        Number.LessThanOrEqualTo                           
+             PushFloat       1                                        ; Pushes 1
+             CallFunc        assert                                             
+             PushFloat       2                                        ; Pushes 1
+    55       PushFloat       2                                        ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        Number.LessThanOrEqualTo                           
+             PushFloat       1                                        ; Pushes 1
+             CallFunc        assert                                             
+    60       PushFloat       2                                        ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        Number.GreaterThanOrEqualTo                        
+             PushFloat       1                                        ; Pushes 1
+    65       CallFunc        assert                                             
+             PushFloat       2                                        ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        Number.GreaterThanOrEqualTo                        
+    70       PushFloat       1                                        ; Pushes 1
+             CallFunc        assert                                             
+    72       Return                                                             
+
+

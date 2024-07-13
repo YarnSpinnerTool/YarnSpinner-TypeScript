@@ -85,14 +85,21 @@ async function processCase(sourceFile, testCase) {
     writeFileSync(tempProjectFile, JSON.stringify(project));
 
     const compileCommand = `ysc compile -p -o '${outputLocation}' -n '${basename(sourceFile).replace(".yarn", "")}' '${tempProjectFile}'`
+    const dumpCodeCommand = `ysc dump-code -p '${tempProjectFile}'`
 
     try {
         const result = await exec(compileCommand)
+
+        const dumpedCode = await exec(dumpCodeCommand);
+
+        const dumpedCodeDestination = resolve(outputLocation, basename(testCase).replace(".testplan", ".code.txt"));
+        writeFileSync(dumpedCodeDestination, dumpedCode.stdout);
 
     } catch (err) {
         // This case fails to compile on the console. It may depend on some
         // context that only exists in the Yarn Spinner unit tests. Skip it for
         // now.
+        console.error(err);
         console.info("❓ " + sourceFile);
         return;
     } finally {
@@ -104,7 +111,9 @@ async function processCase(sourceFile, testCase) {
     const copyFrom = testCase;
     const copyTo = resolve(outputLocation, basename(testCase))
 
-    await copyFile(copyFrom, copyTo)
+    await copyFile(copyFrom, copyTo);
+
+    await copyFile(sourceFile, resolve(outputLocation, basename(sourceFile)));
 
     console.info("✅ " + sourceFile);
 

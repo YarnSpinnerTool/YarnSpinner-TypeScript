@@ -1,0 +1,66 @@
+Node Start:
+     0       RunLine         line:fc8a95b8                            ; "Here's a line with a hashtag"
+             RunLine         line:6aba92cf                            ; "Here's a line with an escaped hashtag #hashtag"
+             PushFloat       0                                        ; Pushes 1
+             RunLine         line:d0eb9b56                            ; "Here's a line with an expression {0}"
+             RunLine         line:46db9c21                            ; "Here's a line with an escaped expression {0}"
+     5       RunLine         line:e54ef8bf                            ; "Here's a line with an escaped command <<foo>>"
+             RunLine         line:737effc8                            ; "Here's a line with a comment"
+             RunLine         line:c92ff651                            ; "Here's a line with an escaped comment // wow"
+             RunLine         line:5f1ff126                            ; "Here's a line with an escaped backslash \"
+             RunLine         line:ce024eb6                            ; "Here's some TMP-style styling with a color code: <color=#fff>wow</color>"
+    10       RunLine         line:583249c1                            ; "Here's a url: http://github.com/YarnSpinnerTool"
+             RunLine         line:ddc57359                            ; "Here's some markup: [a]hello[/a]"
+             RunLine         line:4bf5742e                            ; "Here's some escaped markup: \[a\]hello\[/a\]"
+             AddOption       line:f1a47db7, L0_option_0               ; "Here's an option with a hashtag"
+             AddOption       line:67947ac0, L1_option_1               ; "Here's an option with an escaped hashtag #hashtag"
+    15       PushFloat       0                                        ; Pushes 1
+             AddOption       line:c4011e5e, L2_option_2               ; "Here's an option with an expression {0}"
+             AddOption       line:52311929, L3_option_3               ; "Here's an option with an escaped expression {0}"
+             PushBool        True                                     ; Pushes 1
+             AddOption       line:e86010b0, L4_option_4, has_condition ; "Here's an option with a condition"
+    20       AddOption       line:7e5017c7, L5_option_5               ; "Here's an option with an escaped condition <<if true>>"
+             AddOption       line:ef4da857, L6_option_6               ; "Here's an option with a comment"
+             AddOption       line:797daf20, L7_option_7               ; "Here's an option with an escaped comment // wow"
+             AddOption       line:1e965e72, L8_option_8               ; "Here's an option with an escaped backslash \"
+             AddOption       line:88a65905, L9_option_9               ; "Here's some TMP-style styling with a color code: <color=#fff>wow</color>"
+    25       AddOption       line:32f7509c, L10_option_10             ; "Here's a url: http://github.com/YarnSpinnerTool"
+             AddOption       line:a4c757eb, L11_option_11             ; "Here's some markup: [a]hello[/a]"
+             AddOption       line:07523375, L12_option_12             ; "Here's some escaped markup: \[a\]hello\[/a\]"
+             ShowOptions                                              ; Pushes 1
+             PeekAndJump                                                        
+L0_option_0:
+    30       JumpTo          L13_group_end                                      
+L1_option_1:
+    31       JumpTo          L13_group_end                                      
+L2_option_2:
+    32       JumpTo          L13_group_end                                      
+L3_option_3:
+    33       JumpTo          L13_group_end                                      
+L4_option_4:
+    34       JumpTo          L13_group_end                                      
+L5_option_5:
+    35       JumpTo          L13_group_end                                      
+L6_option_6:
+    36       JumpTo          L13_group_end                                      
+L7_option_7:
+    37       JumpTo          L13_group_end                                      
+L8_option_8:
+    38       JumpTo          L13_group_end                                      
+L9_option_9:
+    39       JumpTo          L13_group_end                                      
+L10_option_10:
+    40       JumpTo          L13_group_end                                      
+L11_option_11:
+    41       JumpTo          L13_group_end                                      
+L12_option_12:
+    42       JumpTo          L13_group_end                                      
+L13_group_end:
+    43       Pop                                                      ; Pops 1  
+             RunLine         line:91623402                            ; "<<escaped command>>"
+    45       RunLine         line:2b333d9b                            ; "{0} escaped line with interpolation"
+             RunLine         line:bd033aec                            ; "// escaped comment"
+             RunLine         line:2c1e857c                            ; "\[a]escaped markup\[/a]"
+    48       Return                                                             
+
+

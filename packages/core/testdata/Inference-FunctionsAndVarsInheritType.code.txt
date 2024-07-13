@@ -1,0 +1,40 @@
+Node Start:
+     0       PushFloat       0                                        ; Pushes 1
+             CallFunc        dummy_number                                       
+             StoreVariable   $a                                       ; <unknown variable>
+             Pop                                                      ; Pops 1  
+             PushVariable    $a                                       ; Pushes 1, <unknown variable>
+     5       RunLine         line:113b2a39                            ; "{0}"   
+             PushFloat       0                                        ; Pushes 1
+             CallFunc        dummy_number                                       
+             StoreVariable   $b                                       ; Implicitly declared in /Users/desplesda/Work/YarnSpinner/Tests/TestCases/Inference-FunctionsAndVarsInheritType.yarn, node Start
+             Pop                                                      ; Pops 1  
+    10       PushVariable    $b                                       ; Pushes 1, Implicitly declared in /Users/desplesda/Work/YarnSpinner/Tests/TestCases/Inference-FunctionsAndVarsInheritType.yarn, node Start
+             RunLine         line:870b2d4e                            ; "{0}"   
+             PushFloat       0                                        ; Pushes 1
+             CallFunc        dummy_bool                                         
+             StoreVariable   $c                                       ; <unknown variable>
+    15       Pop                                                      ; Pops 1  
+             PushVariable    $c                                       ; Pushes 1, <unknown variable>
+             RunLine         line:3d5a24d7                            ; "{0}"   
+             PushFloat       0                                        ; Pushes 1
+             CallFunc        dummy_bool                                         
+    20       StoreVariable   $d                                       ; Implicitly declared in /Users/desplesda/Work/YarnSpinner/Tests/TestCases/Inference-FunctionsAndVarsInheritType.yarn, node Start
+             Pop                                                      ; Pops 1  
+             PushVariable    $d                                       ; Pushes 1, Implicitly declared in /Users/desplesda/Work/YarnSpinner/Tests/TestCases/Inference-FunctionsAndVarsInheritType.yarn, node Start
+             RunLine         line:ab6a23a0                            ; "{0}"   
+             PushFloat       0                                        ; Pushes 1
+    25       CallFunc        dummy_string                                       
+             StoreVariable   $e                                       ; <unknown variable>
+             Pop                                                      ; Pops 1  
+             PushVariable    $e                                       ; Pushes 1, <unknown variable>
+             RunLine         line:08ff473e                            ; "{0}"   
+    30       PushFloat       0                                        ; Pushes 1
+             CallFunc        dummy_string                                       
+             StoreVariable   $f                                       ; Implicitly declared in /Users/desplesda/Work/YarnSpinner/Tests/TestCases/Inference-FunctionsAndVarsInheritType.yarn, node Start
+             Pop                                                      ; Pops 1  
+             PushVariable    $f                                       ; Pushes 1, Implicitly declared in /Users/desplesda/Work/YarnSpinner/Tests/TestCases/Inference-FunctionsAndVarsInheritType.yarn, node Start
+    35       RunLine         line:9ecf4049                            ; "{0}"   
+    36       Return                                                             
+
+

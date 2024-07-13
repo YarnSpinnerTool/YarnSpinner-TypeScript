@@ -1,0 +1,16 @@
+Node Start:
+     0       PushFloat       1.2                                      ; Pushes 1
+             PushFloat       1.2                                      ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        Number.GreaterThanOrEqualTo                        
+             JumpIfFalse     L0_end_clause                                      
+     5       RunLine         line:3d861e4d                            ; "Success"
+             JumpTo          L1_endif                                           
+L0_end_clause:
+     7       Pop                                                      ; Pops 1  
+L1_endif:
+     8       PushFloat       45.1                                     ; Pushes 1
+             RunLine         line:abb6193a                            ; "Here's a number: {0}"
+    10       Return                                                             
+
+

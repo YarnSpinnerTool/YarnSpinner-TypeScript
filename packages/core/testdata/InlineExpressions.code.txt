@@ -1,0 +1,66 @@
+Node Start:
+     0       PushString      variable                                 ; Pushes 1, "variable"
+             StoreVariable   $var                                     ; <unknown variable>
+             Pop                                                      ; Pops 1  
+             PushFloat       1                                        ; Pushes 1
+             RunLine         line:322ec2b6                            ; "Number: {0}"
+     5       PushFloat       1                                        ; Pushes 1
+             PushFloat       1                                        ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        Number.Add                                         
+             RunLine         line:a41ec5c1                            ; "Expression: {0}"
+    10       PushString      string                                   ; Pushes 1, "string"
+             RunLine         line:1e4fcc58                            ; "String: {0}"
+             PushBool        True                                     ; Pushes 1
+             RunLine         line:887fcb2f                            ; "Bool: {0}"
+             PushVariable    $var                                     ; Pushes 1, <unknown variable>
+    15       RunLine         line:2beaafb1                            ; "Variable: {0}"
+             PushVariable    $var                                     ; Pushes 1, <unknown variable>
+             RunLine         line:bddaa8c6                            ; "{0} is great!"
+             PushFloat       1                                        ; Pushes 1
+             AddOption       line:078ba15f, L0_option_0               ; "Option Number: {0}"
+    20       PushFloat       1                                        ; Pushes 1
+             PushFloat       1                                        ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        Number.Add                                         
+             AddOption       line:91bba628, L1_option_1               ; "Option Expression: {0}"
+    25       PushString      string                                   ; Pushes 1, "string"
+             AddOption       line:00a619b8, L2_option_2               ; "Option String: {0}"
+             PushBool        True                                     ; Pushes 1
+             AddOption       line:96961ecf, L3_option_3               ; "Option Bool: {0}"
+             PushVariable    $var                                     ; Pushes 1, <unknown variable>
+    30       AddOption       line:ce7da125, L4_option_4               ; "Option Variable: {0}"
+             ShowOptions                                              ; Pushes 1
+             PeekAndJump                                                        
+L0_option_0:
+    33       JumpTo          L5_group_end                                       
+L1_option_1:
+    34       JumpTo          L5_group_end                                       
+L2_option_2:
+    35       JumpTo          L5_group_end                                       
+L3_option_3:
+    36       JumpTo          L5_group_end                                       
+L4_option_4:
+    37       JumpTo          L5_group_end                                       
+L5_group_end:
+    38       Pop                                                      ; Pops 1  
+             PushFloat       1                                        ; Pushes 1
+    40       RunCommand      number {0}, 1                                      
+             PushFloat       1                                        ; Pushes 1
+             PushFloat       1                                        ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        Number.Add                                         
+    45       RunCommand      expression {0}, 1                                  
+             PushString      string                                   ; Pushes 1, "string"
+             RunCommand      string {0}, 1                                      
+             PushBool        True                                     ; Pushes 1
+             RunCommand      bool {0}, 1                                        
+    50       PushVariable    $var                                     ; Pushes 1, <unknown variable>
+             RunCommand      variable {0}, 1                                    
+    52       Return                                                             
+
+Node Destination:
+     0       Stop                                                               
+     1       Return                                                             
+
+

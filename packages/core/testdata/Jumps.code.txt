@@ -1,0 +1,23 @@
+Node Start:
+     0       RunLine         line:4ff6ba3e                            ; "Start" 
+             RunNode         NodeNameDestination                      ; Clears stack
+             RunLine         line:d9c6bd49                            ; "Error! This line should not be seen."
+     3       Return                                                             
+
+Node NodeNameDestination:
+     0       RunLine         line:169d0df1                            ; "NodeNameDestination"
+             PushString      NodeNameConstantExpression               ; Pushes 1, "NodeNameConstantExpression"
+             PeekAndRunNode                                                     
+     3       Return                                                             
+
+Node NodeNameConstantExpression:
+     0       RunLine         line:2c8fdf38                            ; "NodeNameExpression"
+             PushVariable    $myNodeName                              ; Pushes 1, <unknown variable>
+             PeekAndRunNode                                                     
+     3       Return                                                             
+
+Node NodeNameVariableExpression:
+     0       RunLine         line:efdbe6fe                            ; "NodeNameVariableExpression"
+     1       Return                                                             
+
+

@@ -1,0 +1,33 @@
+Node Start:
+     0       PushString      A-One                                    ; Pushes 1, "A-One"
+             PushString      A-Two                                    ; Pushes 1, "A-Two"
+             PushString      A-Three                                  ; Pushes 1, "A-Three"
+             PushString      B-One                                    ; Pushes 1, "B-One"
+             PushString      B-Two                                    ; Pushes 1, "B-Two"
+     5       PushString      B-Three                                  ; Pushes 1, "B-Three"
+             Stop                                                               
+             PushString      A-One                                    ; Pushes 1, "A-One"
+             PushFloat       1                                        ; Pushes 1
+             CallFunc        set_objective_complete                             
+    10       PushString      B-One                                    ; Pushes 1, "B-One"
+             PushFloat       1                                        ; Pushes 1
+             CallFunc        set_objective_complete                             
+             PushString      A-One                                    ; Pushes 1, "A-One"
+             PushFloat       1                                        ; Pushes 1
+    15       CallFunc        is_objective_active                                
+             JumpIfFalse     L0_end_clause                                      
+             JumpTo          L1_endif                                           
+L0_end_clause:
+    18       Pop                                                      ; Pops 1  
+L1_endif:
+    19       PushString      B-One                                    ; Pushes 1, "B-One"
+    20       PushFloat       1                                        ; Pushes 1
+             CallFunc        is_objective_active                                
+             JumpIfFalse     L2_end_clause                                      
+             JumpTo          L3_endif                                           
+L2_end_clause:
+    24       Pop                                                      ; Pops 1  
+L3_endif:
+    25       Return                                                             
+
+

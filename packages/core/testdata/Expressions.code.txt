@@ -1,0 +1,113 @@
+Node Start:
+     0       PushVariable    $externally_set_bool                     ; Pushes 1, <unknown variable>
+             PushBool        True                                     ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        Bool.EqualTo                                       
+             PushFloat       1                                        ; Pushes 1
+     5       CallFunc        assert                                             
+             PushVariable    $externally_set_number                   ; Pushes 1, <unknown variable>
+             PushFloat       1                                        ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        Number.EqualTo                                     
+    10       PushFloat       1                                        ; Pushes 1
+             CallFunc        assert                                             
+             PushFloat       1                                        ; Pushes 1
+             StoreVariable   $int                                     ; <unknown variable>
+             Pop                                                      ; Pops 1  
+    15       PushVariable    $int                                     ; Pushes 1, <unknown variable>
+             PushFloat       1                                        ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        Number.EqualTo                                     
+             PushFloat       1                                        ; Pushes 1
+    20       CallFunc        assert                                             
+             PushVariable    $int                                     ; Pushes 1, <unknown variable>
+             PushFloat       2                                        ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        Number.NotEqualTo                                  
+    25       PushFloat       1                                        ; Pushes 1
+             CallFunc        assert                                             
+             PushVariable    $bool                                    ; Pushes 1, <unknown variable>
+             PushFloat       1                                        ; Pushes 1
+             CallFunc        Bool.Not                                           
+    30       PushBool        False                                    ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        Bool.EqualTo                                       
+             PushFloat       1                                        ; Pushes 1
+             CallFunc        assert                                             
+    35       PushVariable    $int                                     ; Pushes 1, <unknown variable>
+             PushFloat       1                                        ; Pushes 1
+             CallFunc        Number.UnaryMinus                                  
+             PushFloat       1                                        ; Pushes 1
+             PushFloat       1                                        ; Pushes 1
+    40       CallFunc        Number.UnaryMinus                                  
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        Number.EqualTo                                     
+             PushFloat       1                                        ; Pushes 1
+             CallFunc        assert                                             
+    45       PushVariable    $int                                     ; Pushes 1, <unknown variable>
+             PushFloat       1                                        ; Pushes 1
+             CallFunc        Number.UnaryMinus                                  
+             PushFloat       0                                        ; Pushes 1
+             PushFloat       1                                        ; Pushes 1
+    50       PushFloat       2                                        ; Pushes 1
+             CallFunc        Number.Minus                                       
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        Number.EqualTo                                     
+             PushFloat       1                                        ; Pushes 1
+    55       CallFunc        assert                                             
+             PushFloat       5                                        ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        Number.Multiply                                    
+    60       PushFloat       2                                        ; Pushes 1
+             PushFloat       1                                        ; Pushes 1
+             PushFloat       1                                        ; Pushes 1
+             CallFunc        Number.UnaryMinus                                  
+             PushFloat       2                                        ; Pushes 1
+    65       CallFunc        Number.Multiply                                    
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        Number.Minus                                       
+             StoreVariable   $math                                    ; <unknown variable>
+             Pop                                                      ; Pops 1  
+    70       PushVariable    $math                                    ; Pushes 1, <unknown variable>
+             PushFloat       12                                       ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        Number.EqualTo                                     
+             PushFloat       1                                        ; Pushes 1
+    75       CallFunc        assert                                             
+             PushFloat       12                                       ; Pushes 1
+             StoreVariable   $math                                    ; <unknown variable>
+             Pop                                                      ; Pops 1  
+             PushVariable    $math                                    ; Pushes 1, <unknown variable>
+    80       PushFloat       5                                        ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        Number.Modulo                                      
+             StoreVariable   $math                                    ; <unknown variable>
+             Pop                                                      ; Pops 1  
+    85       PushVariable    $math                                    ; Pushes 1, <unknown variable>
+             PushFloat       2                                        ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        Number.EqualTo                                     
+             PushFloat       1                                        ; Pushes 1
+    90       CallFunc        assert                                             
+             PushFloat       1                                        ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        Number.Divide                                      
+    95       PushFloat       0.5                                      ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        Number.EqualTo                                     
+             PushFloat       1                                        ; Pushes 1
+             CallFunc        assert                                             
+   100       PushFloat       0.1                                      ; Pushes 1
+             PushFloat       0.1                                      ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        Number.Add                                         
+             PushFloat       0.2                                      ; Pushes 1
+   105       PushFloat       2                                        ; Pushes 1
+             CallFunc        Number.EqualTo                                     
+             PushFloat       1                                        ; Pushes 1
+             CallFunc        assert                                             
+   109       Return                                                             
+
+

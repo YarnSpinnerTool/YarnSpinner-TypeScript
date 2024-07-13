@@ -1,0 +1,189 @@
+Node Start:
+     0       RunLine         line:123725bb                            ; "Mae: ¯\_(ツ)_/¯"
+             RunLine         line:840722cc                            ; "Mae: <o>"
+             RunLine         line:3e562b55                            ; "Mae: :|"
+             RunLine         line:a8662c22                            ; "Mae: :)"
+             RunLine         line:0bf348bc                            ; "Mae: :("
+     5       RunLine         line:9dc34fcb                            ; "Mae: :o"
+             RunLine         line:27924652                            ; "Mae: :\"
+             RunLine         line:b1a24125                            ; "Mae: :<"
+             RunLine         line:20bffeb5                            ; "Mae: D:"
+             RunLine         line:b68ff9c2                            ; "Mae: -_-"
+    10       RunLine         line:1fbac21e                            ; "Mae: =_="
+             RunLine         line:898ac569                            ; "Mae: U_U"
+             RunLine         line:33dbccf0                            ; "Mae: O_O"
+             RunLine         line:a5ebcb87                            ; "Mae: o_o"
+             RunLine         line:067eaf19                            ; "Mae: \o/"
+    15       RunLine         line:904ea86e                            ; "Mae: /o\"
+             RunLine         line:2a1fa1f7                            ; "Mae: o/"
+             RunLine         line:bc2fa680                            ; "Mae: _o_"
+             RunLine         line:2d321910                            ; "Mae: o>"
+             RunLine         line:bb021e67                            ; "Mae: / \"
+    20       RunLine         line:dce9ef35                            ; "Mae: \ /"
+             RunLine         line:4ad9e842                            ; "Mae: ~~"
+             AddOption       line:f088e1db, L0_option_0               ; "Mae: ¯\_(ツ)_/¯"
+             AddOption       line:66b8e6ac, L1_option_1               ; "Mae: <o>"
+             AddOption       line:c52d8232, L2_option_2               ; "Mae: :|"
+    25       AddOption       line:531d8545, L3_option_3               ; "Mae: :)"
+             AddOption       line:e94c8cdc, L4_option_4               ; "Mae: :("
+             AddOption       line:7f7c8bab, L5_option_5               ; "Mae: :o"
+             AddOption       line:ee61343b, L6_option_6               ; "Mae: :\"
+             AddOption       line:7851334c, L7_option_7               ; "Mae: :<"
+    30       AddOption       line:9dd8f42c, L8_option_8               ; "Mae: D:"
+             AddOption       line:0be8f35b, L9_option_9               ; "Mae: -_-"
+             AddOption       line:b1b9fac2, L10_option_10             ; "Mae: =_="
+             AddOption       line:2789fdb5, L11_option_11             ; "Mae: U_U"
+             AddOption       line:841c992b, L12_option_12             ; "Mae: O_O"
+    35       AddOption       line:122c9e5c, L13_option_13             ; "Mae: o_o"
+             AddOption       line:a87d97c5, L14_option_14             ; "Mae: \o/"
+             AddOption       line:3e4d90b2, L15_option_15             ; "Mae: /o\"
+             AddOption       line:af502f22, L16_option_16             ; "Mae: o/"
+             AddOption       line:39602855, L17_option_17             ; "Mae: _o_"
+    40       AddOption       line:5a4eb563, L18_option_18             ; "Mae: o>"
+             AddOption       line:cc7eb214, L19_option_19             ; "Mae: / \"
+             AddOption       line:762fbb8d, L20_option_20             ; "Mae: \ /"
+             AddOption       line:e01fbcfa, L21_option_21             ; "Mae: ~~"
+             ShowOptions                                              ; Pushes 1
+    45       PeekAndJump                                                        
+L0_option_0:
+    46       JumpTo          L22_group_end                                      
+L1_option_1:
+    47       JumpTo          L22_group_end                                      
+L2_option_2:
+    48       JumpTo          L22_group_end                                      
+L3_option_3:
+    49       JumpTo          L22_group_end                                      
+L4_option_4:
+    50       JumpTo          L22_group_end                                      
+L5_option_5:
+    51       JumpTo          L22_group_end                                      
+L6_option_6:
+    52       JumpTo          L22_group_end                                      
+L7_option_7:
+    53       JumpTo          L22_group_end                                      
+L8_option_8:
+    54       JumpTo          L22_group_end                                      
+L9_option_9:
+    55       JumpTo          L22_group_end                                      
+L10_option_10:
+    56       JumpTo          L22_group_end                                      
+L11_option_11:
+    57       JumpTo          L22_group_end                                      
+L12_option_12:
+    58       JumpTo          L22_group_end                                      
+L13_option_13:
+    59       JumpTo          L22_group_end                                      
+L14_option_14:
+    60       JumpTo          L22_group_end                                      
+L15_option_15:
+    61       JumpTo          L22_group_end                                      
+L16_option_16:
+    62       JumpTo          L22_group_end                                      
+L17_option_17:
+    63       JumpTo          L22_group_end                                      
+L18_option_18:
+    64       JumpTo          L22_group_end                                      
+L19_option_19:
+    65       JumpTo          L22_group_end                                      
+L20_option_20:
+    66       JumpTo          L22_group_end                                      
+L21_option_21:
+    67       JumpTo          L22_group_end                                      
+L22_group_end:
+    68       Pop                                                      ; Pops 1  
+             RunLine         line:438ad864                            ; "Separating the option groups here."
+    70       PushBool        True                                     ; Pushes 1
+             AddOption       line:d5badf13, L23_option_0, has_condition ; "Mae: ¯\_(ツ)_/¯"
+             PushBool        True                                     ; Pushes 1
+             AddOption       line:6febd68a, L24_option_1, has_condition ; "Mae: <o>"
+             PushBool        True                                     ; Pushes 1
+    75       AddOption       line:f9dbd1fd, L25_option_2, has_condition ; "Mae: :|"
+             PushBool        True                                     ; Pushes 1
+             AddOption       line:68c66e6d, L26_option_3, has_condition ; "Mae: :)"
+             PushBool        True                                     ; Pushes 1
+             AddOption       line:fef6691a, L27_option_4, has_condition ; "Mae: :("
+    80       PushBool        True                                     ; Pushes 1
+             AddOption       line:1b7fae7a, L28_option_5, has_condition ; "Mae: :o"
+             PushBool        True                                     ; Pushes 1
+             AddOption       line:8d4fa90d, L29_option_6, has_condition ; "Mae: :\"
+             PushBool        True                                     ; Pushes 1
+    85       AddOption       line:371ea094, L30_option_7, has_condition ; "Mae: :<"
+             PushBool        True                                     ; Pushes 1
+             AddOption       line:a12ea7e3, L31_option_8, has_condition ; "Mae: D:"
+             PushBool        True                                     ; Pushes 1
+             AddOption       line:02bbc37d, L32_option_9, has_condition ; "Mae: -_-"
+    90       PushBool        True                                     ; Pushes 1
+             AddOption       line:948bc40a, L33_option_10, has_condition ; "Mae: =_="
+             PushBool        True                                     ; Pushes 1
+             AddOption       line:2edacd93, L34_option_11, has_condition ; "Mae: U_U"
+             PushBool        True                                     ; Pushes 1
+    95       AddOption       line:b8eacae4, L35_option_12, has_condition ; "Mae: O_O"
+             PushBool        True                                     ; Pushes 1
+             AddOption       line:29f77574, L36_option_13, has_condition ; "Mae: o_o"
+             PushBool        True                                     ; Pushes 1
+             AddOption       line:bfc77203, L37_option_14, has_condition ; "Mae: \o/"
+   100       PushBool        True                                     ; Pushes 1
+             AddOption       line:d82c8351, L38_option_15, has_condition ; "Mae: /o\"
+             PushBool        True                                     ; Pushes 1
+             AddOption       line:4e1c8426, L39_option_16, has_condition ; "Mae: o/"
+             PushBool        True                                     ; Pushes 1
+   105       AddOption       line:f44d8dbf, L40_option_17, has_condition ; "Mae: _o_"
+             PushBool        True                                     ; Pushes 1
+             AddOption       line:627d8ac8, L41_option_18, has_condition ; "Mae: o>"
+             PushBool        True                                     ; Pushes 1
+             AddOption       line:c1e8ee56, L42_option_19, has_condition ; "Mae: / \"
+   110       PushBool        True                                     ; Pushes 1
+             AddOption       line:57d8e921, L43_option_20, has_condition ; "Mae: \ /"
+             PushBool        True                                     ; Pushes 1
+             AddOption       line:ed89e0b8, L44_option_21, has_condition ; "Mae: ~~"
+             ShowOptions                                              ; Pushes 1
+   115       PeekAndJump                                                        
+L23_option_0:
+   116       JumpTo          L45_group_end                                      
+L24_option_1:
+   117       JumpTo          L45_group_end                                      
+L25_option_2:
+   118       JumpTo          L45_group_end                                      
+L26_option_3:
+   119       JumpTo          L45_group_end                                      
+L27_option_4:
+   120       JumpTo          L45_group_end                                      
+L28_option_5:
+   121       JumpTo          L45_group_end                                      
+L29_option_6:
+   122       JumpTo          L45_group_end                                      
+L30_option_7:
+   123       JumpTo          L45_group_end                                      
+L31_option_8:
+   124       JumpTo          L45_group_end                                      
+L32_option_9:
+   125       JumpTo          L45_group_end                                      
+L33_option_10:
+   126       JumpTo          L45_group_end                                      
+L34_option_11:
+   127       JumpTo          L45_group_end                                      
+L35_option_12:
+   128       JumpTo          L45_group_end                                      
+L36_option_13:
+   129       JumpTo          L45_group_end                                      
+L37_option_14:
+   130       JumpTo          L45_group_end                                      
+L38_option_15:
+   131       JumpTo          L45_group_end                                      
+L39_option_16:
+   132       JumpTo          L45_group_end                                      
+L40_option_17:
+   133       JumpTo          L45_group_end                                      
+L41_option_18:
+   134       JumpTo          L45_group_end                                      
+L42_option_19:
+   135       JumpTo          L45_group_end                                      
+L43_option_20:
+   136       JumpTo          L45_group_end                                      
+L44_option_21:
+   137       JumpTo          L45_group_end                                      
+L45_group_end:
+   138       Pop                                                      ; Pops 1  
+   139       Return                                                             
+
+

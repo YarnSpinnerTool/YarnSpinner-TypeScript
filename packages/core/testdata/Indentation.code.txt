@@ -1,0 +1,115 @@
+Node Start:
+     0       PushBool        True                                     ; Pushes 1
+             StoreVariable   $bar                                     ; Implicitly declared in /Users/desplesda/Work/YarnSpinner/Tests/TestCases/Indentation.yarn, node Start
+             Pop                                                      ; Pops 1  
+             PushVariable    $bar                                     ; Pushes 1, Implicitly declared in /Users/desplesda/Work/YarnSpinner/Tests/TestCases/Indentation.yarn, node Start
+             PushBool        True                                     ; Pushes 1
+     5       PushFloat       2                                        ; Pushes 1
+             CallFunc        Bool.EqualTo                                       
+             JumpIfFalse     L0_end_clause                                      
+             RunLine         line:135173a5                            ; "zero indent if with equal line"
+             JumpTo          L1_endif                                           
+L0_end_clause:
+    10       Pop                                                      ; Pops 1  
+L1_endif:
+    11       PushVariable    $bar                                     ; Pushes 1, Implicitly declared in /Users/desplesda/Work/YarnSpinner/Tests/TestCases/Indentation.yarn, node Start
+             PushBool        True                                     ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        Bool.EqualTo                                       
+    15       JumpIfFalse     L2_end_clause                                      
+             RunLine         line:856174d2                            ; "zero indent if with one indent line"
+             JumpTo          L3_endif                                           
+L2_end_clause:
+    18       Pop                                                      ; Pops 1  
+L3_endif:
+    19       PushVariable    $bar                                     ; Pushes 1, Implicitly declared in /Users/desplesda/Work/YarnSpinner/Tests/TestCases/Indentation.yarn, node Start
+    20       PushBool        True                                     ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        Bool.EqualTo                                       
+             JumpIfFalse     L4_end_clause                                      
+             RunLine         line:3f307d4b                            ; "zero indent if with two indent line"
+    25       JumpTo          L5_endif                                           
+L4_end_clause:
+    26       Pop                                                      ; Pops 1  
+L5_endif:
+    27       PushVariable    $bar                                     ; Pushes 1, Implicitly declared in /Users/desplesda/Work/YarnSpinner/Tests/TestCases/Indentation.yarn, node Start
+             PushBool        True                                     ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+    30       CallFunc        Bool.EqualTo                                       
+             JumpIfFalse     L6_end_clause                                      
+             RunLine         line:a9007a3c                            ; "one indent if with equal indent line"
+             JumpTo          L7_endif                                           
+L6_end_clause:
+    34       Pop                                                      ; Pops 1  
+L7_endif:
+    35       RunLine         line:0a951ea2                            ; "zero indent line"
+             PushVariable    $bar                                     ; Pushes 1, Implicitly declared in /Users/desplesda/Work/YarnSpinner/Tests/TestCases/Indentation.yarn, node Start
+             PushBool        True                                     ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        Bool.EqualTo                                       
+    40       JumpIfFalse     L8_end_clause                                      
+             RunLine         line:9ca519d5                            ; "one indent if with two indent line"
+             JumpTo          L9_endif                                           
+L8_end_clause:
+    43       Pop                                                      ; Pops 1  
+L9_endif:
+    44       RunLine         line:26f4104c                            ; "zero indent line"
+    45       RunLine         line:b0c4173b                            ; "one indent line"
+             PushVariable    $bar                                     ; Pushes 1, Implicitly declared in /Users/desplesda/Work/YarnSpinner/Tests/TestCases/Indentation.yarn, node Start
+             PushBool        True                                     ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        Bool.EqualTo                                       
+    50       JumpIfFalse     L10_end_clause                                     
+             RunLine         line:21d9a8ab                            ; "one indent if with zero indent line and endif"
+             JumpTo          L11_endif                                          
+L10_end_clause:
+    53       Pop                                                      ; Pops 1  
+L11_endif:
+    54       PushVariable    $bar                                     ; Pushes 1, Implicitly declared in /Users/desplesda/Work/YarnSpinner/Tests/TestCases/Indentation.yarn, node Start
+    55       PushBool        True                                     ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        Bool.EqualTo                                       
+             JumpIfFalse     L12_end_clause                                     
+             RunLine         line:b7e9afdc                            ; "zero indent if with one indent line and endif"
+    60       JumpTo          L13_endif                                          
+L12_end_clause:
+    61       Pop                                                      ; Pops 1  
+L13_endif:
+    62       PushVariable    $bar                                     ; Pushes 1, Implicitly declared in /Users/desplesda/Work/YarnSpinner/Tests/TestCases/Indentation.yarn, node Start
+             PushBool        True                                     ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+    65       CallFunc        Bool.EqualTo                                       
+             JumpIfFalse     L14_end_clause                                     
+             RunLine         line:efdcdb69                            ; "zero indent if and line with one indent"
+             JumpTo          L15_endif                                          
+L14_end_clause:
+    69       Pop                                                      ; Pops 1  
+L15_endif:
+    70       PushVariable    $bar                                     ; Pushes 1, Implicitly declared in /Users/desplesda/Work/YarnSpinner/Tests/TestCases/Indentation.yarn, node Start
+             PushBool        True                                     ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        Bool.EqualTo                                       
+             JumpIfFalse     L16_end_clause                                     
+    75       RunLine         line:79ecdc1e                            ; "one indent if and endif with zero indent line"
+             JumpTo          L17_endif                                          
+L16_end_clause:
+    77       Pop                                                      ; Pops 1  
+L17_endif:
+    78       AddOption       line:c3bdd587, L18_option_0              ; "option with subline"
+             ShowOptions                                              ; Pushes 1
+    80       PeekAndJump                                                        
+L18_option_0:
+    81       RunLine         line:558dd2f0                            ; "subline"
+             JumpTo          L19_group_end                                      
+L19_group_end:
+    83       Pop                                                      ; Pops 1  
+             AddOption       line:f618b66e, L20_option_0              ; "option below blank line"
+    85       ShowOptions                                              ; Pushes 1
+             PeekAndJump                                                        
+L20_option_0:
+    87       JumpTo          L21_group_end                                      
+L21_group_end:
+    88       Pop                                                      ; Pops 1  
+    89       Return                                                             
+
+

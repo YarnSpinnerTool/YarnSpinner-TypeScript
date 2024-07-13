@@ -1,0 +1,16 @@
+Node Start:
+     0       RunLine         line:4b8d44a0                            ; "entered start"
+             PushString      Start                                    ; Pushes 1, "Start"
+             PushFloat       1                                        ; Pushes 1
+             CallFunc        visited                                            
+             JumpIfFalse     L0_end_clause                                      
+     5       RunLine         line:ddbd43d7                            ; "we have visited Start before"
+             JumpTo          L1_endif                                           
+L0_end_clause:
+     7       Pop                                                      ; Pops 1  
+             RunLine         line:67ec4a4e                            ; "we have not visited Start"
+             JumpTo          L1_endif                                           
+L1_endif:
+    10       Return                                                             
+
+

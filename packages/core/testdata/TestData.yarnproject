@@ -1,0 +1,12 @@
+{
+    // This .yarnproject exists to prevent the IDE from attempting to parse the
+    // .yarn files in this directory, which are not intended to be compiled or
+    // run on their own (they've already been compiled into .yarnc files, and
+    // are included only for reference.)
+
+    "baseLanguage": "en",
+    "sourceFiles": [],
+    "localisation": {},
+    "projectFileVersion": 2,
+    "compilerOptions": {}
+}

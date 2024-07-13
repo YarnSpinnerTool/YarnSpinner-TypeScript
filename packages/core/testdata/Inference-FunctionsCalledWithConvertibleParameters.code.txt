@@ -1,0 +1,26 @@
+Node Start:
+     0       Stop                                                               
+             PushFloat       0                                        ; Pushes 1
+             PushFloat       1                                        ; Pushes 1
+             CallFunc        some_function                                      
+             JumpIfFalse     L0_end_clause                                      
+     5       JumpTo          L1_endif                                           
+L0_end_clause:
+     6       Pop                                                      ; Pops 1  
+L1_endif:
+     7       PushFloat       1                                        ; Pushes 1
+             PushFloat       1                                        ; Pushes 1
+             CallFunc        some_function                                      
+    10       PushFloat       2                                        ; Pushes 1
+             PushFloat       1                                        ; Pushes 1
+             CallFunc        some_function                                      
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        Bool.Or                                            
+    15       JumpIfFalse     L2_end_clause                                      
+             JumpTo          L3_endif                                           
+L2_end_clause:
+    17       Pop                                                      ; Pops 1  
+L3_endif:
+    18       Return                                                             
+
+

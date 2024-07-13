@@ -1,0 +1,13 @@
+Node Start:
+     0       RunLine         line:1299f5b9                            ; "This is a line of dialogue."
+             RunLine         line:84a9f2ce                            ; "Mae: <shake=.01>HA HA HA HA HA NO I'M FINE.</shake>"
+             RunLine         line:3ef8fb57                            ; "Mae: Testing comments after lines"
+             RunLine         line:a8c8fc20                            ; "Mae: Testing comments after hashtags"
+             PushBool        True                                     ; Pushes 1
+     5       JumpIfFalse     L0_skip_line                                       
+             RunLine         line:0b5d98be                            ; "Mae: Testing comments after line conditions"
+L0_skip_line:
+     7       Pop                                                      ; Pops 1  
+     8       Return                                                             
+
+

@@ -1,0 +1,49 @@
+Node Start:
+     0       RunLine         line:81bbd3ed                            ; "Line 1"
+             DetourToNode    Node2                                              
+             RunLine         line:178bd49a                            ; "Line 5"
+             RunNode         VisitCountTest                           ; Clears stack
+     4       Return                                                             
+
+Node Node2:
+     0       RunLine         line:3fc03123                            ; "Line 2"
+             PushString      Node3                                    ; Pushes 1, "Node3"
+             PeekAndDetourToNode                                                    
+             RunLine         line:a9f03654                            ; "Line 4"
+     4       Return                                                             
+
+Node Node3:
+     0       RunLine         line:4b5449d3                            ; "Line 3"
+             Return                                                             
+             RunLine         line:dd644ea4                            ; "Error: should not be seen"
+     3       Return                                                             
+
+Node VisitCountTest:
+     0       PushString      VisitCountTest                           ; Pushes 1, "VisitCountTest"
+             PushFloat       1                                        ; Pushes 1
+             CallFunc        visited_count                                      
+             RunLine         line:25754f45                            ; "VisitCountTest: {0}"
+             DetourToNode    VisitCountTest2                                    
+     5       RunLine         line:b3454832                            ; "Error: We should not see this"
+     6       Return                                                             
+
+Node VisitCountTest2:
+     0       PushString      VisitCountTest                           ; Pushes 1, "VisitCountTest"
+             PushFloat       1                                        ; Pushes 1
+             CallFunc        visited_count                                      
+             RunLine         line:25092dd5                            ; "VisitCountTest: {0}"
+             RunNode         VisitCountTest3                          ; Clears stack
+     5       Return                                                             
+
+Node VisitCountTest3:
+     0       PushString      VisitCountTest                           ; Pushes 1, "VisitCountTest"
+             PushFloat       1                                        ; Pushes 1
+             CallFunc        visited_count                                      
+             RunLine         line:f20831bb                            ; "VisitCountTest: {0}"
+             PushString      VisitCountTest2                          ; Pushes 1, "VisitCountTest2"
+     5       PushFloat       1                                        ; Pushes 1
+             CallFunc        visited_count                                      
+             RunLine         line:11f70a6f                            ; "VisitCountTest2: {0}"
+     8       Return                                                             
+
+

@@ -1,0 +1,194 @@
+Node Start:
+L0_once_start:
+     0       PushVariable    $Yarn.Internal.Once.2170d563             ; Pushes 1, 'once' statement in file /Users/desplesda/Work/YarnSpinner/Tests/TestCases/LineGroups.yarn, node Start, line 10
+             PushFloat       1                                        ; Pushes 1
+             CallFunc        Bool.Not                                           
+             JumpIfFalse     L5_once_skip_primary                               
+             PushBool        True                                     ; Pushes 1
+     5       StoreVariable   $Yarn.Internal.Once.2170d563             ; 'once' statement in file /Users/desplesda/Work/YarnSpinner/Tests/TestCases/LineGroups.yarn, node Start, line 10
+             Pop                                                      ; Pops 1  
+L1_line_group_start:
+     7       PushVariable    $knows_player                            ; Pushes 1, <unknown variable>
+             AddSaliencyCandidate line:55c31f6c, 1, L2_run_line_group_item ; Pops 1  
+             PushVariable    $knows_player                            ; Pushes 1, <unknown variable>
+    10       PushFloat       1                                        ; Pushes 1
+             CallFunc        Bool.Not                                           
+             AddSaliencyCandidate line:c3f3181b, 2, L3_run_line_group_item ; Pops 1  
+             SelectSaliencyCandidate                                                    
+             JumpIfFalse     L5_once_skip_primary                               
+    15       Pop                                                      ; Pops 1  
+             PeekAndJump                                                        
+L2_run_line_group_item:
+    17       Pop                                                      ; Pops 1  
+             RunLine         line:55c31f6c                            ; "Baker: Hey there, friend! Made some fresh pies for you!"
+             JumpTo          L5_once_skip_primary                               
+L3_run_line_group_item:
+    20       Pop                                                      ; Pops 1  
+             RunLine         line:c3f3181b                            ; "Baker: Hey there! Fresh pies, right out of the oven!"
+             JumpTo          L5_once_skip_primary                               
+L5_once_skip_primary:
+    23       Pop                                                      ; Pops 1  
+L5_line_group_start:
+    24       PushVariable    $pies_bought                             ; Pushes 1, <unknown variable>
+    25       PushFloat       0                                        ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        Number.GreaterThan                                 
+             AddSaliencyCandidate line:79a21182, 1, L6_run_line_group_item ; Pops 1  
+             PushVariable    $pies_bought                             ; Pushes 1, <unknown variable>
+    30       PushFloat       0                                        ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        Number.GreaterThan                                 
+             AddSaliencyCandidate line:ef9216f5, 1, L7_run_line_group_item ; Pops 1  
+             PushVariable    $pies_bought                             ; Pushes 1, <unknown variable>
+    35       PushFloat       0                                        ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        Number.GreaterThan                                 
+             AddSaliencyCandidate line:4c07726b, 1, L8_run_line_group_item ; Pops 1  
+             PushVariable    $knows_player                            ; Pushes 1, <unknown variable>
+    40       PushVariable    $pies_bought                             ; Pushes 1, <unknown variable>
+             PushFloat       0                                        ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        Number.GreaterThan                                 
+             PushFloat       2                                        ; Pushes 1
+    45       CallFunc        Bool.And                                           
+             AddSaliencyCandidate line:da37751c, 2, L9_run_line_group_item ; Pops 1  
+             PushBool        True                                     ; Pushes 1
+             AddSaliencyCandidate line:60667c85, 0, L10_run_line_group_item ; Pops 1  
+             PushBool        True                                     ; Pushes 1
+    50       AddSaliencyCandidate line:f6567bf2, 0, L11_run_line_group_item ; Pops 1  
+             PushBool        True                                     ; Pushes 1
+             AddSaliencyCandidate line:674bc462, 0, L12_run_line_group_item ; Pops 1  
+             SelectSaliencyCandidate                                                    
+             JumpIfFalse     L13_line_group_end                                 
+    55       Pop                                                      ; Pops 1  
+             PeekAndJump                                                        
+L6_run_line_group_item:
+    57       Pop                                                      ; Pops 1  
+             RunLine         line:79a21182                            ; "Baker: Want another?"
+             JumpTo          L13_line_group_end                                 
+L7_run_line_group_item:
+    60       Pop                                                      ; Pops 1  
+             RunLine         line:ef9216f5                            ; "Baker: How about another pie?"
+             JumpTo          L13_line_group_end                                 
+L8_run_line_group_item:
+    63       Pop                                                      ; Pops 1  
+             RunLine         line:4c07726b                            ; "Baker: Another pie?"
+    65       JumpTo          L13_line_group_end                                 
+L9_run_line_group_item:
+    66       Pop                                                      ; Pops 1  
+             RunLine         line:da37751c                            ; "Baker: Another pie for my best customer?"
+             JumpTo          L13_line_group_end                                 
+L10_run_line_group_item:
+    69       Pop                                                      ; Pops 1  
+    70       RunLine         line:60667c85                            ; "Baker: What d'ya say?"
+             JumpTo          L13_line_group_end                                 
+L11_run_line_group_item:
+    72       Pop                                                      ; Pops 1  
+             RunLine         line:f6567bf2                            ; "Baker: How about it?"
+             JumpTo          L13_line_group_end                                 
+L12_run_line_group_item:
+    75       Pop                                                      ; Pops 1  
+             RunLine         line:674bc462                            ; "Baker: Want one?"
+             JumpTo          L13_line_group_end                                 
+L13_line_group_end:
+    78       AddOption       line:f17bc315, L15_line_group_start      ; "Buy Pie"
+             AddOption       line:6205a46f, L20_line_group_start      ; "Don't Buy Pie"
+    80       ShowOptions                                              ; Pushes 1
+             PeekAndJump                                                        
+L15_line_group_start:
+    82       PushBool        True                                     ; Pushes 1
+             AddSaliencyCandidate line:d854adf6, 0, L15_run_line_group_item ; Pops 1  
+             PushBool        True                                     ; Pushes 1
+    85       AddSaliencyCandidate line:4e64aa81, 0, L16_run_line_group_item ; Pops 1  
+             PushBool        True                                     ; Pushes 1
+             AddSaliencyCandidate line:f435a318, 0, L17_run_line_group_item ; Pops 1  
+             SelectSaliencyCandidate                                                    
+             JumpIfFalse     L18_line_group_end                                 
+    90       Pop                                                      ; Pops 1  
+             PeekAndJump                                                        
+L15_run_line_group_item:
+    92       Pop                                                      ; Pops 1  
+             RunLine         line:d854adf6                            ; "Baker: Thank you kindly!"
+             JumpTo          L18_line_group_end                                 
+L16_run_line_group_item:
+    95       Pop                                                      ; Pops 1  
+             RunLine         line:4e64aa81                            ; "Baker: Pleasure doin' business with you!"
+             JumpTo          L18_line_group_end                                 
+L17_run_line_group_item:
+    98       Pop                                                      ; Pops 1  
+             RunLine         line:f435a318                            ; "Baker: Enjoy!"
+   100       JumpTo          L18_line_group_end                                 
+L18_line_group_end:
+   101       PushVariable    $pies_bought                             ; Pushes 1, <unknown variable>
+             PushFloat       1                                        ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        Number.Add                                         
+   105       StoreVariable   $pies_bought                             ; <unknown variable>
+             Pop                                                      ; Pops 1  
+             JumpTo          L24_group_end                                      
+L20_line_group_start:
+   108       PushBool        True                                     ; Pushes 1
+             AddSaliencyCandidate line:c190c0f1, 0, L20_run_line_group_item ; Pops 1  
+   110       PushBool        True                                     ; Pushes 1
+             AddSaliencyCandidate line:57a0c786, 0, L21_run_line_group_item ; Pops 1  
+             PushBool        True                                     ; Pushes 1
+             AddSaliencyCandidate line:edf1ce1f, 0, L22_run_line_group_item ; Pops 1  
+             SelectSaliencyCandidate                                                    
+   115       JumpIfFalse     L23_line_group_end                                 
+             Pop                                                      ; Pops 1  
+             PeekAndJump                                                        
+L20_run_line_group_item:
+   118       Pop                                                      ; Pops 1  
+             RunLine         line:c190c0f1                            ; "Baker: Aw, that's a shame!"
+   120       JumpTo          L23_line_group_end                                 
+L21_run_line_group_item:
+   121       Pop                                                      ; Pops 1  
+             RunLine         line:57a0c786                            ; "Baker: Dang, no sale today!"
+             JumpTo          L23_line_group_end                                 
+L22_run_line_group_item:
+   124       Pop                                                      ; Pops 1  
+   125       RunLine         line:edf1ce1f                            ; "Baker: Come back another time, then!"
+             JumpTo          L23_line_group_end                                 
+L23_line_group_end:
+   127       JumpTo          L24_group_end                                      
+L24_group_end:
+   128       Pop                                                      ; Pops 1  
+   129       Return                                                             
+
+Node BakerSeesPlayer:
+L0_line_group_start:
+     0       PushBool        True                                     ; Pushes 1
+             AddSaliencyCandidate line:afee5f46, 0, L1_run_line_group_item ; Pops 1  
+             PushBool        True                                     ; Pushes 1
+             AddSaliencyCandidate line:3ef3e0d6, 0, L2_run_line_group_item ; Pops 1  
+             PushBool        True                                     ; Pushes 1
+     5       AddSaliencyCandidate line:a8c3e7a1, 0, L3_run_line_group_item ; Pops 1  
+             PushVariable    $pies_bought                             ; Pushes 1, <unknown variable>
+             PushFloat       2                                        ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        Number.GreaterThan                                 
+    10       AddSaliencyCandidate line:cf2816f3, 1, L4_run_line_group_item ; Pops 1  
+             SelectSaliencyCandidate                                                    
+             JumpIfFalse     L5_line_group_end                                  
+             Pop                                                      ; Pops 1  
+             PeekAndJump                                                        
+L1_run_line_group_item:
+    15       Pop                                                      ; Pops 1  
+             RunLine         line:afee5f46                            ; "Baker: Hey there!"
+             JumpTo          L5_line_group_end                                  
+L2_run_line_group_item:
+    18       Pop                                                      ; Pops 1  
+             RunLine         line:3ef3e0d6                            ; "Baker: Fresh pies!"
+    20       JumpTo          L5_line_group_end                                  
+L3_run_line_group_item:
+    21       Pop                                                      ; Pops 1  
+             RunLine         line:a8c3e7a1                            ; "Baker: Fresh and hot pies!"
+             JumpTo          L5_line_group_end                                  
+L4_run_line_group_item:
+    24       Pop                                                      ; Pops 1  
+    25       RunLine         line:cf2816f3                            ; "Baker: Popular pies!"
+             JumpTo          L5_line_group_end                                  
+L5_line_group_end:
+    27       Return                                                             
+
+

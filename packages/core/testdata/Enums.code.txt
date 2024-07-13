@@ -1,0 +1,106 @@
+Node Start:
+     0       PushVariable    $favouriteFood                           ; Pushes 1, <unknown variable>
+             PushFloat       0                                        ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        Enum.EqualTo                                       
+             JumpIfFalse     L0_end_clause                                      
+     5       RunLine         line:3a4c068c                            ; "I like apples!"
+             JumpTo          L2_endif                                           
+L0_end_clause:
+     7       Pop                                                      ; Pops 1  
+             PushVariable    $favouriteFood                           ; Pushes 1, <unknown variable>
+             PushFloat       1                                        ; Pushes 1
+    10       PushFloat       2                                        ; Pushes 1
+             CallFunc        Enum.EqualTo                                       
+             JumpIfFalse     L1_end_clause                                      
+             RunLine         line:ac7c01fb                            ; "It's an error if you see this!"
+             JumpTo          L2_endif                                           
+L1_end_clause:
+    15       Pop                                                      ; Pops 1  
+             RunLine         line:162d0862                            ; "It's an error if you see this!"
+             JumpTo          L2_endif                                           
+L2_endif:
+    18       PushVariable    $secondFavouriteFood                     ; Pushes 1, <unknown variable>
+             PushFloat       1                                        ; Pushes 1
+    20       PushFloat       2                                        ; Pushes 1
+             CallFunc        Enum.EqualTo                                       
+             JumpIfFalse     L3_end_clause                                      
+             RunLine         line:801d0f15                            ; "Oranges are okay in a pinch!"
+             JumpTo          L4_endif                                           
+L3_end_clause:
+    25       Pop                                                      ; Pops 1  
+             RunLine         line:23886b8b                            ; "It's an error if you see this!"
+             JumpTo          L4_endif                                           
+L4_endif:
+    28       PushFloat       1                                        ; Pushes 1
+             StoreVariable   $favouriteFood                           ; <unknown variable>
+    30       Pop                                                      ; Pops 1  
+             PushVariable    $favouriteFood                           ; Pushes 1, <unknown variable>
+             PushFloat       0                                        ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        Enum.EqualTo                                       
+    35       JumpIfFalse     L5_end_clause                                      
+             RunLine         line:b5b86cfc                            ; "It's an error if you see this!"
+             JumpTo          L7_endif                                           
+L5_end_clause:
+    38       Pop                                                      ; Pops 1  
+             PushVariable    $favouriteFood                           ; Pushes 1, <unknown variable>
+    40       PushFloat       1                                        ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        Enum.NotEqualTo                                    
+             JumpIfFalse     L6_end_clause                                      
+             RunLine         line:0fe96565                            ; "It's an error if you see this!"
+    45       JumpTo          L7_endif                                           
+L6_end_clause:
+    46       Pop                                                      ; Pops 1  
+             RunLine         line:99d96212                            ; "I like oranges now!"
+             JumpTo          L7_endif                                           
+L7_endif:
+    49       PushFloat       2                                        ; Pushes 1
+    50       StoreVariable   $favouriteFood                           ; <unknown variable>
+             Pop                                                      ; Pops 1  
+             PushFloat       0                                        ; Pushes 1
+             StoreVariable   $aDifferentFood                          ; Implicitly declared in /Users/desplesda/Work/YarnSpinner/Tests/TestCases/Enums.yarn, node Start
+             Pop                                                      ; Pops 1  
+    55       PushFloat       1                                        ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+             PushFloat       3                                        ; Pushes 1
+             PushFloat       4                                        ; Pushes 1
+             PushFloat       5                                        ; Pushes 1
+    60       PushFloat       6                                        ; Pushes 1
+             PushFloat       7                                        ; Pushes 1
+             PushFloat       8                                        ; Pushes 1
+             PushString      DoObjective1                             ; Pushes 1, "DoObjective1"
+             PushString      DoObjective2                             ; Pushes 1, "DoObjective2"
+    65       PushString      DoObjective3                             ; Pushes 1, "DoObjective3"
+             PushString      DoObjective1                             ; Pushes 1, "DoObjective1"
+             PushFloat       1                                        ; Pushes 1
+             CallFunc        string                                             
+             PushString      DoObjective1                             ; Pushes 1, "DoObjective1"
+    70       PushFloat       2                                        ; Pushes 1
+             CallFunc        String.EqualTo                                     
+             JumpIfFalse     L8_end_clause                                      
+             RunLine         line:08c4dd82                            ; "ok 1"  
+             JumpTo          L9_endif                                           
+L8_end_clause:
+    75       Pop                                                      ; Pops 1  
+             RunLine         line:9ef4daf5                            ; "error" 
+             JumpTo          L9_endif                                           
+L9_endif:
+    78       PushFloat       3                                        ; Pushes 1
+             PushFloat       1                                        ; Pushes 1
+    80       CallFunc        number                                             
+             PushFloat       3                                        ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        Number.EqualTo                                     
+             JumpIfFalse     L10_end_clause                                     
+    85       RunLine         line:9e31402b                            ; "ok 2"  
+             JumpTo          L11_endif                                          
+L10_end_clause:
+    87       Pop                                                      ; Pops 1  
+             RunLine         line:0801475c                            ; "error" 
+             JumpTo          L11_endif                                          
+L11_endif:
+    90       Return                                                             
+
+

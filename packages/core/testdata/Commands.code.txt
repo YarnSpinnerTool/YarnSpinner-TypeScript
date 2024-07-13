@@ -1,0 +1,33 @@
+Node Start:
+     0       RunCommand      flip Harley3 +1, 0                                 
+             RunCommand      toggle, 0                                          
+             RunCommand      settings, 0                                        
+             RunCommand      iffy, 0                                            
+             RunCommand      nulled, 0                                          
+     5       RunCommand      orion, 0                                           
+             RunCommand      andorian, 0                                        
+             RunCommand      note, 0                                            
+             RunCommand      isActive, 0                                        
+             RunCommand      p, 0                                               
+    10       RunCommand      hide Collision:GermOnPorch, 0                      
+             PushFloat       1                                        ; Pushes 1
+             RunCommand      show {0}, 1                                        
+             PushVariable    $replacement                             ; Pushes 1, <unknown variable>
+             RunCommand      show {0}, 1                                        
+    15       PushFloat       0                                        ; Pushes 1
+             PushString                                               ; Pushes 1, ""
+             RunCommand      {0}{1}, 2                                          
+             PushString      {0}                                      ; Pushes 1, "{0}"
+             StoreVariable   $replacement                             ; <unknown variable>
+    20       Pop                                                      ; Pops 1  
+             PushFloat       2                                        ; Pushes 1
+             PushVariable    $replacement                             ; Pushes 1, <unknown variable>
+             RunCommand      {0} {1}, 2                                         
+             PushString      ular old co                              ; Pushes 1, "ular old co"
+    25       StoreVariable   $replacement                             ; <unknown variable>
+             Pop                                                      ; Pops 1  
+             PushVariable    $replacement                             ; Pushes 1, <unknown variable>
+             RunCommand      reg{0}mmand, 1                                     
+    29       Return                                                             
+
+

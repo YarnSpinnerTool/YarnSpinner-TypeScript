@@ -1,0 +1,138 @@
+Node Start:
+     0       AddOption       line:3b2371b5, L0_option_0               ; "Option 1"
+             PushBool        False                                    ; Pushes 1
+             AddOption       line:0e86125c, L5_option_1, has_condition ; "Option 2"
+             AddOption       line:09abaabb, L6_option_2               ; "Option 3"
+             ShowOptions                                              ; Pushes 1
+     5       PeekAndJump                                                        
+L0_option_0:
+     6       PushVariable    $selected                                ; Pushes 1, <unknown variable>
+             PushFloat       1                                        ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        Number.Add                                         
+    10       StoreVariable   $selected                                ; <unknown variable>
+             Pop                                                      ; Pops 1  
+             RunLine         line:ad1376c2                            ; "This line should appear."
+             AddOption       line:17427f5b, L1_option_0               ; "Sub Option 1"
+             AddOption       line:22e71cb2, L2_option_1               ; "Sub Option 2"
+    15       PushBool        False                                    ; Pushes 1
+             AddOption       line:b4d71bc5, L3_option_2, has_condition ; "Sub Option 3"
+             ShowOptions                                              ; Pushes 1
+             PeekAndJump                                                        
+L1_option_0:
+    19       RunLine         line:8172782c                            ; "This line should also appear."
+    20       PushVariable    $selected                                ; Pushes 1, <unknown variable>
+             PushFloat       1                                        ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        Number.Add                                         
+             StoreVariable   $selected                                ; <unknown variable>
+    25       Pop                                                      ; Pops 1  
+             JumpTo          L4_group_end                                       
+L2_option_1:
+    27       JumpTo          L4_group_end                                       
+L3_option_2:
+    28       JumpTo          L4_group_end                                       
+L4_group_end:
+    29       Pop                                                      ; Pops 1  
+    30       JumpTo          L7_group_end                                       
+L5_option_1:
+    31       RunLine         line:98b6152b                            ; "This line should not appear."
+             JumpTo          L7_group_end                                       
+L6_option_2:
+    33       RunLine         line:9f9badcc                            ; "This line should not appear."
+             JumpTo          L7_group_end                                       
+L7_group_end:
+    35       Pop                                                      ; Pops 1  
+             RunLine         line:67767e5c                            ; "Bea: line text"
+             AddOption       line:f146792b, L8_option_0               ; "option1"
+             AddOption       line:4b1770b2, L9_option_1               ; "option2"
+             ShowOptions                                              ; Pushes 1
+    40       PeekAndJump                                                        
+L8_option_0:
+    41       JumpTo          L10_group_end                                      
+L9_option_1:
+    42       JumpTo          L10_group_end                                      
+L10_group_end:
+    43       Pop                                                      ; Pops 1  
+             RunLine         line:dd2777c5                            ; "Bea: line text2"
+    45       RunLine         line:7eb2135b                            ; "Bea: indented line text"
+             AddOption       line:e882142c, L11_option_0              ; "indented option1"
+             AddOption       line:52d31db5, L12_option_1              ; "indented option2"
+             ShowOptions                                              ; Pushes 1
+             PeekAndJump                                                        
+L11_option_0:
+    50       JumpTo          L13_group_end                                      
+L12_option_1:
+    51       JumpTo          L13_group_end                                      
+L13_group_end:
+    52       Pop                                                      ; Pops 1  
+             RunLine         line:c4e31ac2                            ; "Bea: indented line text2"
+             RunLine         line:55fea552                            ; "Bea: line text"
+    55       AddOption       line:c3cea225, L14_option_0              ; "indented option1 following unindented line"
+             AddOption       line:a4255377, L15_option_1              ; "indented option2 following unindented line"
+             ShowOptions                                              ; Pushes 1
+             PeekAndJump                                                        
+L14_option_0:
+    59       JumpTo          L16_group_end                                      
+L15_option_1:
+    60       RunLine         line:32155400                            ; "option2.1"
+             RunLine         line:88445d99                            ; "option2.2"
+             RunLine         line:1e745aee                            ; "option2.3"
+             RunLine         line:bde13e70                            ; "option2.4"
+             JumpTo          L16_group_end                                      
+L16_group_end:
+    65       Pop                                                      ; Pops 1  
+             AddOption       line:2bd13907, L17_option_0              ; "A"     
+             ShowOptions                                              ; Pushes 1
+             PeekAndJump                                                        
+L17_option_0:
+    69       RunLine         line:9180309e                            ; "B"     
+    70       JumpTo          L18_group_end                                      
+L18_group_end:
+    71       Pop                                                      ; Pops 1  
+             PushBool        True                                     ; Pushes 1
+             AddOption       line:0e8a7ce, L19_option_0, has_condition ; "Option A"
+             AddOption       line:0405c66, L20_option_1               ; "Option B"
+    75       ShowOptions                                              ; Pushes 1
+             PeekAndJump                                                        
+L19_option_0:
+    77       JumpTo          L21_group_end                                      
+L20_option_1:
+    78       JumpTo          L21_group_end                                      
+L21_group_end:
+    79       Pop                                                      ; Pops 1  
+    80       PushBool        True                                     ; Pushes 1
+             AddOption       line:0e8a7cd, L22_option_0, has_condition ; "Option A"
+             AddOption       line:0405c67, L23_option_1               ; "Option B"
+             ShowOptions                                              ; Pushes 1
+             PeekAndJump                                                        
+L22_option_0:
+    85       JumpTo          L24_group_end                                      
+L23_option_1:
+    86       JumpTo          L24_group_end                                      
+L24_group_end:
+    87       Pop                                                      ; Pops 1  
+             PushBool        True                                     ; Pushes 1
+             JumpIfFalse     L27_end_clause                                     
+    90       AddOption       line:73244f19, L25_option_0              ; "Option1"
+             ShowOptions                                              ; Pushes 1
+             PeekAndJump                                                        
+L25_option_0:
+    93       JumpTo          L26_group_end                                      
+L26_group_end:
+    94       Pop                                                      ; Pops 1  
+    95       JumpTo          L30_endif                                          
+L27_end_clause:
+    96       Pop                                                      ; Pops 1  
+             AddOption       line:c9754680, L28_option_0              ; "Option2"
+             ShowOptions                                              ; Pushes 1
+             PeekAndJump                                                        
+L28_option_0:
+   100       JumpTo          L29_group_end                                      
+L29_group_end:
+   101       Pop                                                      ; Pops 1  
+             JumpTo          L30_endif                                          
+L30_endif:
+   103       Return                                                             
+
+

@@ -1,0 +1,39 @@
+Node Start:
+     0       RunLine         line:196c3cd1                            ; "entered start"
+             PushString      second                                   ; Pushes 1, "second"
+             PushFloat       1                                        ; Pushes 1
+             CallFunc        visited_count                                      
+             RunLine         line:8f5c3ba6                            ; "seconds visited count is {0}"
+     5       RunNode         second                                   ; Clears stack
+     6       Return                                                             
+
+Node second:
+     0       PushString      second                                   ; Pushes 1, "second"
+             PushFloat       1                                        ; Pushes 1
+             CallFunc        visited_count                                      
+             PushFloat       3                                        ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+     5       CallFunc        Number.LessThan                                    
+             JumpIfFalse     L0_end_clause                                      
+             PushString      second                                   ; Pushes 1, "second"
+             PushFloat       1                                        ; Pushes 1
+             CallFunc        visited_count                                      
+    10       RunLine         line:d7a08d6e                            ; "second visited {0} times"
+             RunNode         second                                   ; Clears stack
+             JumpTo          L1_endif                                           
+L0_end_clause:
+    13       Pop                                                      ; Pops 1  
+             RunNode         third                                    ; Clears stack
+    15       JumpTo          L1_endif                                           
+L1_endif:
+    16       Return                                                             
+
+Node third:
+     0       RunLine         line:1048fa78                            ; "entered third"
+             PushString      second                                   ; Pushes 1, "second"
+             PushFloat       1                                        ; Pushes 1
+             CallFunc        visited_count                                      
+             RunLine         line:b3dd9ee6                            ; "seconds was visited a total of {0} times"
+     5       Return                                                             
+
+

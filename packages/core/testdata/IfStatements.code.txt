@@ -1,0 +1,17 @@
+Node Start:
+     0       PushBool        True                                     ; Pushes 1
+             JumpIfFalse     L0_end_clause                                      
+             RunLine         line:794945                              ; "Player: Hey, Sally."
+             RunLine         line:2dc39b                              ; "Sally: Oh! Hi."
+             RunLine         line:34de2f                              ; "Sally: You snuck up on me."
+     5       RunLine         line:dcc2bc                              ; "Sally: Don't do that."
+             JumpTo          L1_endif                                           
+L0_end_clause:
+     7       Pop                                                      ; Pops 1  
+             RunLine         line:a8e70c                              ; "Player: Hey."
+             RunLine         line:305cde                              ; "Sally: Hi."
+    10       JumpTo          L1_endif                                           
+L1_endif:
+    11       Return                                                             
+
+

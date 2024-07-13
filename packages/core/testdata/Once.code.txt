@@ -1,0 +1,136 @@
+Node Start:
+L0_once_start:
+     0       PushVariable    $Yarn.Internal.Once.1a97ed46             ; Pushes 1, 'once' statement in file /Users/desplesda/Work/YarnSpinner/Tests/TestCases/Once.yarn, node Start, line 3
+             PushFloat       1                                        ; Pushes 1
+             CallFunc        Bool.Not                                           
+             JumpIfFalse     L1_once_skip_primary                               
+             PushBool        True                                     ; Pushes 1
+     5       StoreVariable   $Yarn.Internal.Once.1a97ed46             ; 'once' statement in file /Users/desplesda/Work/YarnSpinner/Tests/TestCases/Once.yarn, node Start, line 3
+             Pop                                                      ; Pops 1  
+             RunLine         line:42994297                            ; "This content is only seen once."
+             JumpTo          L2_once_skip_alternate                             
+L1_once_skip_primary:
+     9       RunLine         line:d4a945e0                            ; "This content is seen on all other occasions."
+L2_once_skip_alternate:
+    10       Pop                                                      ; Pops 1  
+L3_once_start:
+    11       PushVariable    $Yarn.Internal.Once.047e38a6             ; Pushes 1, 'once' statement in file /Users/desplesda/Work/YarnSpinner/Tests/TestCases/Once.yarn, node Start, line 9
+             PushFloat       1                                        ; Pushes 1
+             CallFunc        Bool.Not                                           
+             PushVariable    $conditionA                              ; Pushes 1, Implicitly declared in /Users/desplesda/Work/YarnSpinner/Tests/TestCases/Once.yarn, node Start
+    15       PushFloat       2                                        ; Pushes 1
+             CallFunc        Bool.And                                           
+             JumpIfFalse     L4_once_skip_primary                               
+             PushBool        True                                     ; Pushes 1
+             StoreVariable   $Yarn.Internal.Once.047e38a6             ; 'once' statement in file /Users/desplesda/Work/YarnSpinner/Tests/TestCases/Once.yarn, node Start, line 9
+    20       Pop                                                      ; Pops 1  
+             RunLine         line:6ef84c79                            ; "This content is only seen once, and only if $conditionA is true."
+L4_once_skip_primary:
+    22       Pop                                                      ; Pops 1  
+             PushVariable    $Yarn.Internal.Once.line:f8c84b0e        ; Pushes 1, 'once' line condition for line ID line:f8c84b0e, in file /Users/desplesda/Work/YarnSpinner/Tests/TestCases/Once.yarn, node Start, line 13
+             PushFloat       1                                        ; Pushes 1
+    25       CallFunc        Bool.Not                                           
+             PushVariable    $conditionB                              ; Pushes 1, Implicitly declared in /Users/desplesda/Work/YarnSpinner/Tests/TestCases/Once.yarn, node Start
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        Bool.And                                           
+             AddOption       line:f8c84b0e, L5_option_0, has_condition ; "Option 1"
+    30       PushVariable    $Yarn.Internal.Once.line:5b5d2f90        ; Pushes 1, 'once' line condition for line ID line:5b5d2f90, in file /Users/desplesda/Work/YarnSpinner/Tests/TestCases/Once.yarn, node Start, line 14
+             PushFloat       1                                        ; Pushes 1
+             CallFunc        Bool.Not                                           
+             AddOption       line:5b5d2f90, L6_option_1, has_condition ; "Option 2"
+             PushVariable    $conditionB                              ; Pushes 1, Implicitly declared in /Users/desplesda/Work/YarnSpinner/Tests/TestCases/Once.yarn, node Start
+    35       AddOption       line:cd6d28e7, L7_option_2, has_condition ; "Option 3"
+             AddOption       line:773c217e, L8_option_3               ; "Option 4"
+             ShowOptions                                              ; Pushes 1
+             PeekAndJump                                                        
+L5_option_0:
+    39       PushBool        True                                     ; Pushes 1
+    40       StoreVariable   $Yarn.Internal.Once.line:f8c84b0e        ; 'once' line condition for line ID line:f8c84b0e, in file /Users/desplesda/Work/YarnSpinner/Tests/TestCases/Once.yarn, node Start, line 13
+             Pop                                                      ; Pops 1  
+             JumpTo          L9_group_end                                       
+L6_option_1:
+    43       PushBool        True                                     ; Pushes 1
+             StoreVariable   $Yarn.Internal.Once.line:5b5d2f90        ; 'once' line condition for line ID line:5b5d2f90, in file /Users/desplesda/Work/YarnSpinner/Tests/TestCases/Once.yarn, node Start, line 14
+    45       Pop                                                      ; Pops 1  
+             JumpTo          L9_group_end                                       
+L7_option_2:
+    47       JumpTo          L9_group_end                                       
+L8_option_3:
+    48       JumpTo          L9_group_end                                       
+L9_group_end:
+    49       Pop                                                      ; Pops 1  
+L10_line_group_start:
+    50       PushVariable    $Yarn.Internal.Once.line:e10c2609        ; Pushes 1, 'once' line condition for line ID line:e10c2609, in file /Users/desplesda/Work/YarnSpinner/Tests/TestCases/Once.yarn, node Start, line 18
+             PushFloat       1                                        ; Pushes 1
+             CallFunc        Bool.Not                                           
+             AddSaliencyCandidate line:e10c2609, 1, L11_run_line_group_item ; Pops 1  
+             PushVariable    $Yarn.Internal.Once.line:70119999        ; Pushes 1, 'once' line condition for line ID line:70119999, in file /Users/desplesda/Work/YarnSpinner/Tests/TestCases/Once.yarn, node Start, line 19
+    55       PushFloat       1                                        ; Pushes 1
+             CallFunc        Bool.Not                                           
+             PushVariable    $conditionC                              ; Pushes 1, Implicitly declared in /Users/desplesda/Work/YarnSpinner/Tests/TestCases/Once.yarn, node Start
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        Bool.And                                           
+    60       AddSaliencyCandidate line:70119999, 2, L12_run_line_group_item ; Pops 1  
+             PushVariable    $conditionC                              ; Pushes 1, Implicitly declared in /Users/desplesda/Work/YarnSpinner/Tests/TestCases/Once.yarn, node Start
+             AddSaliencyCandidate line:e6219eee, 1, L13_run_line_group_item ; Pops 1  
+             PushBool        True                                     ; Pushes 1
+             AddSaliencyCandidate line:458c8575, 0, L14_run_line_group_item ; Pops 1  
+    65       SelectSaliencyCandidate                                                    
+             JumpIfFalse     L15_line_group_end                                 
+             Pop                                                      ; Pops 1  
+             PeekAndJump                                                        
+L11_run_line_group_item:
+    69       Pop                                                      ; Pops 1  
+    70       PushBool        True                                     ; Pushes 1
+             StoreVariable   $Yarn.Internal.Once.line:e10c2609        ; 'once' line condition for line ID line:e10c2609, in file /Users/desplesda/Work/YarnSpinner/Tests/TestCases/Once.yarn, node Start, line 18
+             Pop                                                      ; Pops 1  
+             RunLine         line:e10c2609                            ; "Item 1"
+             JumpTo          L15_line_group_end                                 
+L12_run_line_group_item:
+    75       Pop                                                      ; Pops 1  
+             PushBool        True                                     ; Pushes 1
+             StoreVariable   $Yarn.Internal.Once.line:70119999        ; 'once' line condition for line ID line:70119999, in file /Users/desplesda/Work/YarnSpinner/Tests/TestCases/Once.yarn, node Start, line 19
+             Pop                                                      ; Pops 1  
+             RunLine         line:70119999                            ; "Item 2"
+    80       JumpTo          L15_line_group_end                                 
+L13_run_line_group_item:
+    81       Pop                                                      ; Pops 1  
+             RunLine         line:e6219eee                            ; "Item 3"
+             JumpTo          L15_line_group_end                                 
+L14_run_line_group_item:
+    84       Pop                                                      ; Pops 1  
+    85       RunLine         line:458c8575                            ; "Item 4"
+             JumpTo          L15_line_group_end                                 
+L15_line_group_end:
+    87       PushVariable    $Yarn.Internal.Once.line:d3bc8202        ; Pushes 1, 'once' line condition for line ID line:d3bc8202, in file /Users/desplesda/Work/YarnSpinner/Tests/TestCases/Once.yarn, node Start, line 23
+             PushFloat       1                                        ; Pushes 1
+             CallFunc        Bool.Not                                           
+    90       JumpIfFalse     L16_skip_line                                      
+             PushBool        True                                     ; Pushes 1
+             StoreVariable   $Yarn.Internal.Once.line:d3bc8202        ; 'once' line condition for line ID line:d3bc8202, in file /Users/desplesda/Work/YarnSpinner/Tests/TestCases/Once.yarn, node Start, line 23
+             Pop                                                      ; Pops 1  
+             RunLine         line:d3bc8202                            ; "Line 1"
+L16_skip_line:
+    95       Pop                                                      ; Pops 1  
+             PushVariable    $Yarn.Internal.Once.line:69ed8b9b        ; Pushes 1, 'once' line condition for line ID line:69ed8b9b, in file /Users/desplesda/Work/YarnSpinner/Tests/TestCases/Once.yarn, node Start, line 24
+             PushFloat       1                                        ; Pushes 1
+             CallFunc        Bool.Not                                           
+             PushVariable    $conditionD                              ; Pushes 1, Implicitly declared in /Users/desplesda/Work/YarnSpinner/Tests/TestCases/Once.yarn, node Start
+   100       PushFloat       2                                        ; Pushes 1
+             CallFunc        Bool.And                                           
+             JumpIfFalse     L17_skip_line                                      
+             PushBool        True                                     ; Pushes 1
+             StoreVariable   $Yarn.Internal.Once.line:69ed8b9b        ; 'once' line condition for line ID line:69ed8b9b, in file /Users/desplesda/Work/YarnSpinner/Tests/TestCases/Once.yarn, node Start, line 24
+   105       Pop                                                      ; Pops 1  
+             RunLine         line:69ed8b9b                            ; "Line 2"
+L17_skip_line:
+   107       Pop                                                      ; Pops 1  
+             PushVariable    $conditionD                              ; Pushes 1, Implicitly declared in /Users/desplesda/Work/YarnSpinner/Tests/TestCases/Once.yarn, node Start
+             JumpIfFalse     L18_skip_line                                      
+   110       RunLine         line:ffdd8cec                            ; "Line 3"
+L18_skip_line:
+   111       Pop                                                      ; Pops 1  
+             RunLine         line:5c48e872                            ; "Line 4"
+   113       Return                                                             
+
+
