@@ -1339,8 +1339,147 @@ export class YarnVM {
                 return op.value.floatValue;
             case "stringValue":
                 return op.value.stringValue;
+            default:
+                throw new Error(
+                    `Can't unwrap ${JSON.stringify(op)}: unknown type`,
+                );
         }
-        return undefined;
+    }
+
+    public evaluateSmartVariable(name: string): YarnValue | undefined {
+        if (!this.program) {
+            throw new Error(
+                `Can't evaluate smart variable ${name}: no program is loaded`,
+            );
+        }
+        const node = this.program.nodes[name];
+        if (!node) {
+            // No node with this name. Return undefined.
+            return undefined;
+        }
+
+        // Run a miniature version of the virtual machine that supports just
+        // enough instructions to be able to evaluate an expression
+
+        const stack: YarnValue[] = [];
+        let programCounter = 0;
+
+        const evaluateSmartVariableInstruction = (i: Instruction): boolean => {
+            switch (i.instructionType.oneofKind) {
+                case "pushString": {
+                    stack.push(i.instructionType.pushString.value);
+                    programCounter += 1;
+                    return true;
+                }
+                case "pushFloat": {
+                    stack.push(i.instructionType.pushFloat.value);
+                    programCounter += 1;
+                    return true;
+                }
+                case "pushBool": {
+                    stack.push(i.instructionType.pushBool.value);
+                    programCounter += 1;
+                    return true;
+                }
+                case "pop": {
+                    stack.pop();
+                    programCounter += 1;
+                    return true;
+                }
+                case "callFunc": {
+                    const paramCount = stack.pop();
+                    if (typeof paramCount !== "number") {
+                        throw new Error("Expected top of stack to be number");
+                    }
+                    if (stack.length < paramCount) {
+                        throw new Error("Not enough parameters on stack");
+                    }
+                    const parameters: YarnValue[] = [];
+                    for (let i = 0; i < paramCount; i++) {
+                        parameters.unshift(stack.pop()!);
+                    }
+                    const result = this.runFunc(
+                        i.instructionType.callFunc.functionName,
+                        parameters,
+                    );
+                    if (result === undefined) {
+                        throw new Error("Failed to run function");
+                    }
+                    stack.push(result);
+                    programCounter += 1;
+                    return true;
+                }
+                case "pushVariable": {
+                    const variableName =
+                        i.instructionType.pushVariable.variableName;
+                    if (variableName in this.variableStorage) {
+                        stack.push(this.variableStorage[variableName]);
+                    } else {
+                        const initialValue =
+                            this.program!.initialValues[variableName];
+                        if (initialValue === undefined) {
+                            throw new Error(
+                                "Undefined variable " + variableName,
+                            );
+                        }
+
+                        stack.push(this.unwrap(initialValue));
+                    }
+                    programCounter += 1;
+                    return true;
+                }
+                case "jumpIfFalse": {
+                    if (stack.length == 0) {
+                        throw new Error("Can't jump - stack is empty");
+                    }
+                    const top = stack[stack.length - 1];
+                    if (typeof top !== "boolean") {
+                        throw new Error(
+                            "Can't jump - top of stack is not boolean",
+                        );
+                    }
+                    if (top === false) {
+                        programCounter =
+                            i.instructionType.jumpIfFalse.destination;
+                    } else {
+                        programCounter += 1;
+                    }
+                    return true;
+                }
+                case "stop": {
+                    return false;
+                }
+                default: {
+                    throw new Error(
+                        `Can't use instruction type ${i.instructionType.oneofKind} in smart variables`,
+                    );
+                }
+            }
+        };
+
+        while (programCounter < node.instructions.length) {
+            const previousProgramCounter = programCounter;
+            const instruction = node.instructions[programCounter];
+            const shouldContinue =
+                evaluateSmartVariableInstruction(instruction);
+
+            // The instruction pointer must always move forwards in a smart
+            // variable
+            if (programCounter <= previousProgramCounter) {
+                throw new Error("Jump backwards in smart variable detected");
+            }
+
+            if (!shouldContinue) {
+                break;
+            }
+        }
+
+        if (stack.length !== 1) {
+            throw new Error("Expected precisely one value remaining on stack");
+        }
+
+        return stack[0];
+    }
     }
     private unwrapString(op: Operand): string | undefined {
         if (op.value.oneofKind === "stringValue") {

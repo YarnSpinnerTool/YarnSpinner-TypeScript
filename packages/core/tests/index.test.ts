@@ -390,3 +390,17 @@ describe("all testplans run as expected", () => {
         5,
     );
 });
+
+it("can evaluate smart variables", () => {
+    const path = resolve(testDataPath, "SmartVariables.yarnc");
+    const program = Program.fromBinary(readFileSync(path));
+    expect(program).toBeDefined();
+
+    let storage: VariableStorage = {};
+
+    const vm = new YarnVM();
+    vm.loadProgram(program, {});
+    vm.variableStorage = storage;
+
+    expect(vm.evaluateSmartVariable("$player_can_afford_pie")).toBe(false);
+});
