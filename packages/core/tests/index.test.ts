@@ -162,7 +162,8 @@ describe("all testplans run as expected", () => {
                 } satisfies Record<string, YarnFunction>),
             );
 
-            const vm = new YarnVM(program, stringTable, library, metadataTable);
+            const vm = new YarnVM();
+            vm.loadProgram(program, stringTable, library, metadataTable);
             vm.verboseLogging = false;
 
             const dontExpectLines =

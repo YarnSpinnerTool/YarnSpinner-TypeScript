@@ -344,17 +344,6 @@ export class YarnVM {
     // intended to be used for testing
     private library?: YarnLibrary;
 
-    constructor(
-        newProgram?: Program,
-        strings?: { [key: string]: string },
-        library?: YarnLibrary,
-        metadataTable?: Record<string, MetadataEntry>,
-    ) {
-        if (newProgram && strings) {
-            this.loadProgram(newProgram, strings, library, metadataTable);
-        }
-    }
-
     public loadProgram(
         newProgram: Program,
         strings: { [key: string]: string },
