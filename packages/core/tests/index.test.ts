@@ -360,12 +360,12 @@ describe("all testplans run as expected", () => {
                         }
                     }
 
-                    // We've reached the end of the testplan. Expect a stop and
-                    // no other content.
-                    vm.optionCallback = dontExpectOptions;
-                    vm.commandCallback = dontExpectCommand;
-                    vm.lineCallback = dontExpectLines;
-                    vm.dialogueCompleteCallback = async () => {};
+                    // We've reached the end of the testplan. Allow anything
+                    // else to run.
+                    vm.optionCallback = () => Promise.resolve(0);
+                    vm.commandCallback = () => Promise.resolve();
+                    vm.lineCallback = () => Promise.resolve();
+                    vm.dialogueCompleteCallback = () => Promise.resolve();
                 };
 
                 continueTestPlan();
