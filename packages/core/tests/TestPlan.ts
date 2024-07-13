@@ -151,50 +151,94 @@ function trimCharacters(input: string, characters: string): string {
     return input.substring(start, end + 1);
 }
 
+/**
+ * Represents a test plan that can be iterated over to access individual test runs.
+ */
 export class TestPlan implements Iterable<TestPlanRun> {
+    /**
+     * An array of test run objects associated with this test plan.
+     */
     public runs: TestPlanRun[] = [];
 
+    /**
+     * Constructs a new instance of the TestPlan class.
+     */
     constructor() {}
 
+    /**
+     * Returns an iterator object that allows iteration over the test runs in
+     * this test plan.
+     * @returns An iterator object that iterates over all runs in the test plan.
+     */
     [Symbol.iterator](): Iterator<TestPlanRun, TestPlanRun, undefined> {
         return this.runs.values();
     }
 
+    /**
+     * Creates a new instance of TestPlan from the content of a file at the
+     * specified path.
+     * @param path - The file system path where the test plan is stored.
+     * @returns A new instance of TestPlan populated with data parsed from the
+     * file.
+     */
     public static fromFile(path: string): TestPlan {
         const text = fs.readFileSync(path).toString();
         return TestPlan.fromString(text);
     }
 
+    /**
+     * Creates a new instance of TestPlan from the provided string containing
+     * the test plan data.
+     * @param text - The string that contains the test plan source code.
+     * @returns A new instance of TestPlan populated with data parsed from the
+     * string.
+     */
     public static fromString(text: string): TestPlan {
+        // Initialize a new TestPlan instance
         const plan = new TestPlan();
+
+        // Create a CharStream from the input text for parsing
         const charStream = CharStream.fromString(text);
+
+        // Create a lexer to convert the character stream into tokens
         const lexer = new YarnSpinnerTestPlanLexer(charStream);
 
+        // Create a parser to build an abstract syntax tree (AST) from the
+        // tokens
         const tokenStream = new CommonTokenStream(lexer);
         const parser = new YarnSpinnerTestPlanParser(tokenStream);
+
+        // Remove default error listeners for cleaner error handling
         lexer.removeErrorListeners();
         parser.removeErrorListeners();
+
+        // Add custom error listeners specific to the test plan parsing
         const lexerErrorListener = new ErrorListener("testplan");
         const parserErrorListener = new ErrorListener("testplan");
         lexer.addErrorListener(lexerErrorListener);
         parser.addErrorListener(parserErrorListener);
 
+        // Parse the input text to obtain the root of the AST
         const testPlanTree = parser.testplan();
 
-        // var allDiagnostics = lexerErrorListener.Diagnostics.Concat(parserErrorListener.Diagnostics);
-        // if (allDiagnostics.Any(d => d.Severity == Diagnostic.DiagnosticSeverity.Error)) {
-        //     throw new Error("Syntax errors in test plan: " + allDiagnostics.join("\n",));
-        // }
-
+        // Iterate over each run context in the parsed test plan tree
         for (const runContext of testPlanTree.run()) {
+            // Create a new TestPlanRun instance for this run
             const run = new TestPlanRun();
+
+            // Iterate over each step within the current run context
             for (const stepContext of runContext.step()) {
                 let step: TestPlanStep;
+
+                // Determine the type of step based on the presence of specific
+                // tokens or conditions
                 if (stepContext.actionJumpToNode() != null) {
+                    // Create an ActionJumpToNodeStep instance
                     step = new ActionJumpToNodeStep(
                         stepContext.actionJumpToNode()?._nodeName?.text ?? "",
                     );
                 } else if (stepContext.actionSelect() != null) {
+                    // Create an ActionSelectStep instance
                     step = new ActionSelectStep(
                         parseInt(
                             stepContext.actionSelect()?.NUMBER().getText() ??
@@ -202,6 +246,7 @@ export class TestPlan implements Iterable<TestPlanRun> {
                         ) - 1,
                     );
                 } else if (stepContext.actionSet() != null) {
+                    // Handle different types of set actions
                     const set = stepContext.actionSet();
 
                     if (set instanceof ActionSetBoolContext) {
@@ -224,6 +269,7 @@ export class TestPlan implements Iterable<TestPlanRun> {
                         );
                     }
                 } else if (stepContext.lineExpected()) {
+                    // Create an ExpectLineStep instance for line expectations
                     const expectation = stepContext.lineExpected()!;
                     if (expectation instanceof LineWithAnyTextExpectedContext) {
                         step = new ExpectLineStep(
@@ -245,6 +291,8 @@ export class TestPlan implements Iterable<TestPlanRun> {
                         throw new Error("Invalid line expectation");
                     }
                 } else if (stepContext.optionExpected()) {
+                    // Create an ExpectOptionStep instance for option
+                    // expectations
                     step = new ExpectOptionStep(
                         trimCharacters(
                             stepContext.optionExpected()?.TEXT().getText() ??
@@ -258,6 +306,8 @@ export class TestPlan implements Iterable<TestPlanRun> {
                         !stepContext.optionExpected()?._isDisabled,
                     );
                 } else if (stepContext.commandExpected()) {
+                    // Create an ExpectCommandStep instance for command
+                    // expectations
                     step = new ExpectCommandStep(
                         trimCharacters(
                             stepContext.commandExpected()?.TEXT().getText() ??
@@ -266,8 +316,11 @@ export class TestPlan implements Iterable<TestPlanRun> {
                         ),
                     );
                 } else if (stepContext.stopExpected()) {
+                    // Create an ExpectStop instance for stop conditions
                     step = new ExpectStop();
                 } else if (stepContext.actionSetSaliencyMode()) {
+                    // Create an ActionSetSaliencyStep instance for saliency
+                    // mode setting
                     step = new ActionSetSaliencyStep(
                         stepContext.actionSetSaliencyMode()?._saliencyMode
                             ?.text ?? "<error>",
@@ -277,13 +330,20 @@ export class TestPlan implements Iterable<TestPlanRun> {
                         "Unhandled step type: " + stepContext.getText(),
                     );
                 }
+
+                // Add the parsed step to the current run's steps list
                 run.steps.push(step);
             }
+
+            // Add the populated run to the test plan
             plan.runs.push(run);
         }
+
+        // Return the fully populated TestPlan instance
         return plan;
     }
 }
+
 /**
  * Represents different types of steps in a test plan.
  */
