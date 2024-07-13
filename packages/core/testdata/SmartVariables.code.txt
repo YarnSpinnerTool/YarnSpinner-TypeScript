@@ -1,0 +1,24 @@
+Node Start:
+     0       PushVariable    $player_money                            ; Pushes 1, Implicitly declared in /Users/desplesda/Work/YarnSpinner/Tests/TestCases/SmartVariables.yarn, node Start
+             PushFloat       10                                       ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        Number.GreaterThan                                 
+             JumpIfFalse     L0_end_clause                                      
+     5       RunLine         line:2fc6c23d                            ; "Player: One pie, please."
+             RunLine         line:b9f6c54a                            ; "PieMaker: Certainly!"
+             JumpTo          L1_endif                                           
+L0_end_clause:
+     8       Pop                                                      ; Pops 1  
+             RunLine         line:03a7ccd3                            ; "Player: Can I have a pie?"
+    10       RunLine         line:9597cba4                            ; "PieMaker: You can't afford one!"
+             JumpTo          L1_endif                                           
+L1_endif:
+    12       Return                                                             
+
+Node $player_can_afford_pie:
+     0       PushVariable    $player_money                            ; Pushes 1, Implicitly declared in /Users/desplesda/Work/YarnSpinner/Tests/TestCases/SmartVariables.yarn, node Start
+             PushFloat       10                                       ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+     3       CallFunc        Number.GreaterThan                                 
+
+
