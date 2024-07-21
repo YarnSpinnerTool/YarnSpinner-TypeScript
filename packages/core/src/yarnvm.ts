@@ -12,9 +12,9 @@ export interface VariableStorage {
 
 export interface OptionItem {
     label: string;
-    line: string;
+    line: Line;
     jump: number;
-    lineCondition: boolean;
+    isAvailable: boolean;
     optionID: number;
 }
 
@@ -310,6 +310,12 @@ function randomRange(min: number, max: number): number {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+export type Line = {
+    id: string;
+    rawText: string;
+    metadata: string[];
+};
+
 export class YarnVM {
     private currentNode: Node | null = null;
     public program?: Program;
@@ -332,7 +338,7 @@ export class YarnVM {
 
     public verboseLogging: boolean = false;
 
-    public lineCallback: ((line: string) => Promise<void>) | null = null;
+    public lineCallback: ((line: Line) => Promise<void>) | null = null;
     public commandCallback: ((command: string) => Promise<void>) | null = null;
     public optionCallback: ((options: OptionItem[]) => Promise<number>) | null =
         null;
@@ -505,7 +511,15 @@ export class YarnVM {
                     }
                 }
 
-                const line = this.buildLine(label, parameters);
+                let line = this.buildLine(label, parameters);
+
+                if (line === undefined) {
+                    line = {
+                        id: label,
+                        metadata: [],
+                        rawText: "Unknown line " + label,
+                    };
+                }
 
                 // in the c# one we set state to delivered
                 // then to waiting
@@ -593,15 +607,24 @@ export class YarnVM {
                 // we then need to configure the option here
                 this.log(`adding option ${label}:${lineCondition}`);
 
+                let line = this.buildLine(label, parameters);
+
+                if (line === undefined) {
+                    line = {
+                        id: label,
+                        metadata: [],
+                        rawText: "Unknown line " + label,
+                    };
+                }
+
                 const option: OptionItem = {
                     label: label,
-                    line: lineCondition
-                        ? this.buildLine(label, parameters)
-                        : `${this.buildLine(label, parameters)}`, // when an option is disabled it gets given a [disabled] flag at the end of the line, probably should remove this later...
+                    line: line,
                     jump: jump == undefined ? 0 : jump,
-                    lineCondition: lineCondition,
+                    isAvailable: lineCondition,
                     optionID: this.optionSet.length,
                 };
+
                 this.optionSet.push(option);
 
                 break;
@@ -1279,14 +1302,15 @@ export class YarnVM {
     private buildLine(
         lineID: string,
         parameters: (string | boolean | number)[],
-    ): string {
+    ): Line | undefined {
         let line = this.stringTable[lineID];
+        let metaEntry: MetadataEntry | undefined;
+        metaEntry = this.metadataTable[lineID];
         if (line === undefined || line === "") {
             // The line was not present in the string table. It may be in the shadow table.
-            const metaEntry = this.metadataTable[lineID];
             if (!metaEntry) {
-                // It wasn't found. Return just the line ID.
-                return lineID;
+                // No metadata was found for this line. Return undefined.
+                return undefined;
             }
             const SourceTagPrefix = "shadow:";
             const sourceTag = metaEntry.tags.find((t) =>
@@ -1294,7 +1318,7 @@ export class YarnVM {
             );
             if (!sourceTag) {
                 // We have a metadata entry for this line, but it doesn't have a source tag.
-                return lineID;
+                return undefined;
             }
             const sourceLineID =
                 "line:" + sourceTag.substring(SourceTagPrefix.length);
@@ -1302,7 +1326,7 @@ export class YarnVM {
 
             if (line === undefined) {
                 // We failed to find the source line for this shadowed line.
-                return lineID;
+                return undefined;
             }
         }
 
@@ -1327,7 +1351,11 @@ export class YarnVM {
             }
         }
 
-        return line;
+        return {
+            id: lineID,
+            rawText: line,
+            metadata: metaEntry?.tags ?? [],
+        };
     }
     private buildCommand(
         cmd: string,

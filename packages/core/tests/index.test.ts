@@ -21,6 +21,7 @@ import {
     BestSaliencyStrategy,
     ContentSaliencyStrategy,
     FirstSaliencyStrategy,
+    Line,
     MetadataEntry,
     OptionItem,
     YarnFunction,
@@ -153,9 +154,9 @@ describe("all testplans run as expected", () => {
 
             const dontExpectLines =
                 (expectation: string) =>
-                (line: string): Promise<never> => {
+                (line: Line): Promise<never> => {
                     throw Error(
-                        `Received line "${line}" when we were expecting ${expectation}`,
+                        `Received line "${line.rawText}" when we were expecting ${expectation}`,
                     );
                 };
 
@@ -251,8 +252,18 @@ describe("all testplans run as expected", () => {
                                     expect(vm.state).toBe(
                                         "waiting-for-continue",
                                     );
+
+                                    const parsedText = parseMarkup(
+                                        line.rawText,
+                                        {
+                                            replacementMarkers: {
+                                                select: selectMarker,
+                                                plural: englishCardinalPluralMarker,
+                                                ordinal:
+                                                    englishOrdinalPluralMarker,
+                                            },
                                         },
-                                    });
+                                    );
 
                                     expect(parsedText.text).toEqual(
                                         currentStep.expectedText,
@@ -314,7 +325,7 @@ describe("all testplans run as expected", () => {
                                             expectedOptions[i];
 
                                         const parsedText = parseMarkup(
-                                            option.line,
+                                            option.line.rawText,
                                             {
                                                 replacementMarkers: {
                                                     select: selectMarker,
@@ -328,7 +339,7 @@ describe("all testplans run as expected", () => {
                                         expect(parsedText.text).toEqual(
                                             expectedOption.line,
                                         );
-                                        expect(option.lineCondition).toEqual(
+                                        expect(option.isAvailable).toEqual(
                                             expectedOption.available,
                                         );
                                         if (

@@ -1,6 +1,13 @@
 import { LineDeliveryMode, Settings } from "./settings";
 
-import { MetadataEntry, OptionItem, Program, YarnVM } from "@yarnspinner/core";
+import {
+    Line,
+    MetadataEntry,
+    OptionItem,
+    parseMarkup,
+    Program,
+    YarnVM,
+} from "@yarnspinner/core";
 
 import "bootstrap";
 import "./yarnspinner.scss";
@@ -26,9 +33,10 @@ VM.onVariableSet = () => updateVariableDisplay(VM);
 
 const yarnLoadedEvent = new Event("yarnLoaded");
 
-VM.lineCallback = function (line: string) {
+VM.lineCallback = function (line: Line) {
     return new Promise<void>(function (resolve) {
-        addDialogueText(line).scrollIntoView();
+        const parsedText = parseMarkup(line.rawText).text;
+        addDialogueText(parsedText).scrollIntoView();
 
         if (currentSettings.lineDelivery == LineDeliveryMode.OneAtATime) {
             const nextLineButton = addDialogueElement(
@@ -77,7 +85,7 @@ VM.optionCallback = function (options: OptionItem[]) {
             const button = document.createElement("a");
             button.classList.add("list-group-item", "list-group-item-action");
 
-            if (option.lineCondition == false) {
+            if (option.isAvailable == false) {
                 if (currentSettings.showUnavailableOptions == false) {
                     // Do not show this option at all
                     return;
@@ -91,18 +99,19 @@ VM.optionCallback = function (options: OptionItem[]) {
             optionsList.appendChild(button);
 
             // Set the text of the button to the button itself
-            const text = option.line;
-            button.innerHTML = "<b>&#8594;</b> " + text; // '→'
+            const line = option.line;
+            button.innerHTML = "<b>&#8594;</b> " + line; // '→'
+            const parsedText = parseMarkup(line.rawText).text;
 
             // If the option is available, allow the user to select it
-            if (option.lineCondition) {
+            if (option.isAvailable) {
                 // When the button is clicked, display the selected option and
                 // resolve with its ID.
                 button.addEventListener("click", () => {
                     // Add the text of the button that was selected, and get rid
                     // of the buttons.
                     addDialogueText(
-                        text,
+                        parsedText,
                         "selected-option",
                         "list-group-item-secondary",
                     );
