@@ -248,11 +248,9 @@ describe("all testplans run as expected", () => {
                                 vm.dialogueCompleteCallback =
                                     dontExpectStop(expectation);
                                 vm.lineCallback = (line) => {
-                                    const parsedText = parseMarkup(line, {
-                                        replacementMarkers: {
-                                            select: selectMarker,
-                                            plural: englishCardinalPluralMarker,
-                                            ordinal: englishOrdinalPluralMarker,
+                                    expect(vm.state).toBe(
+                                        "waiting-for-continue",
+                                    );
                                         },
                                     });
 
@@ -282,6 +280,10 @@ describe("all testplans run as expected", () => {
                                     dontExpectStop(expectation);
 
                                 vm.commandCallback = (command) => {
+                                    expect(vm.state).toBe(
+                                        "waiting-for-continue",
+                                    );
+
                                     expect(command).toEqual(
                                         currentStep.expectedText,
                                     );
@@ -299,6 +301,10 @@ describe("all testplans run as expected", () => {
                                 vm.dialogueCompleteCallback =
                                     dontExpectStop(expectation);
                                 vm.optionCallback = (options) => {
+                                    expect(vm.state).toBe(
+                                        "waiting-on-option-selection",
+                                    );
+
                                     expect(options).toHaveLength(
                                         expectedOptions.length,
                                     );

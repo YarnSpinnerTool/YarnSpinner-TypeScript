@@ -1,11 +1,10 @@
 import { Instruction, Node, Operand, Program } from "./generated/yarn_spinner";
 
-enum ExecutionState {
-    Stopped,
-    WaitingOnOptionSelection,
-    WaitingForContinue,
-    Running,
-}
+export type ExecutionState =
+    | "stopped"
+    | "waiting-on-option-selection"
+    | "waiting-for-continue"
+    | "running";
 
 export interface VariableStorage {
     [key: string]: YarnValue;
@@ -316,7 +315,12 @@ export class YarnVM {
     public program?: Program;
 
     private stack: (string | boolean | number)[] = [];
-    private state: ExecutionState = ExecutionState.Stopped;
+    private _state: ExecutionState = "stopped";
+
+    public get state() {
+        return this._state;
+    }
+
     private callStack: CallSite[] = [];
     private programCounter = 0;
 
@@ -397,13 +401,13 @@ export class YarnVM {
     }
     public stop(): void {
         this.log("stopping all execution");
-        this.state = ExecutionState.Stopped;
+        this._state = "stopped";
         this.resetState();
     }
     public selectOption(optionIndex: number): void {
         this.log("selecting option number: " + optionIndex);
 
-        if (this.state != ExecutionState.WaitingOnOptionSelection) {
+        if (this._state != "waiting-on-option-selection") {
             this.logError(
                 "asked to select option when options are not awaited",
             );
@@ -418,7 +422,7 @@ export class YarnVM {
         const destination = this.optionSet[optionIndex].jump;
         this.stack.push(destination);
         this.optionSet = [];
-        this.state = ExecutionState.WaitingForContinue;
+        this._state = "waiting-for-continue";
     }
     public async start(): Promise<void> {
         if (this.currentNode == null) {
@@ -427,19 +431,19 @@ export class YarnVM {
         }
 
         this.log("starting the dialogue");
-        this.state = ExecutionState.Running;
+        this._state = "running";
 
         if (this.currentNode == null) {
             this.log("unable to start dialogue, node is null");
             return;
         }
 
-        while (this.state == ExecutionState.Running) {
+        while (this._state == "running") {
             if (
                 this.currentNode == null ||
                 this.programCounter >= this.currentNode.instructions.length
             ) {
-                this.state = ExecutionState.Stopped;
+                this._state = "stopped";
                 if (this.dialogueCompleteCallback) {
                     await this.dialogueCompleteCallback();
                 }
@@ -506,11 +510,11 @@ export class YarnVM {
                 // in the c# one we set state to delivered
                 // then to waiting
                 // for this I think we can skip that and go straight to waiting to continue
-                this.state = ExecutionState.WaitingForContinue;
+                this._state = "waiting-for-continue";
 
                 if (this.lineCallback != null) {
                     await this.lineCallback(line);
-                    this.state = ExecutionState.Running;
+                    this._state = "running";
                 }
 
                 break;
@@ -542,11 +546,11 @@ export class YarnVM {
                 // in the c# one we set state to delivered
                 // then to waiting
                 // for this I think we can skip that and go straight to waiting to continue
-                this.state = ExecutionState.WaitingForContinue;
+                this._state = "waiting-for-continue";
 
                 if (this.commandCallback != null) {
                     await this.commandCallback(command);
-                    this.state = ExecutionState.Running;
+                    this._state = "running";
                 }
 
                 break;
@@ -605,18 +609,18 @@ export class YarnVM {
             case "showOptions": {
                 if (this.optionSet.length == 0) {
                     this.logError("asked to show options but have none");
-                    this.state == ExecutionState.Stopped;
+                    this._state == "stopped";
                     break;
                 }
 
                 this.log(`presenting ${this.optionSet.length} options`);
 
-                this.state = ExecutionState.WaitingOnOptionSelection;
+                this._state = "waiting-on-option-selection";
 
                 if (this.optionCallback != null) {
                     const index = await this.optionCallback(this.optionSet);
                     this.selectOption(index);
-                    this.state = ExecutionState.Running;
+                    this._state = "running";
                 }
 
                 break;
@@ -727,7 +731,7 @@ export class YarnVM {
             }
 
             case "stop": {
-                this.state = ExecutionState.Stopped;
+                this._state = "stopped";
                 this.currentNode = null;
                 break;
             }
@@ -860,7 +864,7 @@ export class YarnVM {
             }
             default: {
                 this.logError(`Unknown opcode: ${i.instructionType.oneofKind}`);
-                this.state = ExecutionState.Stopped;
+                this._state = "stopped";
             }
         }
     }
