@@ -24,6 +24,7 @@ import {
     Line,
     MetadataEntry,
     OptionItem,
+    VariableStorage,
     YarnFunction,
     YarnLibrary,
     YarnValue,
