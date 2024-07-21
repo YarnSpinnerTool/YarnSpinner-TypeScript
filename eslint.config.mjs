@@ -43,6 +43,11 @@ export default tseslint.config(
           // "varsIgnorePattern": "^_",
           // "ignoreRestSiblings": true
         }
+      ],
+      // Allow while(true)
+      "no-constant-condition": [
+        "error", 
+        { "checkLoops": "allExceptWhileTrue" }
       ]
     }
 
