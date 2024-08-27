@@ -358,6 +358,8 @@ export class YarnVM {
     // intended to be used for testing
     private library?: YarnLibrary;
 
+    private interrupted = false;
+
     public loadProgram(
         newProgram: Program,
         strings: { [key: string]: string },
@@ -390,6 +392,7 @@ export class YarnVM {
         this.programCounter = 0;
         this.optionSet = [];
         this.currentNode = null;
+        this.interrupted = false;
     }
 
     public setNode(nodeName: string, clearState: boolean = true): boolean {
@@ -404,6 +407,9 @@ export class YarnVM {
         this.programCounter = 0;
 
         return true;
+    }
+    public interrupt(): void {
+        this.interrupted = true;
     }
     public stop(): void {
         this.log("stopping all execution");
@@ -457,9 +463,27 @@ export class YarnVM {
             }
 
             const currentNode: Node | undefined = this.currentNode;
-            await this.runInstruction(
-                this.currentNode.instructions[this.programCounter],
-            );
+
+            try {
+                await this.runInstruction(
+                    this.currentNode.instructions[this.programCounter],
+                );
+                if (this.interrupted) {
+                    // We were interrupted while running this instruction. Exit
+                    // immediately.
+                    this.stop();
+                    if (this.dialogueCompleteCallback) {
+                        await this.dialogueCompleteCallback();
+                    }
+                    return;
+                }
+            } catch (err) {
+                if (err) {
+                    this.logError(
+                        `Error thrown in ${this.currentNode.name}:${this.programCounter}: ${err.toString()}`,
+                    );
+                }
+            }
 
             if (this.currentNode == currentNode) {
                 // We're still in the same node. Advance to the next instruction.
