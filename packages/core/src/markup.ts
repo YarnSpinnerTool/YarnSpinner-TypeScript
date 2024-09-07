@@ -1,4 +1,5 @@
-/** Represents a value that can be stored in a {@linkcode MarkupAttribute} property. */
+/** Represents a value that can be stored in a {@linkcode MarkupAttribute}
+ * property. */
 export type MarkupValue = string | number | boolean;
 
 /**
@@ -219,12 +220,15 @@ export function parseMarkup(
                     noMarkupMode &&
                     input.substring(idx).startsWith("[/nomarkup]")
                 ) {
+                    // We're in nomarkup mode, and we're now hitting a
+                    // [/nomarkup] marker. Leave nomarkup mode, and skip over
+                    // the marker.
                     noMarkupMode = false;
-                    // Skip over the tag
                     advance("[/nomarkup]".length);
                 } else if (!noMarkupMode) {
-                    // This is the start of a marker. Stop parsing text, and
-                    // return what we've got.
+                    // We aren't in nomarkup mode, and we've reached the start
+                    // of a marker. Stop parsing text, and return what we've
+                    // got.
                     return {
                         result,
                         remainder: input.substring(idx),
@@ -236,6 +240,8 @@ export function parseMarkup(
                     advance(1);
                 }
             } else {
+                // We've reached some text that doesn't get any special
+                // treatment. Add it to the result.
                 result += c;
                 advance(1);
             }
@@ -352,8 +358,7 @@ export function parseMarkup(
                     } satisfies Marker,
                 };
             } else {
-                // This is a named closing marker.
-                // Parse the name of the marker
+                // This is a named closing marker. Parse the name of the marker.
                 let name: string;
                 ({ result: name, remainder: input } = parseID(input));
 
@@ -469,8 +474,8 @@ export function parseMarkup(
             ({ remainder: workingString, result: marker } =
                 parseMarker(workingString));
 
-            // If this is a replacement marker, then we need to emit text
-            // into the output.
+            // If this is a replacement marker, then we need to emit text into
+            // the output.
             if (marker.type === "self-closing") {
                 const registrations = Object.entries(
                     options?.replacementMarkers ?? {},
