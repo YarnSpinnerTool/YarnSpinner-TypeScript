@@ -39,6 +39,10 @@ export type MetadataEntry = {
     [key: string]: unknown;
 };
 
+export type MetadataTable = Record<string, MetadataEntry>;
+
+export type StringTable = Record<string, string>;
+
 /**
  * Contains methods for choosing a piece of content from a collection of
  * options.
