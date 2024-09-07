@@ -994,7 +994,12 @@ export class YarnVM {
             }
         }
 
-        this.setNode(nodeName, !isDetour);
+        const success = this.setNode(nodeName, !isDetour);
+        if (!success) {
+            throw new Error(
+                `Can't jump to node ${nodeName}: no node with this name was found`,
+            );
+        }
 
         this.programCounter = 0;
     }
