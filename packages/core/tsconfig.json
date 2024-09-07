@@ -5,6 +5,7 @@
     // "sourceRoot": "src/",
     "rootDir": "src/",
     "strict": true,
+    "sourceMap": true,
     "noImplicitAny": true,
     "target": "ES2018",
     "module": "CommonJS",
