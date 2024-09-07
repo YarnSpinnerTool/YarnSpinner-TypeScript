@@ -231,8 +231,11 @@ export class BestLeastRecentlyViewedSalienceStrategy
 {
     private storage: VariableStorage;
 
-    constructor(storage: VariableStorage) {
+    public chooseRandomly: boolean;
+
+    constructor(storage: VariableStorage, chooseRandomly: boolean = false) {
         this.storage = storage;
+        this.chooseRandomly = chooseRandomly;
     }
 
     queryBestContent(
@@ -240,6 +243,11 @@ export class BestLeastRecentlyViewedSalienceStrategy
     ): ContentSaliencyOption | null {
         // First, filter out any content that has a failing condition.
         content = content.filter((c) => c.failingConditionValueCount == 0);
+
+        if (content.length == 0) {
+            // No content available.
+            return null;
+        }
 
         // Next, find the view count for every option.
         const optionsAndViewCounts: {
@@ -272,15 +280,35 @@ export class BestLeastRecentlyViewedSalienceStrategy
             }
         }
 
-        // Get the item in the group with the highest complexity
-        const best = orderBy(lowest.opts, (o) => o.complexityScore, {
-            ascending: false,
-        })[0];
+        // Get the subgroup with the most complexity
+        const best = groupBy(lowest.opts, (c) => c.complexityScore);
+        let bestSubgroup: {
+            opts: ContentSaliencyOption[];
+            complexity: number;
+        } = {
+            opts: [],
+            complexity: -Infinity,
+        };
+        for (const [score, group] of best.entries()) {
+            if (score > bestSubgroup.complexity) {
+                bestSubgroup = { opts: group, complexity: score };
+            }
+        }
 
-        if (best) {
-            return best;
-        } else {
+        if (bestSubgroup.opts.length == 0) {
+            // No content was found.
             return null;
+        } else if (bestSubgroup.opts.length == 1) {
+            // Return the single option available.
+            return bestSubgroup.opts[0];
+        } else if (this.chooseRandomly) {
+            // Randomly choose from these equally-best items.
+            return bestSubgroup.opts[
+                randomRange(0, bestSubgroup.opts.length - 1)
+            ];
+        } else {
+            // Choose the first from these equally-best items.
+            return bestSubgroup.opts[0];
         }
     }
 
