@@ -4,5 +4,9 @@
     {
       "path": "../core"
     }
-  ]
+  ],
+  "compilerOptions": {
+    "declarationDir": "dist",
+    "rootDir": "src"
+  }
 }
