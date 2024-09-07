@@ -409,8 +409,12 @@ export class YarnVM {
         ]);
         this.metadataTable = metadataTable ?? {};
 
-        for (const key in this.program.initialValues) {
-            const value = this.unwrap(this.program.initialValues[key]);
+        this.loadInitialValues(this.program);
+    }
+
+    public loadInitialValues(program: Program) {
+        for (const key in program.initialValues) {
+            const value = this.unwrap(program.initialValues[key]);
 
             if (value !== undefined) {
                 this.variableStorage[key] = value;
