@@ -101,8 +101,8 @@ VM.optionCallback = function (options: OptionItem[]) {
 
             // Set the text of the button to the button itself
             const line = option.line;
-            button.innerHTML = "<b>&#8594;</b> " + line; // '→'
             const parsedText = parseMarkup(line.rawText).text;
+            button.innerHTML = "<b>&#8594;</b> " + parsedText; // '→'
 
             // If the option is available, allow the user to select it
             if (option.isAvailable) {
