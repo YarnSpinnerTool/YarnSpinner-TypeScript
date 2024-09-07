@@ -437,3 +437,49 @@ it("can select best content", () => {
     expect(thirdSelected).toBe(opt3);
     strategy.contentWasSelected(opt3);
 });
+
+it("can interrupt in the middle of execution", async () => {
+    // Arrange:
+
+    // Create a simple 'program' that just runs three lines.
+    const makeLine = (id: string): PartialMessage<Instruction> => ({
+        instructionType: {
+            oneofKind: "runLine",
+            runLine: { lineID: id, substitutionCount: 0 },
+        },
+    });
+
+    const program = Program.create({
+        nodes: {
+            Start: {
+                instructions: ["a", "b", "c"].map((id) => makeLine(id)),
+            },
+        },
+    });
+
+    // We'll stop after we see the line with this ID.
+    const stopAfterLineID = "b";
+
+    // Create a VM to use.
+    const vm = new YarnVM();
+    vm.loadProgram(program, {});
+    vm.setNode("Start");
+
+    // When the VM sees a line, add its ID to the list.
+    const linesSeen: string[] = [];
+
+    vm.lineCallback = async (line) => {
+        linesSeen.push(line.id);
+        if (line.id == stopAfterLineID) {
+            vm.interrupt();
+        }
+    };
+
+    await vm.start();
+
+    expect(linesSeen).toContain("a");
+    expect(linesSeen).toContain("b");
+
+    // We interrupted after 'b', so we should not see the third line
+    expect(linesSeen).not.toContain("c");
+});
