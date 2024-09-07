@@ -364,7 +364,7 @@ export class YarnVM {
 
     public variableStorage: VariableStorage = {};
     private stringTable: { [key: string]: string } = {};
-    private metadataTable: Record<string, MetadataEntry> = {};
+    private metadataTable: Record<string, MetadataEntry | undefined> = {};
 
     private optionSet: OptionItem[] = [];
 
