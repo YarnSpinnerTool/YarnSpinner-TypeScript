@@ -2,11 +2,12 @@ import { LineDeliveryMode, Settings } from "./settings";
 
 import {
     Line,
-    MetadataEntry,
     OptionItem,
     parseMarkup,
     Program,
     YarnVM,
+    StringTable,
+    MetadataTable,
 } from "@yarnspinner/core";
 
 import "bootstrap";
@@ -223,16 +224,10 @@ function updateStartNodeUI() {
         currentSettings.startNodeName ?? "(start node)";
 }
 
-type StringTable = {
-    [key: string]: string;
-};
-
-type MetadataTable = Record<string, MetadataEntry>;
-
 declare global {
     interface Window {
         loadProgram: (
-            programData: Uint8Array,
+            data: string,
             stringTable: StringTable,
             metadataTable: MetadataTable,
         ) => void;
@@ -310,12 +305,17 @@ window.addButton = (text: string, classes: string[], handler: () => void) => {
     saveButton?.parentElement?.insertBefore(newButton, saveButton);
 };
 
+function base64ToBytes(base64: string) {
+    const binString = atob(base64);
+    return Uint8Array.from(binString, (m) => m.codePointAt(0) as number);
+}
+
 function loadProgram(
-    programData: Uint8Array,
+    programData: string,
     stringTable: StringTable,
     metadataTable: MetadataTable,
 ): void {
-    const program = Program.fromBinary(programData);
+    const program = Program.fromBinary(base64ToBytes(programData));
 
     if (Object.keys(program.nodes).length == 0) {
         console.error("Loaded program contains no nodes.");
