@@ -355,6 +355,10 @@ export class YarnVM {
         return this._state;
     }
 
+    public get currentNodeName(): string | null {
+        return this.currentNode?.name ?? null;
+    }
+
     private callStack: CallSite[] = [];
     private programCounter = 0;
 
