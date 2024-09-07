@@ -15,10 +15,11 @@ import {
     englishOrdinalPluralMarker,
 } from "./test-common";
 
-import { Program } from "../src/generated/yarn_spinner";
+import { Instruction, Program } from "../src/generated/yarn_spinner";
 import {
     BestLeastRecentlyViewedSalienceStrategy,
     BestSaliencyStrategy,
+    ContentSaliencyOption,
     ContentSaliencyStrategy,
     FirstSaliencyStrategy,
     Line,
@@ -34,6 +35,7 @@ import { parseMarkup, selectMarker } from "../src/markup";
 import { parse as parseCSV } from "csv-parse/sync";
 import { existsSync, readFileSync, readdirSync } from "fs";
 import { resolve } from "node:path";
+import { PartialMessage } from "@protobuf-ts/runtime";
 
 console.error = (message, ..._params) => {
     throw new Error(
@@ -407,4 +409,31 @@ it("can evaluate smart variables", () => {
     vm.variableStorage = storage;
 
     expect(vm.evaluateSmartVariable("$player_can_afford_pie")).toBe(false);
+});
+
+it("can select best content", () => {
+    const storage: VariableStorage = {};
+    const strategy = new BestLeastRecentlyViewedSalienceStrategy(
+        storage,
+        false,
+    );
+
+    const opt1 = new ContentSaliencyOption("1");
+    opt1.complexityScore = 2;
+    const opt2 = new ContentSaliencyOption("2");
+    opt2.complexityScore = 1;
+    const opt3 = new ContentSaliencyOption("3");
+    opt3.complexityScore = 1;
+
+    const opts = [opt2, opt3, opt1];
+
+    const firstSelected = strategy.queryBestContent(opts);
+    expect(firstSelected).toBe(opt1);
+    strategy.contentWasSelected(opt1);
+    const secondSelected = strategy.queryBestContent(opts);
+    expect(secondSelected).toBe(opt2);
+    strategy.contentWasSelected(opt2);
+    const thirdSelected = strategy.queryBestContent(opts);
+    expect(thirdSelected).toBe(opt3);
+    strategy.contentWasSelected(opt3);
 });
