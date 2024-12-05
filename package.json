@@ -12,7 +12,7 @@
   "scripts": {
     "setup-tests": "node packages/core/scripts/create-test-data.js",
     "test": "jest",
-    "build": "npm run build --prefix packages/core"
+    "build": "npm run build --prefix packages/core && npm run build --prefix packages/frontend"
   },
   "keywords": [],
   "author": "",
