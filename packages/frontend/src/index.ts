@@ -8,6 +8,7 @@ import {
     YarnVM,
     StringTable,
     MetadataTable,
+    Node,
 } from "@yarnspinner/core";
 
 import "bootstrap";
@@ -325,30 +326,28 @@ function loadProgram(
     if (program) {
         VM.loadProgram(program, stringTable, undefined, metadataTable);
 
-        let nodeNames = Object.keys(program.nodes);
+        let allStartNodes = Object.values(program.nodes).filter((node) => {
+            return (
+                node.name.startsWith("$Yarn.Internal") == false &&
+                node.headers.find(
+                    (h) => h.key === "$Yarn.Internal.NodeGroup",
+                ) === undefined
+            );
+        });
 
-        // If 'Start' is present in the list, move it to the front
-        if (nodeNames.indexOf("Start") != -1) {
-            // Remove 'Start' from the list
-            nodeNames = nodeNames.filter((n) => n != "Start");
+        let startNode: Node | undefined =
+            allStartNodes.find((n) => n.name === "Start") ??
+            Object.values(allStartNodes)[0];
 
-            // Put 'Start' at the beginning of the list
-            nodeNames = ["Start"].concat(nodeNames);
+        // If we found a start node, move it to the top of the list
+        if (startNode && allStartNodes.indexOf(startNode) != -1) {
+            allStartNodes = allStartNodes.filter((n) => n !== startNode);
+            allStartNodes = [startNode, ...allStartNodes];
         }
 
-        initialiseStartNodeUI(nodeNames);
+        initialiseStartNodeUI(allStartNodes.map((n) => n.name));
 
-        let startNodeName: string;
-
-        // If this program contains a node named Start, then set the start node
-        // to that. Otherwise, pick the first node in the list.
-        if (nodeNames.indexOf("Start") == -1) {
-            startNodeName = nodeNames[0];
-        } else {
-            startNodeName = "Start";
-        }
-
-        updateSettings({ startNodeName: startNodeName });
+        updateSettings({ startNodeName: startNode.name });
     } else {
         console.error("Failed to load program!");
     }
