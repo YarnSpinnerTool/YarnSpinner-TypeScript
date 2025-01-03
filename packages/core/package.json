@@ -1,6 +1,6 @@
 {
   "name": "@yarnspinnertool/core",
-  "version": "1.0.1",
+  "version": "0.0.1-108",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -8,7 +8,9 @@
     "url": "https://github.com/YarnSpinnerTool/YarnSpinner-Typescript"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.json"
+    "build": "tsc -p tsconfig.json",
+    "publish": "VARIABLE=$(dotnet-gitversion /showVariable semver) && npm version $VARIABLE --no-git-tag-version --allow-same-version && npm run update-version && npm publish; VARIABLE=$(dotnet-gitversion /showVariable majorminorpatch) && npm version $VARIABLE --no-git-tag-version --allow-same-version",
+    "update-version": ""
   },
   "author": "",
   "license": "MIT",
@@ -21,6 +23,9 @@
     "antlr4ng": "^3.0.4",
     "csv-parse": "^5.5.6"
   },
+  "files": [
+    "/dist"
+  ],
   "exports": {
     ".": {
       "import": {
