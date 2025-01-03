@@ -21,4 +21,54 @@ Node $player_can_afford_pie:
              PushFloat       2                                        ; Pushes 1
      3       CallFunc        Number.GreaterThan                                 
 
+Node $C:
+     0       PushVariable    $a                                       ; Pushes 1, <unknown variable>
+             PushFloat       1                                        ; Pushes 1
+             CallFunc        Bool.Not                                           
+             PushVariable    $b                                       ; Pushes 1, <unknown variable>
+             PushFloat       2                                        ; Pushes 1
+     5       CallFunc        Bool.And                                           
+             PushVariable    $b                                       ; Pushes 1, <unknown variable>
+             PushFloat       2                                        ; Pushes 1
+     8       CallFunc        Bool.Or                                            
+
+Node $D:
+     0       PushVariable    $a                                       ; Pushes 1, <unknown variable>
+             PushFloat       1                                        ; Pushes 1
+             CallFunc        Bool.Not                                           
+             PushVariable    $b                                       ; Pushes 1, <unknown variable>
+             PushFloat       2                                        ; Pushes 1
+     5       CallFunc        Bool.And                                           
+             PushVariable    $b                                       ; Pushes 1, <unknown variable>
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        Bool.Or                                            
+             PushVariable    $player_money                            ; Pushes 1, Implicitly declared in /Users/desplesda/Work/YarnSpinner/Tests/TestCases/SmartVariables.yarn, node Start
+    10       PushFloat       10                                       ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        Number.GreaterThan                                 
+             PushFloat       2                                        ; Pushes 1
+    14       CallFunc        Bool.Or                                            
+
+Node $E:
+     0       PushVariable    $a                                       ; Pushes 1, <unknown variable>
+             PushFloat       1                                        ; Pushes 1
+             CallFunc        Bool.Not                                           
+             PushVariable    $b                                       ; Pushes 1, <unknown variable>
+             PushFloat       2                                        ; Pushes 1
+     5       CallFunc        Bool.And                                           
+             PushVariable    $b                                       ; Pushes 1, <unknown variable>
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        Bool.Or                                            
+             PushVariable    $a                                       ; Pushes 1, <unknown variable>
+    10       PushFloat       1                                        ; Pushes 1
+             CallFunc        Bool.Not                                           
+             PushVariable    $b                                       ; Pushes 1, <unknown variable>
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        Bool.And                                           
+    15       PushVariable    $b                                       ; Pushes 1, <unknown variable>
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        Bool.Or                                            
+             PushFloat       2                                        ; Pushes 1
+    19       CallFunc        Bool.Or                                            
+
 
