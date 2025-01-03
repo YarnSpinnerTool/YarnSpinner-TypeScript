@@ -1,6 +1,12 @@
-import { englishOrdinalPluralMarker } from "./test-common";
-import { parseMarkup, MarkupParseError, MarkupValue } from "../src/markup";
+import {
+    parseMarkup,
+    MarkupParseError,
+    MarkupValue,
+    createPluralReplacers,
+} from "../src/markup";
 import { selectMarker } from "../src/markup";
+
+const { ordinal: englishOrdinalPluralMarker } = createPluralReplacers("en-US");
 
 it("parses markup", () => {
     const test = "before [a]during1[/a] [b]during2[/b] after";
