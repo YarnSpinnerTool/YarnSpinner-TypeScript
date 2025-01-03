@@ -9,7 +9,7 @@ import {
     MetadataTable,
     Node,
     BasicLineProvider,
-} from "@yarnspinner/core";
+} from "@yarnspinnertool/core";
 
 import "bootstrap";
 import "./yarnspinner.scss";
