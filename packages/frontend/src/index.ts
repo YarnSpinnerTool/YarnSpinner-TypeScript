@@ -3,12 +3,12 @@ import { LineDeliveryMode, Settings } from "./settings";
 import {
     Line,
     OptionItem,
-    parseMarkup,
     Program,
     YarnVM,
     StringTable,
     MetadataTable,
     Node,
+    BasicLineProvider,
 } from "@yarnspinner/core";
 
 import "bootstrap";
@@ -35,10 +35,14 @@ VM.onVariableSet = () => updateVariableDisplay(VM);
 
 const yarnLoadedEvent = new Event("yarnLoaded");
 
-VM.lineCallback = function (line: Line) {
-    return new Promise<void>(function (resolve) {
-        const parsedText = parseMarkup(line.rawText).text;
-        addDialogueText(parsedText).scrollIntoView();
+// TODO: support specifying locale in input data, don't hardcode
+const lineProvider = new BasicLineProvider("en-US", {}, {});
+
+VM.lineCallback = async function (line: Line) {
+    const parsedText = await lineProvider.getLocalizedLine(line);
+
+    await new Promise<void>((resolve) => {
+        addDialogueText(parsedText.text).scrollIntoView();
 
         if (currentSettings.lineDelivery == LineDeliveryMode.OneAtATime) {
             const nextLineButton = addDialogueElement(
@@ -83,46 +87,49 @@ VM.optionCallback = function (options: OptionItem[]) {
         optionsContainer.appendChild(optionsList);
 
         options.forEach((option) => {
-            // Create a button in the options container
-            const button = document.createElement("a");
-            button.classList.add("list-group-item", "list-group-item-action");
+            lineProvider.getLocalizedLine(option.line).then((optionLine) => {
+                // Create a button in the options container
+                const button = document.createElement("a");
+                button.classList.add(
+                    "list-group-item",
+                    "list-group-item-action",
+                );
 
-            if (option.isAvailable == false) {
-                if (currentSettings.showUnavailableOptions == false) {
-                    // Do not show this option at all
-                    return;
-                } else {
-                    // Show this option like the rest, but mark it
-                    // as unavailable
-                    button.classList.add("list-group-item-unavailable");
+                if (option.isAvailable == false) {
+                    if (currentSettings.showUnavailableOptions == false) {
+                        // Do not show this option at all
+                        return;
+                    } else {
+                        // Show this option like the rest, but mark it
+                        // as unavailable
+                        button.classList.add("list-group-item-unavailable");
+                    }
                 }
-            }
 
-            optionsList.appendChild(button);
+                optionsList.appendChild(button);
 
-            // Set the text of the button to the button itself
-            const line = option.line;
-            const parsedText = parseMarkup(line.rawText).text;
-            button.innerHTML = "<b>&#8594;</b> " + parsedText; // '→'
+                // Set the text of the button to the button itself
+                button.innerHTML = "<b>&#8594;</b> " + optionLine.text; // '→'
 
-            // If the option is available, allow the user to select it
-            if (option.isAvailable) {
-                // When the button is clicked, display the selected option and
-                // resolve with its ID.
-                button.addEventListener("click", () => {
-                    // Add the text of the button that was selected, and get rid
-                    // of the buttons.
-                    addDialogueText(
-                        parsedText,
-                        "selected-option",
-                        "list-group-item-secondary",
-                    );
-                    optionsContainer.remove();
+                // If the option is available, allow the user to select it
+                if (option.isAvailable) {
+                    // When the button is clicked, display the selected option and
+                    // resolve with its ID.
+                    button.addEventListener("click", () => {
+                        // Add the text of the button that was selected, and get rid
+                        // of the buttons.
+                        addDialogueText(
+                            optionLine.text,
+                            "selected-option",
+                            "list-group-item-secondary",
+                        );
+                        optionsContainer.remove();
 
-                    // Resolve with the option ID that was selected.
-                    resolve(option.optionID);
-                });
-            }
+                        // Resolve with the option ID that was selected.
+                        resolve(option.optionID);
+                    });
+                }
+            });
         });
 
         optionsList.scrollIntoView();
@@ -323,8 +330,11 @@ function loadProgram(
         return;
     }
 
+    lineProvider.stringTable = stringTable;
+    lineProvider.metadataTable = metadataTable;
+
     if (program) {
-        VM.loadProgram(program, stringTable, undefined, metadataTable);
+        VM.loadProgram(program, undefined);
 
         let allStartNodes = Object.values(program.nodes).filter((node) => {
             return (

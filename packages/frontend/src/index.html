@@ -1,116 +1,193 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Yarn Spinner Runner</title>
+    </head>
 
-<head>
-  <meta charset="utf-8" />
-  <title>Yarn Spinner Runner</title>
-</head>
-
-<body style="padding-top: 70px;" class="pb-2 ">
-  <nav class="navbar  fixed-top navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="https://yarnspinner.dev">
-        <img markup-inline height="35px" src="<%= require('./img/yarnspinner.svg') %>" id="logo" />
-        Yarn Spinner Preview
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <!-- <li class="nav-item">
+    <body style="padding-top: 70px" class="pb-2">
+        <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="https://yarnspinner.dev">
+                    <img
+                        markup-inline
+                        height="35px"
+                        src="<%= require('./img/yarnspinner.svg') %>"
+                        id="logo"
+                    />
+                    Yarn Spinner Preview
+                </a>
+                <button
+                    class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation"
+                >
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div
+                    class="collapse navbar-collapse"
+                    id="navbarSupportedContent"
+                >
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <!-- <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="#">Home</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#">Link</a>
           </li>
           -->
-          <!-- <li class="nav-item">
+                        <!-- <li class="nav-item">
             <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
           </li> -->
-        </ul>
+                    </ul>
 
-        <ul class="navbar-nav mb-2 mb-lg-0">
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="start-node-current" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Start Node
-            </a>
-            <ul class="dropdown-menu dropdown-menu-checkable dropdown-menu-end" aria-labelledby="navbarDropdown" id="start-node-dropdown">
-              
-            </ul>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
-              aria-expanded="false">
-              Settings
-            </a>
-            <ul class="dropdown-menu dropdown-menu-checkable dropdown-menu-end" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item dropdown-item-checked" id="setting-lines-one-at-a-time" href="#">
-                  Show Lines One At A Time</a>
-              </li>
-              <li>
-                <a class="dropdown-item dropdown-item-checked" id="setting-lines-all-at-once" href="#">
-                  Show Lines All At Once</a>
-              </li>
-              <li>
-                <hr class="dropdown-divider">
-              </li>
-              <li>
-                <a class="dropdown-item" id="setting-show-variables" href="#">
-                  Show Variables</a>
-              </li>
-              <li>
-                <a class="dropdown-item" id="setting-show-unavailable-options" href="#">
-                  Show Unavailable Options</a>
-              </li>
-              <!-- <li><a class="dropdown-item" href="#">Another action</a></li>
+                    <ul class="navbar-nav mb-2 mb-lg-0">
+                        <li class="nav-item dropdown">
+                            <a
+                                class="nav-link dropdown-toggle"
+                                href="#"
+                                id="start-node-current"
+                                role="button"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                            >
+                                Start Node
+                            </a>
+                            <ul
+                                class="dropdown-menu dropdown-menu-checkable dropdown-menu-end"
+                                aria-labelledby="navbarDropdown"
+                                id="start-node-dropdown"
+                            ></ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a
+                                class="nav-link dropdown-toggle"
+                                href="#"
+                                id="navbarDropdown"
+                                role="button"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                            >
+                                Settings
+                            </a>
+                            <ul
+                                class="dropdown-menu dropdown-menu-checkable dropdown-menu-end"
+                                aria-labelledby="navbarDropdown"
+                            >
+                                <li>
+                                    <a
+                                        class="dropdown-item dropdown-item-checked"
+                                        id="setting-lines-one-at-a-time"
+                                        href="#"
+                                    >
+                                        Show Lines One At A Time</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        class="dropdown-item dropdown-item-checked"
+                                        id="setting-lines-all-at-once"
+                                        href="#"
+                                    >
+                                        Show Lines All At Once</a
+                                    >
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider" />
+                                </li>
+                                <li>
+                                    <a
+                                        class="dropdown-item"
+                                        id="setting-show-variables"
+                                        href="#"
+                                    >
+                                        Show Variables</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        class="dropdown-item"
+                                        id="setting-show-unavailable-options"
+                                        href="#"
+                                    >
+                                        Show Unavailable Options</a
+                                    >
+                                </li>
+                                <!-- <li><a class="dropdown-item" href="#">Another action</a></li>
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" href="#">Something else here</a></li> -->
-            </ul>
-          </li>
-          <button class="btn btn-outline-success" id="start" type="submit">Restart</button>
-        </ul>
-      </div>
-    </div>
-  </nav>
+                            </ul>
+                        </li>
+                        <button
+                            class="btn btn-outline-success"
+                            id="start"
+                            type="submit"
+                        >
+                            Restart
+                        </button>
+                    </ul>
+                </div>
+            </div>
+        </nav>
 
-  <div class="container-fluid h-100 d-flex flex-column">
-    <div class="row flex-fill mh-100" style="overflow-y: scroll;">
-      <div class="col">
-        <div class="container">
-
-          <ul class="list-group" id="dialogue-contents">
-            
-          </ul>
+        <div class="container-fluid h-100 d-flex flex-column">
+            <div class="row flex-fill mh-100" style="overflow-y: scroll">
+                <div class="col">
+                    <div class="container">
+                        <ul class="list-group" id="dialogue-contents"></ul>
+                    </div>
+                </div>
+            </div>
+            <div
+                class="row flex-shrink-0 mt-3 d-none"
+                style="max-height: 25%; overflow-y: scroll"
+                id="variable-view"
+            >
+                <div class="col-12">
+                    <div id="variables" class="container">
+                        <table class="table table-borderless">
+                            <thead>
+                                <th>Variable</th>
+                                <th>Type</th>
+                                <th>Value</th>
+                            </thead>
+                            <tbody id="variables-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-    <div class="row flex-shrink-0 mt-3 d-none" style="max-height: 25%; overflow-y: scroll;" id="variable-view">
-      <div class="col-12">
-        <div id="variables" class="container">
-          <table class="table table-borderless">
-            <thead>
-              <th>Variable</th>
-              <th>Type</th>
-              <th>Value</th>
-            </thead>
-            <tbody id="variables-body"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div> <!-- /container -->
+        <!-- /container -->
 
-  <script id="injected-yarn-program"></script>
+        <script id="injected-yarn-program"></script>
 
-  <script>
-    window.addEventListener("load", () => {
-        window.setup();
-        window.loadProgram(window.yarnData.data, window.yarnData.stringTable, window.yarnData.metadataTable);
-        window.startDialogue();
-    });
-  </script>
-</body>
+        <script>
+            window.addEventListener("load", () => {
+                if (!window.yarnData) {
+                    // If we don't have any data, we can't run the dialogue.
+                    // Append a warning message as a sibling to the main
+                    // dialogue view.
+                    const warningMessage = document.createElement("div");
+                    warningMessage.innerText = "Error: No Yarn data was found";
 
+                    const log = document.getElementById("dialogue-contents");
+                    log.parentElement.appendChild(warningMessage);
+
+                    return;
+                }
+
+                window.setup();
+                window.loadProgram(
+                    window.yarnData.data,
+                    window.yarnData.stringTable,
+                    window.yarnData.metadataTable,
+                );
+                window.startDialogue();
+            });
+        </script>
+    </body>
 </html>

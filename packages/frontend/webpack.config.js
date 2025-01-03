@@ -5,7 +5,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HTMLInlineCSSWebpackPlugin = require('html-inline-css-webpack-plugin').default;
-var InlineChunkHtmlPlugin = require('react-dev-utils/InlineChunkHtmlPlugin');
+const InlineChunkHtmlPlugin = require('react-dev-utils/InlineChunkHtmlPlugin');
 const PurgecssPlugin = require('purgecss-webpack-plugin');
 
 const PATHS = {
@@ -26,9 +26,11 @@ module.exports = (env, argv) => {
           "import": "./src/index.ts",
           "dependOn": 'data',
         },
-        "data": './src/data.ts'
+        data: {
+          "import": './src/dev-load-static-data.ts'
+        }
       }),
-  },
+    },
     module: {
       rules: [
         {
@@ -98,6 +100,7 @@ module.exports = (env, argv) => {
         urlBase: process.env['BASE_URL'] || '',
       }),
       new InlineChunkHtmlPlugin(HtmlWebpackPlugin, [/yarnspinner/]),
+      new InlineChunkHtmlPlugin(HtmlWebpackPlugin, [/data/]),
     ]
   }
 };
