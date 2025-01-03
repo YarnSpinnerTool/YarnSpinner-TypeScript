@@ -344,8 +344,7 @@ function randomRange(min: number, max: number): number {
 
 export type Line = {
     id: string;
-    rawText: string;
-    metadata: string[];
+    substitutions: YarnValue[];
 };
 
 export class YarnVM {
@@ -367,8 +366,6 @@ export class YarnVM {
     private programCounter = 0;
 
     public variableStorage: VariableStorage = {};
-    private stringTable: { [key: string]: string } = {};
-    private metadataTable: Record<string, MetadataEntry | undefined> = {};
 
     private optionSet: OptionItem[] = [];
 
@@ -396,14 +393,8 @@ export class YarnVM {
 
     private interrupted = false;
 
-    public loadProgram(
-        newProgram: Program,
-        strings: { [key: string]: string },
-        library?: YarnLibrary,
-        metadataTable?: Record<string, MetadataEntry> | undefined,
-    ) {
+    public loadProgram(newProgram: Program, library?: YarnLibrary) {
         this.program = newProgram;
-        this.stringTable = strings;
 
         this.library = new Map([
             // Take the user-provided library of functions
@@ -411,7 +402,6 @@ export class YarnVM {
             // Add it to our own library
             ...this.getLibrary().entries(),
         ]);
-        this.metadataTable = metadataTable ?? {};
 
         this.loadInitialValues(this.program);
     }
@@ -577,14 +567,6 @@ export class YarnVM {
 
                 let line = this.buildLine(label, parameters);
 
-                if (line === undefined) {
-                    line = {
-                        id: label,
-                        metadata: [],
-                        rawText: "Unknown line " + label,
-                    };
-                }
-
                 // in the c# one we set state to delivered
                 // then to waiting
                 // for this I think we can skip that and go straight to waiting to continue
@@ -672,14 +654,6 @@ export class YarnVM {
                 this.log(`adding option ${label}:${lineCondition}`);
 
                 let line = this.buildLine(label, parameters);
-
-                if (line === undefined) {
-                    line = {
-                        id: label,
-                        metadata: [],
-                        rawText: "Unknown line " + label,
-                    };
-                }
 
                 const option: OptionItem = {
                     label: label,
@@ -1368,62 +1342,13 @@ export class YarnVM {
         }
     }
 
-    private buildLine(
-        lineID: string,
-        parameters: (string | boolean | number)[],
-    ): Line | undefined {
-        let line = this.stringTable[lineID];
-        let metaEntry: MetadataEntry | undefined;
-        metaEntry = this.metadataTable[lineID];
-        if (line === undefined || line === "") {
-            // The line was not present in the string table. It may be in the shadow table.
-            if (!metaEntry) {
-                // No metadata was found for this line. Return undefined.
-                return undefined;
-            }
-            const SourceTagPrefix = "shadow:";
-            const sourceTag = metaEntry.tags.find((t) =>
-                t.startsWith(SourceTagPrefix),
-            );
-            if (!sourceTag) {
-                // We have a metadata entry for this line, but it doesn't have a source tag.
-                return undefined;
-            }
-            const sourceLineID =
-                "line:" + sourceTag.substring(SourceTagPrefix.length);
-            line = this.stringTable[sourceLineID];
-
-            if (line === undefined) {
-                // We failed to find the source line for this shadowed line.
-                return undefined;
-            }
-        }
-
+    private buildLine(lineID: string, parameters: YarnValue[]): Line {
         // parameters is built like a stack but will we access it like an array
         // as such its backwards, so we need to reverse it before use
         parameters = parameters.slice().reverse();
-
-        for (let i = 0; i < parameters.length; i += 1) {
-            let substitution = parameters[i];
-            if (typeof substitution == "boolean") {
-                line = line.replace(
-                    "{" + i + "}",
-                    `${substitution == true ? "True" : "False"}`,
-                );
-            } else {
-                if (typeof substitution == "number") {
-                    if (!Number.isInteger(substitution)) {
-                        substitution = substitution.toFixed(1); // not sure how I feel about this but it smoothes out some weirdness
-                    }
-                }
-                line = line.replace("{" + i + "}", `${substitution}`);
-            }
-        }
-
         return {
             id: lineID,
-            rawText: line,
-            metadata: metaEntry?.tags ?? [],
+            substitutions: parameters,
         };
     }
     private buildCommand(

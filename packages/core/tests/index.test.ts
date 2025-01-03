@@ -10,12 +10,8 @@ import {
     TestPlan,
 } from "./TestPlan";
 
-import {
-    englishCardinalPluralMarker,
-    englishOrdinalPluralMarker,
-} from "./test-common";
-
 import { Instruction, Program } from "../src/generated/yarn_spinner";
+import { BasicLineProvider, LineProvider } from "../src/lineProvider";
 import {
     BestLeastRecentlyViewedSalienceStrategy,
     BestSaliencyStrategy,
@@ -31,11 +27,11 @@ import {
     YarnValue,
     YarnVM,
 } from "../src/yarnvm";
-import { parseMarkup, selectMarker } from "../src/markup";
-import { parse as parseCSV } from "csv-parse/sync";
-import { existsSync, readFileSync, readdirSync } from "fs";
-import { resolve } from "node:path";
+
 import { PartialMessage } from "@protobuf-ts/runtime";
+import { parse as parseCSV } from "csv-parse/sync";
+import { existsSync, readdirSync, readFileSync } from "fs";
+import { resolve } from "node:path";
 
 console.error = (message, ..._params) => {
     throw new Error(
@@ -152,14 +148,20 @@ describe("all testplans run as expected", () => {
             );
 
             const vm = new YarnVM();
-            vm.loadProgram(program, stringTable, library, metadataTable);
+            vm.loadProgram(program, library);
             vm.verboseLogging = false;
+
+            const lineProvider: LineProvider = new BasicLineProvider(
+                "en-US",
+                stringTable,
+                metadataTable,
+            );
 
             const dontExpectLines =
                 (expectation: string) =>
                 (line: Line): Promise<never> => {
                     throw Error(
-                        `Received line "${line.rawText}" when we were expecting ${expectation}`,
+                        `Received line "${line.id}" when we were expecting ${expectation}`,
                     );
                 };
 
@@ -167,7 +169,7 @@ describe("all testplans run as expected", () => {
                 (expectation: string) =>
                 (_options: OptionItem[]): Promise<never> => {
                     throw Error(
-                        `Received options ${_options.map((o) => o.line).join(", ")} when we were expecting ${expectation}`,
+                        `Received options ${_options.map((o) => o.line.id).join(", ")} when we were expecting ${expectation}`,
                     );
                 };
             const dontExpectCommand =
@@ -251,24 +253,17 @@ describe("all testplans run as expected", () => {
                                     dontExpectCommand(expectation);
                                 vm.dialogueCompleteCallback =
                                     dontExpectStop(expectation);
-                                vm.lineCallback = (line) => {
+                                vm.lineCallback = async (line) => {
                                     expect(vm.state).toBe(
                                         "waiting-for-continue",
                                     );
 
-                                    const parsedText = parseMarkup(
-                                        line.rawText,
-                                        {
-                                            replacementMarkers: {
-                                                select: selectMarker,
-                                                plural: englishCardinalPluralMarker,
-                                                ordinal:
-                                                    englishOrdinalPluralMarker,
-                                            },
-                                        },
-                                    );
+                                    const localizedLine =
+                                        await lineProvider.getLocalizedLine(
+                                            line,
+                                        );
 
-                                    expect(parsedText.text).toEqual(
+                                    expect(localizedLine.text).toEqual(
                                         currentStep.expectedText,
                                     );
                                     if (
@@ -314,7 +309,7 @@ describe("all testplans run as expected", () => {
                                     dontExpectCommand(expectation);
                                 vm.dialogueCompleteCallback =
                                     dontExpectStop(expectation);
-                                vm.optionCallback = (options) => {
+                                vm.optionCallback = async (options) => {
                                     expect(vm.state).toBe(
                                         "waiting-on-option-selection",
                                     );
@@ -327,19 +322,12 @@ describe("all testplans run as expected", () => {
                                         const expectedOption =
                                             expectedOptions[i];
 
-                                        const parsedText = parseMarkup(
-                                            option.line.rawText,
-                                            {
-                                                replacementMarkers: {
-                                                    select: selectMarker,
-                                                    plural: englishCardinalPluralMarker,
-                                                    ordinal:
-                                                        englishOrdinalPluralMarker,
-                                                },
-                                            },
-                                        );
+                                        const localizedOption =
+                                            await lineProvider.getLocalizedLine(
+                                                option.line,
+                                            );
 
-                                        expect(parsedText.text).toEqual(
+                                        expect(localizedOption.text).toEqual(
                                             expectedOption.line,
                                         );
                                         expect(option.isAvailable).toEqual(
@@ -405,7 +393,7 @@ it("can evaluate smart variables", () => {
     let storage: VariableStorage = {};
 
     const vm = new YarnVM();
-    vm.loadProgram(program, {});
+    vm.loadProgram(program);
     vm.variableStorage = storage;
 
     expect(vm.evaluateSmartVariable("$player_can_afford_pie")).toBe(false);
@@ -462,7 +450,7 @@ it("can interrupt in the middle of execution", async () => {
 
     // Create a VM to use.
     const vm = new YarnVM();
-    vm.loadProgram(program, {});
+    vm.loadProgram(program);
     vm.setNode("Start");
 
     // When the VM sees a line, add its ID to the list.
