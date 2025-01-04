@@ -21,11 +21,13 @@ module.exports = (env, argv) => {
         yarnspinner: {
           "import": "./src/index.ts",
         },
+        entry: { "import": "./src/entrypoint.ts" },
       } : {
         yarnspinner: {
           "import": "./src/index.ts",
           "dependOn": 'data',
         },
+        entry: { "import": "./src/entrypoint.ts" },
         data: {
           "import": './src/dev-load-static-data.ts'
         }

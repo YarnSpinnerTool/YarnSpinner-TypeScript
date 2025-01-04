@@ -2,7 +2,7 @@
   "name": "@yarnspinner/standalone-runner",
   "version": "1.0.0",
   "description": "Runs yarn stuff in the browser",
-  "main": "index.js",
+  "main": "dist/entrypoint.js",
   "scripts": {
     "test": "jest",
     "prepare-tests": "node scripts/create-test-data.js",
