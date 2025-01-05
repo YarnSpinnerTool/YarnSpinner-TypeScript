@@ -419,6 +419,7 @@ export class YarnVM {
     public resetState(): void {
         this.log("resetting state");
         this.stack = [];
+        this.callStack = [];
         this.programCounter = 0;
         this.optionSet = [];
         this.currentNode = null;
