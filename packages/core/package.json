@@ -1,6 +1,6 @@
 {
   "name": "@yarnspinnertool/core",
-  "version": "0.0.1-108",
+  "version": "0.0.1",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -9,8 +9,7 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "publish": "VARIABLE=$(dotnet-gitversion /showVariable semver) && npm version $VARIABLE --no-git-tag-version --allow-same-version && npm run update-version && npm publish; VARIABLE=$(dotnet-gitversion /showVariable majorminorpatch) && npm version $VARIABLE --no-git-tag-version --allow-same-version",
-    "update-version": ""
+    "release": "VARIABLE=$(dotnet-gitversion /showVariable semver) && npm version $VARIABLE --no-git-tag-version --allow-same-version && npm run build; npm publish; VARIABLE=$(dotnet-gitversion /showVariable majorminorpatch) && npm version $VARIABLE --no-git-tag-version --allow-same-version"
   },
   "author": "",
   "license": "MIT",
