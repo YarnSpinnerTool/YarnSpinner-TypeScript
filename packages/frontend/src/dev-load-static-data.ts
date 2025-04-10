@@ -1,4 +1,4 @@
-import data from "./data";
+import data from "./dev-data";
 
 // When we're doing a development build and the Yarn data is available at build
 // time, import that data and set it as a global property on window. The data
