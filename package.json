@@ -1,6 +1,6 @@
 {
   "name": "yarnspinner-typescript",
-  "version": "0.0.1-108",
+  "version": "0.0.1",
   "description": "This is a work-in-progress TypeScript VM and runner of compiled yarn files. ",
   "main": "jest.config.js",
   "devDependencies": {
@@ -13,7 +13,7 @@
     "setup-tests": "node packages/core/scripts/create-test-data.js",
     "test": "jest",
     "build": "npm run build --prefix packages/core && npm run build --prefix packages/frontend",
-    "publish": "npm run publish --prefix packages/core"
+    "release": "npm run release --prefix packages/core"
   },
   "keywords": [],
   "author": "",

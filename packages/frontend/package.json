@@ -1,17 +1,24 @@
 {
-  "name": "@yarnspinner/standalone-runner",
-  "version": "1.0.0",
+  "name": "@yarnspinnertool/standalone-runner",
+  "version": "0.0.1",
   "description": "Runs yarn stuff in the browser",
   "main": "dist/entrypoint.js",
+  "repository": {
+    "url": "https://github.com/YarnSpinnerTool/YarnSpinner-Typescript"
+  },
   "scripts": {
     "test": "jest",
     "prepare-tests": "node scripts/create-test-data.js",
-    "build": "npx webpack --mode=production",
+    "build": "npx rimraf dist && npx webpack --mode=production",
     "build:dev": "npx webpack --mode=development",
-    "start": "npx webpack serve --open"
+    "start": "npx webpack serve --mode=development --open",
+    "release": "npm run build && VARIABLE=$(dotnet-gitversion /showVariable semver) && npm version $VARIABLE --no-git-tag-version --allow-same-version && npm publish; VARIABLE=$(dotnet-gitversion /showVariable majorminorpatch) && npm version $VARIABLE --no-git-tag-version --allow-same-version"
   },
   "author": "",
   "license": "MIT",
+  "files": [
+    "dist"
+  ],
   "devDependencies": {
     "@types/bootstrap": "^5.2.10",
     "antlr4ng": "^3.0.4",
@@ -41,7 +48,7 @@
   "dependencies": {
     "@popperjs/core": "^2.11.5",
     "@protobuf-ts/plugin": "^2.5.0",
-    "@yarnspinner/core": "^1.0.0",
+    "@yarnspinnertool/core": "*",
     "bootstrap": "^5.2.0-beta1"
   }
 }
