@@ -1,40 +1,40 @@
 {
-  "name": "@yarnspinnertool/core",
-  "version": "0.0.1",
-  "description": "",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "repository": {
-    "url": "https://github.com/YarnSpinnerTool/YarnSpinner-Typescript"
-  },
-  "scripts": {
-    "build": "tsc -p tsconfig.json",
-    "release": "VARIABLE=$(dotnet-gitversion /showVariable semver) && npm version $VARIABLE --no-git-tag-version --allow-same-version && npm run build; npm publish; VARIABLE=$(dotnet-gitversion /showVariable majorminorpatch) && npm version $VARIABLE --no-git-tag-version --allow-same-version"
-  },
-  "author": "",
-  "license": "MIT",
-  "dependencies": {
-    "@protobuf-ts/runtime": "^2.9.4"
-  },
-  "devDependencies": {
-    "@types/jest": "^29.5.12",
-    "@types/node": "^20.14.8",
-    "antlr4ng": "^3.0.4",
-    "csv-parse": "^5.5.6"
-  },
-  "files": [
-    "/dist"
-  ],
-  "exports": {
-    ".": {
-      "import": {
-        "types": "./dist/index.d.ts",
-        "default": "./dist/index.js"
-      },
-      "require": {
-        "types": "./dist/index.d.ts",
-        "default": "./dist/index.js"
-      }
+    "name": "@yarnspinnertool/core",
+    "version": "0.0.1",
+    "description": "",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "repository": {
+        "url": "https://github.com/YarnSpinnerTool/YarnSpinner-Typescript"
+    },
+    "scripts": {
+        "build": "tsc -p tsconfig.json",
+        "release": "VARIABLE=$(dotnet-gitversion /showVariable semver) && npm version $VARIABLE --no-git-tag-version --allow-same-version && npm run build; npm publish; VARIABLE=$(dotnet-gitversion /showVariable majorminorpatch) && npm version $VARIABLE --no-git-tag-version --allow-same-version"
+    },
+    "author": "",
+    "license": "MIT",
+    "dependencies": {
+        "@protobuf-ts/runtime": "^2.9.4"
+    },
+    "devDependencies": {
+        "@types/jest": "^29.5.12",
+        "@types/node": "^20.14.8",
+        "antlr4ng": "^3.0.4",
+        "csv-parse": "^5.5.6"
+    },
+    "files": [
+        "/dist"
+    ],
+    "exports": {
+        ".": {
+            "import": {
+                "types": "./dist/index.d.ts",
+                "default": "./dist/index.js"
+            },
+            "require": {
+                "types": "./dist/index.d.ts",
+                "default": "./dist/index.js"
+            }
+        }
     }
-  }
 }

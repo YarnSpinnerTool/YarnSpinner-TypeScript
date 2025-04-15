@@ -1,54 +1,54 @@
 {
-  "name": "@yarnspinnertool/standalone-runner",
-  "version": "0.0.1",
-  "description": "Runs yarn stuff in the browser",
-  "main": "dist/entrypoint.js",
-  "repository": {
-    "url": "https://github.com/YarnSpinnerTool/YarnSpinner-Typescript"
-  },
-  "scripts": {
-    "test": "jest",
-    "prepare-tests": "node scripts/create-test-data.js",
-    "build": "npx rimraf dist && npx webpack --mode=production",
-    "build:dev": "npx webpack --mode=development",
-    "start": "npx webpack serve --mode=development --open",
-    "release": "npm run build && VARIABLE=$(dotnet-gitversion /showVariable semver) && npm version $VARIABLE --no-git-tag-version --allow-same-version && npm publish; VARIABLE=$(dotnet-gitversion /showVariable majorminorpatch) && npm version $VARIABLE --no-git-tag-version --allow-same-version"
-  },
-  "author": "",
-  "license": "MIT",
-  "files": [
-    "dist"
-  ],
-  "devDependencies": {
-    "@types/bootstrap": "^5.2.10",
-    "antlr4ng": "^3.0.4",
-    "css-loader": "^6.7.1",
-    "csv-parse": "^5.0.4",
-    "eslint": "^8.57.0",
-    "eslint-config-prettier": "^9.1.0",
-    "html-inline-css-webpack-plugin": "^1.11.1",
-    "html-webpack-plugin": "^5.5.0",
-    "jest": "^28.1.3",
-    "mini-css-extract-plugin": "^2.6.1",
-    "prettier": "3.3.2",
-    "purgecss-webpack-plugin": "^4.1.3",
-    "react-dev-utils": "^12.0.1",
-    "sass": "^1.53.0",
-    "sass-loader": "^13.0.2",
-    "style-loader": "^3.3.1",
-    "ts-jest": "^28.0.2",
-    "ts-loader": "^9.3.1",
-    "typescript": "^4.9.5",
-    "typescript-eslint": "^7.13.1",
-    "webpack": "^5.72.1",
-    "webpack-cli": "^4.9.2",
-    "webpack-dev-server": "^4.9.3",
-    "workspace-root": "^3.2.0"
-  },
-  "dependencies": {
-    "@popperjs/core": "^2.11.5",
-    "@protobuf-ts/plugin": "^2.5.0",
-    "@yarnspinnertool/core": "*",
-    "bootstrap": "^5.2.0-beta1"
-  }
+    "name": "@yarnspinnertool/standalone-runner",
+    "version": "0.0.1",
+    "description": "Runs yarn stuff in the browser",
+    "main": "dist/entrypoint.js",
+    "repository": {
+        "url": "https://github.com/YarnSpinnerTool/YarnSpinner-Typescript"
+    },
+    "scripts": {
+        "test": "jest",
+        "prepare-tests": "node scripts/create-test-data.js",
+        "build": "npx rimraf dist && npx webpack --mode=production",
+        "build:dev": "npx webpack --mode=development",
+        "start": "npx webpack serve --mode=development --open",
+        "release": "npm run build && VARIABLE=$(dotnet-gitversion /showVariable semver) && npm version $VARIABLE --no-git-tag-version --allow-same-version && npm publish; VARIABLE=$(dotnet-gitversion /showVariable majorminorpatch) && npm version $VARIABLE --no-git-tag-version --allow-same-version"
+    },
+    "author": "",
+    "license": "MIT",
+    "files": [
+        "dist"
+    ],
+    "devDependencies": {
+        "@types/bootstrap": "^5.2.10",
+        "antlr4ng": "^3.0.4",
+        "css-loader": "^6.7.1",
+        "csv-parse": "^5.0.4",
+        "eslint": "^8.57.0",
+        "eslint-config-prettier": "^9.1.0",
+        "html-inline-css-webpack-plugin": "^1.11.1",
+        "html-webpack-plugin": "^5.5.0",
+        "jest": "^28.1.3",
+        "mini-css-extract-plugin": "^2.6.1",
+        "prettier": "3.3.2",
+        "purgecss-webpack-plugin": "^4.1.3",
+        "react-dev-utils": "^12.0.1",
+        "sass": "^1.53.0",
+        "sass-loader": "^13.0.2",
+        "style-loader": "^3.3.1",
+        "ts-jest": "^28.0.2",
+        "ts-loader": "^9.3.1",
+        "typescript": "^4.9.5",
+        "typescript-eslint": "^7.13.1",
+        "webpack": "^5.72.1",
+        "webpack-cli": "^4.9.2",
+        "webpack-dev-server": "^4.9.3",
+        "workspace-root": "^3.2.0"
+    },
+    "dependencies": {
+        "@popperjs/core": "^2.11.5",
+        "@protobuf-ts/plugin": "^2.5.0",
+        "@yarnspinnertool/core": "*",
+        "bootstrap": "^5.2.0-beta1"
+    }
 }

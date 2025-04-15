@@ -8,7 +8,7 @@ Idealised flow will be something like the following:
 2. Use [`ysc`](https://github.com/YarnSpinnerTool/YarnSpinner-Console) or the [Visual Studio Extension](https://github.com/YarnSpinnerTool/VSCodeExtension) to compile the yarn into a single HTML file
 3. Email/upload/etc your story for people to look at
 
-The goal of this project, at least initially, is *not* to make a JS version of Yarn Spinner, but to make something to more easily share stories for feedback and testing.
+The goal of this project, at least initially, is _not_ to make a JS version of Yarn Spinner, but to make something to more easily share stories for feedback and testing.
 As such the entire design philosophy at this stage is around making a single JS and HTML file representing your Yarn to be embedded into a website, not a tool for making a web narrative game.
 
 ## Using This
@@ -42,14 +42,14 @@ this is the only line in the second node!
 
 To build this you will need the following tools:
 
-- `NPM`
-- `TypeScript`
-- `Protobuf`
-- [`Protobuf for TypeScript`](https://github.com/timostamm/protobuf-ts)
-- `Webpack`
-- `Jest`
-- [`Typescript Jest`](https://github.com/kulshekhar/ts-jest)
-- `Python`
+-   `NPM`
+-   `TypeScript`
+-   `Protobuf`
+-   [`Protobuf for TypeScript`](https://github.com/timostamm/protobuf-ts)
+-   `Webpack`
+-   `Jest`
+-   [`Typescript Jest`](https://github.com/kulshekhar/ts-jest)
+-   `Python`
 
 Assuming you somehow manage to survive the labyrinthian nightmare of installing these tools you are still quite some steps away from being able to do anything useful.
 
@@ -58,8 +58,8 @@ If you wanted to replace the story you would need to do the following:
 1. Using ysc compile your yarn into a yarnc and csv file: `ysc compile your_yarn.yarn`
 2. Using `munger.py` create a TypeScript text embeddable version of your compiled story: `python munger.py`
 3. Replace the `stringTable` and `data` variables inside `index.ts` with those created by `munger.py`
-5. Compile the TypeScript and run webpack to munge everything up into a single js file we can use: `npm run build`
-6. Open `index.html` in your browser and "enjoy"
+4. Compile the TypeScript and run webpack to munge everything up into a single js file we can use: `npm run build`
+5. Open `index.html` in your browser and "enjoy"
 
 ### Build the Protobuf file
 
