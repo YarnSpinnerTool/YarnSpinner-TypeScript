@@ -5,20 +5,32 @@ export enum LineDeliveryMode {
 
     /** Deliver lines all at once, stopping only when the user needs to choose
      * an option. */
-    AllAtOnce
+    AllAtOnce,
+}
+
+export enum Saliency {
+    Random,
+    Best,
+    First,
+    BestLeastRecentlySeen,
+    RandomBestLeastRecentlySeen,
 }
 
 export type Settings = {
     /** Controls the way that lines are delivered to the user. */
-    lineDelivery?: LineDeliveryMode;
+    lineDelivery: LineDeliveryMode;
 
     /** Controls whether the contents of variables are shown to the user. */
-    showVariables?: boolean;
+    showVariables: boolean;
 
     /** Controls whether options marked as unavailable are shown to the user. */
-    showUnavailableOptions?: boolean;
+    showUnavailableOptions: boolean;
 
     /** Contains the name of the node that will be launched when the page loads,
      * or when the reload button is clicked. */
-    startNodeName?: string;
+    startNodeName: string;
+
+    /** Controls the saliency strategy used to select content in node groups and
+     * line groups. */
+    saliencyStrategy: Saliency;
 };

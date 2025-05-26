@@ -1,17 +1,16 @@
 // 1. Include functions first (so you can manipulate colors, SVGs, calc, etc)
 @import "../../../node_modules/bootstrap/scss/functions";
 
-
 // 2. Customise variables
 
-$blue: #79A5B7;
-$pink: #F2A9A0;
-$red: #D5683F;
+$blue: #79a5b7;
+$pink: #f2a9a0;
+$red: #d5683f;
 $orange: #fd7e14;
-$yellow: #F5C45A;
-$darker-green: #7AA479;
-$dark-green: #A8BD9B;
-$main-green: #C5E29B;
+$yellow: #f5c45a;
+$darker-green: #7aa479;
+$dark-green: #a8bd9b;
+$main-green: #c5e29b;
 $grey: #818582;
 
 $primary: $main-green;
@@ -67,15 +66,17 @@ $link-color: $darker-green;
 @import "../../../node_modules/bootstrap/scss/utilities/api";
 
 html,
-    body {
-      height: 100%;
-    }
+body {
+    height: 100%;
+}
 
-#app-header, #app-footer {
+#app-header,
+#app-footer {
     background-color: $background-tint;
 }
 
-.navbar, #variable-view {
+.navbar,
+#variable-view {
     border-color: $darker-green;
     border-width: 2px;
 }
@@ -90,7 +91,7 @@ html,
 .dropdown-menu {
     max-height: 50vh;
     overflow-y: auto;
-  }
+}
 
 .dropdown-menu.dropdown-menu-checkable .dropdown-item {
     padding-left: 30px;
@@ -99,9 +100,9 @@ html,
 .dropdown-menu.dropdown-menu-checkable .dropdown-item-checked::before {
     position: relative;
     margin-left: -1rem;
-    content: '✓';
+    content: "✓";
     font-weight: 600;
-  }
+}
 
 #log .list-group-item {
     -webkit-user-select: none;

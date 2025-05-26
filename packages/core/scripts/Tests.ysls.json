@@ -14,7 +14,7 @@
         },
         {
             "Documentation": "Example method that takes a string.",
-            
+
             "YarnName": "set_objective_complete",
             "ReturnType": "bool",
             "Parameters": [
@@ -26,7 +26,7 @@
         },
         {
             "Documentation": "Example method that takes a string.",
-            
+
             "YarnName": "is_objective_active",
             "ReturnType": "bool",
             "Parameters": [

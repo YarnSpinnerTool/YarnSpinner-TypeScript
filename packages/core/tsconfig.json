@@ -1,24 +1,22 @@
 {
-  "extends": "../../tsconfig.base.json",
-  "compilerOptions": {
-    "outDir": "dist",
-    // "sourceRoot": "src/",
-    "rootDir": "src/",
-    "strict": true,
-    "sourceMap": true,
-    "noImplicitAny": true,
-    "target": "ES2018",
-    "module": "CommonJS",
-    "strictPropertyInitialization": true,
-    "useDefineForClassFields": true
-    // "noImplicitThis": true,
-    // "noUnusedParameters": true,
-    // "noUnusedLocals": true,
-  },
-  "include": [
-    "./src/**/*"
-  ],
-  // "exclude": [
-  //   "./tests/**/*"
-  // ]
+    "extends": "../../tsconfig.base.json",
+    "compilerOptions": {
+        "outDir": "dist",
+        // "sourceRoot": "src/",
+        "rootDir": "src/",
+        "strict": true,
+        "sourceMap": true,
+        "noImplicitAny": true,
+        "target": "ES2018",
+        "module": "CommonJS",
+        "strictPropertyInitialization": true,
+        "useDefineForClassFields": true
+        // "noImplicitThis": true,
+        // "noUnusedParameters": true,
+        // "noUnusedLocals": true,
+    },
+    "include": ["./src/**/*"]
+    // "exclude": [
+    //   "./tests/**/*"
+    // ]
 }

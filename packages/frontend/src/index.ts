@@ -1,4 +1,4 @@
-import { LineDeliveryMode, Settings } from "./settings";
+import { LineDeliveryMode, Saliency, Settings } from "./settings";
 
 import {
     Line,
@@ -9,12 +9,18 @@ import {
     MetadataTable,
     Node,
     BasicLineProvider,
+    ContentSaliencyStrategy,
+    ContentSaliencyOption,
+    BestSaliencyStrategy,
+    FirstSaliencyStrategy,
+    BestLeastRecentlyViewedSalienceStrategy,
 } from "@yarnspinnertool/core";
 
 import "bootstrap";
 import "./yarnspinner.scss";
 
 let currentSettings: Settings = {
+    saliencyStrategy: Saliency.Random,
     lineDelivery: LineDeliveryMode.OneAtATime,
     showVariables: false,
     showUnavailableOptions: false,
@@ -30,8 +36,35 @@ let variableTableBody: HTMLElement;
 let startNodeCurrentLabel: HTMLElement;
 let startNodeDropdown: HTMLElement;
 
+let settingSaliencyRandomButton: HTMLElement;
+let settingSaliencyFirstButton: HTMLElement;
+let settingSaliencyBestButton: HTMLElement;
+let settingSaliencyRandomBestLeastRecentButton: HTMLElement;
+let settingSaliencyBestLeastRecentButton: HTMLElement;
+
+class RandomStrategy implements ContentSaliencyStrategy {
+    queryBestContent(
+        content: ContentSaliencyOption[],
+    ): ContentSaliencyOption | null {
+        const permittedContent = content.filter(
+            (c) => c.failingConditionValueCount == 0,
+        );
+        if (permittedContent.length == 0) {
+            return null;
+        }
+        return permittedContent[
+            Math.floor(Math.random() * permittedContent.length)
+        ];
+    }
+
+    contentWasSelected(content: ContentSaliencyOption): void {
+        return;
+    }
+}
+
 const VM = new YarnVM();
 VM.onVariableSet = () => updateVariableDisplay(VM);
+VM.saliencyStrategy = new RandomStrategy();
 
 const yarnLoadedEvent = new Event("yarnLoaded");
 
@@ -172,6 +205,42 @@ function updateShowVariablesUI() {
     }
 }
 
+function updateSaliencyUI() {
+    const saliency = currentSettings.saliencyStrategy;
+
+    const buttons = [
+        settingSaliencyRandomButton,
+        settingSaliencyFirstButton,
+        settingSaliencyBestButton,
+        settingSaliencyRandomBestLeastRecentButton,
+        settingSaliencyBestLeastRecentButton,
+    ];
+
+    buttons.forEach((i) => i.classList.remove("dropdown-item-checked"));
+
+    let selectedButton: HTMLElement;
+
+    switch (saliency) {
+        case Saliency.Random:
+            selectedButton = settingSaliencyRandomButton;
+            break;
+        case Saliency.Best:
+            selectedButton = settingSaliencyBestButton;
+            break;
+        case Saliency.First:
+            selectedButton = settingSaliencyFirstButton;
+            break;
+        case Saliency.BestLeastRecentlySeen:
+            selectedButton = settingSaliencyBestButton;
+            break;
+        case Saliency.RandomBestLeastRecentlySeen:
+            selectedButton = settingSaliencyRandomBestLeastRecentButton;
+            break;
+    }
+
+    selectedButton.classList.add("dropdown-item-checked");
+}
+
 function updateShowUnavailableOptionsUI() {
     const showUnavailableOptions = currentSettings.showUnavailableOptions;
 
@@ -296,6 +365,47 @@ window.setup = () => {
         });
     });
 
+    settingSaliencyRandomButton = document.getElementById(
+        "setting-saliency-random",
+    )!;
+
+    settingSaliencyFirstButton = document.getElementById(
+        "setting-saliency-first",
+    )!;
+
+    settingSaliencyBestButton = document.getElementById(
+        "setting-saliency-best",
+    )!;
+
+    settingSaliencyRandomBestLeastRecentButton = document.getElementById(
+        "setting-saliency-random-best-least-recent",
+    )!;
+
+    settingSaliencyBestLeastRecentButton = document.getElementById(
+        "setting-saliency-best-least-recent",
+    )!;
+
+    settingSaliencyRandomButton.addEventListener("click", () => {
+        updateSettings({ saliencyStrategy: Saliency.Random });
+    });
+
+    settingSaliencyFirstButton.addEventListener("click", () => {
+        updateSettings({ saliencyStrategy: Saliency.First });
+    });
+
+    settingSaliencyBestButton.addEventListener("click", () => {
+        updateSettings({ saliencyStrategy: Saliency.Best });
+    });
+
+    settingSaliencyRandomBestLeastRecentButton.addEventListener("click", () => {
+        updateSettings({
+            saliencyStrategy: Saliency.RandomBestLeastRecentlySeen,
+        });
+    });
+    settingSaliencyBestLeastRecentButton.addEventListener("click", () => {
+        updateSettings({ saliencyStrategy: Saliency.BestLeastRecentlySeen });
+    });
+
     updateSettings(currentSettings);
 
     window.dispatchEvent(yarnLoadedEvent);
@@ -363,12 +473,39 @@ function loadProgram(
     }
 }
 
-function updateSettings(newSettings: Settings) {
+function updateSettings(newSettings: Partial<Settings>) {
+    const previousSettings = currentSettings;
     currentSettings = { ...currentSettings, ...newSettings };
     updateLineDeliveryUI();
     updateShowVariablesUI();
+    updateSaliencyUI();
     updateShowUnavailableOptionsUI();
     updateStartNodeUI();
+
+    if (
+        previousSettings.saliencyStrategy !== currentSettings.saliencyStrategy
+    ) {
+        switch (currentSettings.saliencyStrategy) {
+            case Saliency.Random:
+                VM.saliencyStrategy = new RandomStrategy();
+            case Saliency.Best:
+                VM.saliencyStrategy = new BestSaliencyStrategy();
+            case Saliency.First:
+                VM.saliencyStrategy = new FirstSaliencyStrategy();
+            case Saliency.BestLeastRecentlySeen:
+                VM.saliencyStrategy =
+                    new BestLeastRecentlyViewedSalienceStrategy(
+                        VM.variableStorage,
+                        false,
+                    );
+            case Saliency.RandomBestLeastRecentlySeen:
+                VM.saliencyStrategy =
+                    new BestLeastRecentlyViewedSalienceStrategy(
+                        VM.variableStorage,
+                        true,
+                    );
+        }
+    }
 }
 
 const dialogueContentsID = "dialogue-contents";

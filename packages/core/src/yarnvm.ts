@@ -416,6 +416,20 @@ export class YarnVM {
         }
     }
 
+    public getExecutionPosition(): {
+        node: string;
+        position: number;
+    } | null {
+        if (this.state == "stopped" || this.currentNodeName == null) {
+            return null;
+        } else {
+            return {
+                node: this.currentNodeName,
+                position: this.programCounter,
+            };
+        }
+    }
+
     public resetState(): void {
         this.log("resetting state");
         this.stack = [];
