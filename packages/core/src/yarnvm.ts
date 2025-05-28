@@ -371,10 +371,18 @@ export class YarnVM {
 
     public verboseLogging: boolean = false;
 
-    public lineCallback: ((line: Line) => Promise<void>) | null = null;
-    public commandCallback: ((command: string) => Promise<void>) | null = null;
-    public optionCallback: ((options: OptionItem[]) => Promise<number>) | null =
-        null;
+    private dialogueAbortController?: AbortController;
+    private currentContentAbortController?: AbortController;
+
+    public lineCallback:
+        | ((line: Line, abort: AbortSignal) => Promise<void>)
+        | null = null;
+    public commandCallback:
+        | ((command: string, abort: AbortSignal) => Promise<void>)
+        | null = null;
+    public optionCallback:
+        | ((options: OptionItem[], abort: AbortSignal) => Promise<number>)
+        | null = null;
     public dialogueCompleteCallback: (() => Promise<void>) | null = null;
     public nodeCompleteCallback: ((nodeName: string) => void) | null = null;
 
@@ -390,8 +398,6 @@ export class YarnVM {
     // maps functions to their stub values
     // intended to be used for testing
     private library?: YarnLibrary;
-
-    private interrupted = false;
 
     public loadProgram(newProgram: Program, library?: YarnLibrary) {
         this.program = newProgram;
@@ -437,7 +443,6 @@ export class YarnVM {
         this.programCounter = 0;
         this.optionSet = [];
         this.currentNode = null;
-        this.interrupted = false;
     }
 
     public setNode(nodeName: string, clearState: boolean = true): boolean {
@@ -453,10 +458,14 @@ export class YarnVM {
 
         return true;
     }
-    public interrupt(): void {
-        this.interrupted = true;
+
+    public requestNextLine(): void {
+        this.currentContentAbortController?.abort();
     }
+
     public stop(): void {
+        this.dialogueAbortController?.abort();
+
         this.log("stopping all execution");
         this._state = "stopped";
         this.resetState();
@@ -495,6 +504,15 @@ export class YarnVM {
             return;
         }
 
+        // Abort any pre-existing controller, just in case
+        this.dialogueAbortController?.abort();
+        this.dialogueAbortController = new AbortController();
+
+        // If the dialogue is aborted, also abort any currently running content
+        this.dialogueAbortController.signal.addEventListener("abort", () =>
+            this.currentContentAbortController?.abort(),
+        );
+
         while (this._state == "running") {
             if (
                 this.currentNode == null ||
@@ -513,9 +531,9 @@ export class YarnVM {
                 await this.runInstruction(
                     this.currentNode.instructions[this.programCounter],
                 );
-                if (this.interrupted) {
-                    // We were interrupted while running this instruction. Exit
-                    // immediately.
+                if (this.dialogueAbortController.signal.aborted) {
+                    // The dialogue was aborted while running this instruction.
+                    // Exit immediately.
                     this.stop();
                     if (this.dialogueCompleteCallback) {
                         await this.dialogueCompleteCallback();
@@ -588,7 +606,13 @@ export class YarnVM {
                     // for this I think we can skip that and go straight to waiting to continue
                     this._state = "waiting-for-continue";
 
-                    await this.lineCallback(line);
+                    this.currentContentAbortController = new AbortController();
+
+                    await this.lineCallback(
+                        line,
+                        this.currentContentAbortController.signal,
+                    );
+                    this.currentContentAbortController = undefined;
                 }
                 this._state = "running";
 
@@ -619,12 +643,19 @@ export class YarnVM {
                 if (this.commandCallback != null) {
                     command = this.buildCommand(command, parameters);
 
+                    this.currentContentAbortController = new AbortController();
+
                     // in the c# one we set state to delivered
                     // then to waiting
                     // for this I think we can skip that and go straight to waiting to continue
 
                     this._state = "waiting-for-continue";
-                    await this.commandCallback(command);
+                    await this.commandCallback(
+                        command,
+                        this.currentContentAbortController.signal,
+                    );
+
+                    this.currentContentAbortController = undefined;
                 }
 
                 this._state = "running";
@@ -698,11 +729,27 @@ export class YarnVM {
                     break;
                 }
 
+                if (this.dialogueAbortController == null) {
+                    this.logError(
+                        "internal error: did not expect dialogueAbortController to be null when running options",
+                    );
+                    this._state = "stopped";
+                    break;
+                }
+
                 this.log(`presenting ${this.optionSet.length} options`);
 
                 this._state = "waiting-on-option-selection";
 
-                const index = await this.optionCallback(this.optionSet);
+                const index = await this.optionCallback(
+                    this.optionSet,
+                    // unlike lines and options, options doesn't get its own
+                    // cancellation signal - the only valid situation where we
+                    // want to tell the options callback that its return value
+                    // won't be needed or used is when the entire dialogue is
+                    // stopping
+                    this.dialogueAbortController?.signal,
+                );
                 this.selectOption(index);
                 this._state = "running";
 

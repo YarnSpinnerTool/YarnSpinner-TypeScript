@@ -17,6 +17,7 @@ import {
     BestSaliencyStrategy,
     ContentSaliencyOption,
     ContentSaliencyStrategy,
+    ExecutionState,
     FirstSaliencyStrategy,
     Line,
     MetadataEntry,
@@ -426,10 +427,7 @@ it("can select best content", () => {
     strategy.contentWasSelected(opt3);
 });
 
-it("can interrupt in the middle of execution", async () => {
-    // Arrange:
-
-    // Create a simple 'program' that just runs three lines.
+const createProgramWithLineIDs = (...ids: string[]): Program => {
     const makeLine = (id: string): PartialMessage<Instruction> => ({
         instructionType: {
             oneofKind: "runLine",
@@ -440,10 +438,18 @@ it("can interrupt in the middle of execution", async () => {
     const program = Program.create({
         nodes: {
             Start: {
-                instructions: ["a", "b", "c"].map((id) => makeLine(id)),
+                instructions: ids.map((id) => makeLine(id)),
             },
         },
     });
+    return program;
+};
+
+it("can stop dialogue while running lines", async () => {
+    // Arrange:
+
+    // Create a simple 'program' that just runs three lines.
+    const program = createProgramWithLineIDs("a", "b", "c");
 
     // We'll stop after we see the line with this ID.
     const stopAfterLineID = "b";
@@ -459,7 +465,7 @@ it("can interrupt in the middle of execution", async () => {
     vm.lineCallback = async (line) => {
         linesSeen.push(line.id);
         if (line.id == stopAfterLineID) {
-            vm.interrupt();
+            vm.stop();
         }
     };
 
@@ -470,4 +476,35 @@ it("can interrupt in the middle of execution", async () => {
 
     // We interrupted after 'b', so we should not see the third line
     expect(linesSeen).not.toContain("c");
+    expect(vm.state).toBe<ExecutionState>("stopped");
+});
+
+it("can interrupt dialogue externally", async () => {
+    const program = createProgramWithLineIDs("a");
+
+    const vm = new YarnVM();
+    vm.loadProgram(program);
+    vm.setNode("Start");
+
+    let lineAborted = false;
+
+    vm.lineCallback = (line, signal) => {
+        return new Promise((resolve) => {
+            // This line callback will never resolve on its own - we'll only continue
+            // when our abort signal fires its event
+            signal.addEventListener("abort", () => {
+                lineAborted = true;
+                resolve();
+            });
+        });
+    };
+
+    // Wait 100ms and externally stop the dialogue
+    setTimeout(() => vm.stop(), 100);
+
+    // Start the program
+    await vm.start();
+
+    // The abort signal's handler should have fired
+    expect(lineAborted).toBe(true);
 });
