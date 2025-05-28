@@ -580,17 +580,17 @@ export class YarnVM {
                     }
                 }
 
-                let line = this.buildLine(label, parameters);
-
-                // in the c# one we set state to delivered
-                // then to waiting
-                // for this I think we can skip that and go straight to waiting to continue
-                this._state = "waiting-for-continue";
-
                 if (this.lineCallback != null) {
+                    let line = this.buildLine(label, parameters);
+
+                    // in the c# one we set state to delivered
+                    // then to waiting
+                    // for this I think we can skip that and go straight to waiting to continue
+                    this._state = "waiting-for-continue";
+
                     await this.lineCallback(line);
-                    this._state = "running";
                 }
+                this._state = "running";
 
                 break;
             }
@@ -616,17 +616,18 @@ export class YarnVM {
                     parameters.reverse();
                 }
 
-                command = this.buildCommand(command, parameters);
-
-                // in the c# one we set state to delivered
-                // then to waiting
-                // for this I think we can skip that and go straight to waiting to continue
-                this._state = "waiting-for-continue";
-
                 if (this.commandCallback != null) {
+                    command = this.buildCommand(command, parameters);
+
+                    // in the c# one we set state to delivered
+                    // then to waiting
+                    // for this I think we can skip that and go straight to waiting to continue
+
+                    this._state = "waiting-for-continue";
                     await this.commandCallback(command);
-                    this._state = "running";
                 }
+
+                this._state = "running";
 
                 break;
             }
@@ -689,15 +690,21 @@ export class YarnVM {
                     break;
                 }
 
+                if (this.optionCallback == null) {
+                    this.logError(
+                        "asked to show options but no optionCallback was provided; cannot continue",
+                    );
+                    this._state = "stopped";
+                    break;
+                }
+
                 this.log(`presenting ${this.optionSet.length} options`);
 
                 this._state = "waiting-on-option-selection";
 
-                if (this.optionCallback != null) {
-                    const index = await this.optionCallback(this.optionSet);
-                    this.selectOption(index);
-                    this._state = "running";
-                }
+                const index = await this.optionCallback(this.optionSet);
+                this.selectOption(index);
+                this._state = "running";
 
                 break;
             }
