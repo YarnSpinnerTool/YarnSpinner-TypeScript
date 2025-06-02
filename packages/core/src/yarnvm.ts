@@ -525,7 +525,7 @@ export class YarnVM {
                 return;
             }
 
-            const currentNode: Node | undefined = this.currentNode;
+            const currentNodeName = this.currentNode.name;
 
             try {
                 await this.runInstruction(
@@ -548,7 +548,7 @@ export class YarnVM {
                 }
             }
 
-            if (this.currentNode == currentNode) {
+            if (this.currentNodeName == currentNodeName) {
                 // We're still in the same node. Advance to the next instruction.
                 this.programCounter += 1;
             }

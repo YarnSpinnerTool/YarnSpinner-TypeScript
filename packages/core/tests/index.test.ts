@@ -27,7 +27,9 @@ import {
     YarnLibrary,
     YarnValue,
     YarnVM,
-} from "../src/yarnvm";
+} from "../src/";
+
+import { __experimental } from "../src";
 
 import { PartialMessage } from "@protobuf-ts/runtime";
 import { parse as parseCSV } from "csv-parse/sync";
@@ -44,6 +46,14 @@ const testDataPath = resolve(__filename, "..", "..", "testdata");
 const allTestPlans = readdirSync(testDataPath).filter((path) =>
     path.endsWith(".testplan"),
 );
+
+const delay = (timeout: number) => {
+    return new Promise<void>((resolve) => {
+        setTimeout(() => {
+            resolve();
+        }, timeout);
+    });
+};
 
 describe("can parse all testplans", () => {
     it.each(allTestPlans)("testplan: %p", (testplan: string) => {
@@ -438,6 +448,7 @@ const createProgramWithLineIDs = (...ids: string[]): Program => {
     const program = Program.create({
         nodes: {
             Start: {
+                name: "Start",
                 instructions: ids.map((id) => makeLine(id)),
             },
         },
@@ -492,9 +503,15 @@ it("can interrupt dialogue externally", async () => {
         return new Promise((resolve) => {
             // This line callback will never resolve on its own - we'll only continue
             // when our abort signal fires its event
-            signal.addEventListener("abort", () => {
+            signal.onabort = () => {
                 lineAborted = true;
                 resolve();
+            };
+
+            delay(500).then(() => {
+                if (!signal.aborted) {
+                    fail("the VM should have been stopped by now");
+                }
             });
         });
     };
@@ -502,9 +519,48 @@ it("can interrupt dialogue externally", async () => {
     // Wait 100ms and externally stop the dialogue
     setTimeout(() => vm.stop(), 100);
 
-    // Start the program
+    // Start the program; it will hang at the first line
     await vm.start();
 
     // The abort signal's handler should have fired
     expect(lineAborted).toBe(true);
+});
+
+it("can stop and replace a running program", async () => {
+    const programOld = createProgramWithLineIDs("a", "b");
+    const programNew = createProgramWithLineIDs(
+        "a",
+        "added-in-past",
+        "b",
+        "added-in-future",
+    );
+
+    const vm = new YarnVM();
+
+    const linesSeen: string[] = [];
+
+    let breakpoint = 1; // "b" in programOld
+    const getProgramCounter = () => vm["programCounter"];
+
+    vm.lineCallback = async (line, abort) => {
+        if (getProgramCounter() == breakpoint) {
+            breakpoint = -1;
+            __experimental.hotReload(vm, programNew, 2);
+
+            return;
+        }
+        linesSeen.push(line.id);
+    };
+
+    vm.loadProgram(programOld);
+    vm.setNode("Start");
+
+    await vm.start();
+
+    expect(linesSeen).toContain("a");
+    expect(linesSeen).toContain("b");
+    expect(linesSeen).toContain("added-in-future");
+    expect(linesSeen).toHaveLength(3);
+
+    expect(linesSeen).not.toContain("added-in-past");
 });
