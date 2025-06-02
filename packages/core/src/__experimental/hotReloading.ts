@@ -27,6 +27,15 @@ export function hotReload(
         );
     }
 
+    if (vm["callStack"].length > 0) {
+        // We can't hot-reload while detoured, because we can't be sure that the
+        // instruction pointer stored in the call stack points to the right
+        // place anymore.
+        throw new Error(
+            `Can't hot reload: unable to hot reload while detoured`,
+        );
+    }
+
     if (
         replacementProgramCounter < 0 ||
         replacementProgramCounter >= incomingNode.instructions.length
