@@ -1,5 +1,5 @@
 import { Instruction, Node, Operand, Program } from "./generated/yarn_spinner";
-import { getNodeGroupName } from "./program";
+import { getNodeGroupName, isNodeGroupHub } from "./program";
 
 export type ExecutionState =
     | "stopped"
@@ -1376,6 +1376,36 @@ export class YarnVM {
             },
         };
 
+        const nodeGroupFunctions: Record<string, YarnFunction> = {
+            has_any_content: (nodeGroupName) => {
+                checkString(nodeGroupName);
+
+                if (this.program == null) {
+                    // No program at all, so no content available
+                    return false;
+                }
+
+                const node = this.program.nodes[nodeGroupName];
+
+                if (!node) {
+                    // No node with this name
+                    return false;
+                }
+
+                if (!isNodeGroupHub(node)) {
+                    // Not a node group hub, so it always has content available
+                    return true;
+                }
+
+                const options = this.getSaliencyCandidatesForNode(node.name);
+                const bestOption =
+                    this.saliencyStrategy.queryBestContent(options);
+
+                // Did the saliency strategy indicate that an option could be selected?
+                return bestOption != null;
+            },
+        };
+
         const library: YarnLibrary = new Map(
             Object.entries({
                 ...numberFunctions,
@@ -1385,6 +1415,7 @@ export class YarnVM {
                 ...mathsFunctions,
                 ...enumFunctions,
                 ...visitationFunctions,
+                ...nodeGroupFunctions,
             }),
         );
 
