@@ -1,4 +1,5 @@
 import { Instruction, Node, Operand, Program } from "./generated/yarn_spinner";
+import { getNodeGroupName } from "./program";
 
 export type ExecutionState =
     | "stopped"
@@ -1600,6 +1601,34 @@ export class YarnVM {
 
     private getHeaderValuesForNode(node: Node, header: string): string[] {
         return node.headers.filter((h) => h.key === header).map((h) => h.value);
+    }
+
+    getSaliencyCandidatesForNode(nodeName: string): ContentSaliencyOption[] {
+        if (!this.program) {
+            throw new Error(
+                `Can't get saliency candidates for node ${nodeName}: VM has no program`,
+            );
+        }
+
+        const nodesInGroup = Object.values(this.program.nodes).filter(
+            (node) => getNodeGroupName(node) === nodeName,
+        );
+
+        const result: ContentSaliencyOption[] = [];
+
+        for (const node of nodesInGroup) {
+            const { pass, fail } =
+                this.evaluateSaliencyWhenClausesForNode(node);
+            const complexity = this.getSaliencyComplexityForNode(node);
+
+            const newCandidate = new ContentSaliencyOption(node.name);
+            newCandidate.passingConditionValueCount = pass;
+            newCandidate.failingConditionValueCount = fail;
+            newCandidate.complexityScore = complexity;
+
+            result.push(newCandidate);
+        }
+        return result;
     }
 
     private getSaliencyComplexityForNode(node: Node): number {
