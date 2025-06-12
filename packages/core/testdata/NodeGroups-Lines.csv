@@ -12,3 +12,4 @@ line:b3034160,Error: Node should not run,/Users/desplesda/Work/YarnSpinner/Tests
 line:1cf60a6e,Error: Node should not run,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/NodeGroups.yarn,UnRunnableNodegroup,66
 line:13f00d83,Detour test 1,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/NodeGroups.yarn,DetourNode,72
 line:a9a1041a,Detour test 2,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/NodeGroups.yarn,DetourNode,78
+line:a18cdf64,TestCaseFunctionConditions,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/NodeGroups.yarn,TestCaseFunctionConditions,83

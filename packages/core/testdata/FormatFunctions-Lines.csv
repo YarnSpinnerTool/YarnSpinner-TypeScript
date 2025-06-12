@@ -15,4 +15,3 @@ line:49ed3b2c,"Mae: Wow, I came [ordinal value={0} one=""%st"" two=""%nd"" few="
 line:dfdd3c5b,"[select value={0} male=""male"" female=""female"" other=""other""/]",/Users/desplesda/Work/YarnSpinner/Tests/TestCases/FormatFunctions.yarn,Start,57
 line:7c4858c5,"[plural value={0} one=""one"" few=""few"" many=""many"" other=""other""/]",/Users/desplesda/Work/YarnSpinner/Tests/TestCases/FormatFunctions.yarn,Start,58
 line:ea785fb2,"[ordinal value={0} one=""one"" two=""two"" few=""few"" many=""many"" other=""other""/]",/Users/desplesda/Work/YarnSpinner/Tests/TestCases/FormatFunctions.yarn,Start,59
-line:c84b2f15,>,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/FormatFunctions.yarn,Destination,65

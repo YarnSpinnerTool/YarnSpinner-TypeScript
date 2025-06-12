@@ -1,8 +1,16 @@
 id,text,file,node,lineNumber
 line:b408a9f3,beginning,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/VisitTracking.yarn,Start,3
-line:1afd91c7,entered NoTrack,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/VisitTracking.yarn,NoTrack,10
-line:596b5c5f,entered Track,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/VisitTracking.yarn,Track,17
-line:27b10ade,entered End,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/VisitTracking.yarn,End,23
-line:84246e40,did we visit NoTrack? {0}!,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/VisitTracking.yarn,End,24
-line:12146937,did we visit Track? {0}!,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/VisitTracking.yarn,End,25
-line:a84560ae,done,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/VisitTracking.yarn,End,26
+line:2238ae84,entered End,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/VisitTracking.yarn,Start,13
+line:9869a71d,did we visit ImplicitTrack? {0}!,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/VisitTracking.yarn,Start,15
+line:0e59a06a,did we visit NoTrack? {0}!,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/VisitTracking.yarn,Start,16
+line:adccc4f4,did we visit Track? {0}!,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/VisitTracking.yarn,Start,17
+line:3bfcc383,did we visit NodeGroupImplicitTrack? {0}!,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/VisitTracking.yarn,Start,18
+line:81adca1a,did we visit NodeGroupNoTrack? {0}!,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/VisitTracking.yarn,Start,19
+line:179dcd6d,did we visit NodeGroupTrack? {0}!,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/VisitTracking.yarn,Start,20
+line:868072fd,done,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/VisitTracking.yarn,Start,22
+line:1539da93,entered ImplicitTrack,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/VisitTracking.yarn,ImplicitTrack,27
+line:a6b77e09,entered NoTrack,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/VisitTracking.yarn,NoTrack,33
+line:4f0919ba,entered Track,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/VisitTracking.yarn,Track,39
+line:c56f1c7e,entered NodeGroupImplicitTrack,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/VisitTracking.yarn,NodeGroupImplicitTrack,45
+line:619f52fd,entered NodeGroupTrack,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/VisitTracking.yarn,NodeGroupTrack,51
+line:c7dffc1f,entered NodeGroupNoTrack,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/VisitTracking.yarn,NodeGroupNoTrack,57

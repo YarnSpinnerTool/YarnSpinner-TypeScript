@@ -1,0 +1,29 @@
+Node Start:
+     0       RunNode         NodeGroup                                ; Clears stack
+     1       Return                                                             
+
+Node NodeGroup.3766e124:
+     0       RunLine         line:b8928b54                            ; "once"  
+     1       Return                                                             
+
+Node $Yarn.Internal.NodeGroup.NodeGroup.3766e124.Condition.0:
+     0       PushVariable    $Yarn.Internal.Once.NodeGroup.3766e124   ; Pushes 1, 'once' node condition for NodeGroup.3766e124
+             PushFloat       1                                        ; Pushes 1
+     2       CallFunc        Bool.Not                                           
+
+Node NodeGroup:
+     0       AddSaliencyCandidateFromNode NodeGroup.3766e124, L1_run_candidate_NodeGroup.3766e124           
+             SelectSaliencyCandidate                                                    
+             JumpIfFalse     L0_no_content_available                            
+             Pop                                                      ; Pops 1  
+             PeekAndJump                                                        
+L0_no_content_available:
+     5       Return                                                             
+L1_run_candidate_NodeGroup.3766e124:
+     6       PushBool        True                                     ; Pushes 1
+             StoreVariable   $Yarn.Internal.Once.NodeGroup.3766e124   ; 'once' node condition for NodeGroup.3766e124
+             Pop                                                      ; Pops 1  
+             DetourToNode    NodeGroup.3766e124                                 
+    10       Return                                                             
+
+

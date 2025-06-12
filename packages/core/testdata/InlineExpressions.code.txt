@@ -1,6 +1,6 @@
 Node Start:
      0       PushString      variable                                 ; Pushes 1, "variable"
-             StoreVariable   $var                                     ; <unknown variable>
+             StoreVariable   $var                                     ; <no variable info available>
              Pop                                                      ; Pops 1  
              PushFloat       1                                        ; Pushes 1
              RunLine         line:322ec2b6                            ; "Number: {0}"
@@ -13,9 +13,9 @@ Node Start:
              RunLine         line:1e4fcc58                            ; "String: {0}"
              PushBool        True                                     ; Pushes 1
              RunLine         line:887fcb2f                            ; "Bool: {0}"
-             PushVariable    $var                                     ; Pushes 1, <unknown variable>
+             PushVariable    $var                                     ; Pushes 1, <no variable info available>
     15       RunLine         line:2beaafb1                            ; "Variable: {0}"
-             PushVariable    $var                                     ; Pushes 1, <unknown variable>
+             PushVariable    $var                                     ; Pushes 1, <no variable info available>
              RunLine         line:bddaa8c6                            ; "{0} is great!"
              PushFloat       1                                        ; Pushes 1
              AddOption       line:078ba15f, L0_option_0               ; "Option Number: {0}"
@@ -28,7 +28,7 @@ Node Start:
              AddOption       line:00a619b8, L2_option_2               ; "Option String: {0}"
              PushBool        True                                     ; Pushes 1
              AddOption       line:96961ecf, L3_option_3               ; "Option Bool: {0}"
-             PushVariable    $var                                     ; Pushes 1, <unknown variable>
+             PushVariable    $var                                     ; Pushes 1, <no variable info available>
     30       AddOption       line:ce7da125, L4_option_4               ; "Option Variable: {0}"
              ShowOptions                                              ; Pushes 1
              PeekAndJump                                                        
@@ -55,7 +55,7 @@ L5_group_end:
              RunCommand      string {0}, 1                                      
              PushBool        True                                     ; Pushes 1
              RunCommand      bool {0}, 1                                        
-    50       PushVariable    $var                                     ; Pushes 1, <unknown variable>
+    50       PushVariable    $var                                     ; Pushes 1, <no variable info available>
              RunCommand      variable {0}, 1                                    
     52       Return                                                             
 

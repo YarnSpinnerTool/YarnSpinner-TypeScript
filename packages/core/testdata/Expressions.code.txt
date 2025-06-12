@@ -1,32 +1,32 @@
 Node Start:
-     0       PushVariable    $externally_set_bool                     ; Pushes 1, <unknown variable>
+     0       PushVariable    $externally_set_bool                     ; Pushes 1, <no variable info available>
              PushBool        True                                     ; Pushes 1
              PushFloat       2                                        ; Pushes 1
              CallFunc        Bool.EqualTo                                       
              PushFloat       1                                        ; Pushes 1
      5       CallFunc        assert                                             
-             PushVariable    $externally_set_number                   ; Pushes 1, <unknown variable>
+             PushVariable    $externally_set_number                   ; Pushes 1, <no variable info available>
              PushFloat       1                                        ; Pushes 1
              PushFloat       2                                        ; Pushes 1
              CallFunc        Number.EqualTo                                     
     10       PushFloat       1                                        ; Pushes 1
              CallFunc        assert                                             
              PushFloat       1                                        ; Pushes 1
-             StoreVariable   $int                                     ; <unknown variable>
+             StoreVariable   $int                                     ; <no variable info available>
              Pop                                                      ; Pops 1  
-    15       PushVariable    $int                                     ; Pushes 1, <unknown variable>
+    15       PushVariable    $int                                     ; Pushes 1, <no variable info available>
              PushFloat       1                                        ; Pushes 1
              PushFloat       2                                        ; Pushes 1
              CallFunc        Number.EqualTo                                     
              PushFloat       1                                        ; Pushes 1
     20       CallFunc        assert                                             
-             PushVariable    $int                                     ; Pushes 1, <unknown variable>
+             PushVariable    $int                                     ; Pushes 1, <no variable info available>
              PushFloat       2                                        ; Pushes 1
              PushFloat       2                                        ; Pushes 1
              CallFunc        Number.NotEqualTo                                  
     25       PushFloat       1                                        ; Pushes 1
              CallFunc        assert                                             
-             PushVariable    $bool                                    ; Pushes 1, <unknown variable>
+             PushVariable    $bool                                    ; Pushes 1, <no variable info available>
              PushFloat       1                                        ; Pushes 1
              CallFunc        Bool.Not                                           
     30       PushBool        False                                    ; Pushes 1
@@ -34,7 +34,7 @@ Node Start:
              CallFunc        Bool.EqualTo                                       
              PushFloat       1                                        ; Pushes 1
              CallFunc        assert                                             
-    35       PushVariable    $int                                     ; Pushes 1, <unknown variable>
+    35       PushVariable    $int                                     ; Pushes 1, <no variable info available>
              PushFloat       1                                        ; Pushes 1
              CallFunc        Number.UnaryMinus                                  
              PushFloat       1                                        ; Pushes 1
@@ -44,7 +44,7 @@ Node Start:
              CallFunc        Number.EqualTo                                     
              PushFloat       1                                        ; Pushes 1
              CallFunc        assert                                             
-    45       PushVariable    $int                                     ; Pushes 1, <unknown variable>
+    45       PushVariable    $int                                     ; Pushes 1, <no variable info available>
              PushFloat       1                                        ; Pushes 1
              CallFunc        Number.UnaryMinus                                  
              PushFloat       0                                        ; Pushes 1
@@ -67,24 +67,24 @@ Node Start:
     65       CallFunc        Number.Multiply                                    
              PushFloat       2                                        ; Pushes 1
              CallFunc        Number.Minus                                       
-             StoreVariable   $math                                    ; <unknown variable>
+             StoreVariable   $math                                    ; <no variable info available>
              Pop                                                      ; Pops 1  
-    70       PushVariable    $math                                    ; Pushes 1, <unknown variable>
+    70       PushVariable    $math                                    ; Pushes 1, <no variable info available>
              PushFloat       12                                       ; Pushes 1
              PushFloat       2                                        ; Pushes 1
              CallFunc        Number.EqualTo                                     
              PushFloat       1                                        ; Pushes 1
     75       CallFunc        assert                                             
              PushFloat       12                                       ; Pushes 1
-             StoreVariable   $math                                    ; <unknown variable>
+             StoreVariable   $math                                    ; <no variable info available>
              Pop                                                      ; Pops 1  
-             PushVariable    $math                                    ; Pushes 1, <unknown variable>
+             PushVariable    $math                                    ; Pushes 1, <no variable info available>
     80       PushFloat       5                                        ; Pushes 1
              PushFloat       2                                        ; Pushes 1
              CallFunc        Number.Modulo                                      
-             StoreVariable   $math                                    ; <unknown variable>
+             StoreVariable   $math                                    ; <no variable info available>
              Pop                                                      ; Pops 1  
-    85       PushVariable    $math                                    ; Pushes 1, <unknown variable>
+    85       PushVariable    $math                                    ; Pushes 1, <no variable info available>
              PushFloat       2                                        ; Pushes 1
              PushFloat       2                                        ; Pushes 1
              CallFunc        Number.EqualTo                                     

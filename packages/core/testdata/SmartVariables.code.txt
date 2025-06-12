@@ -22,24 +22,24 @@ Node $player_can_afford_pie:
      3       CallFunc        Number.GreaterThan                                 
 
 Node $C:
-     0       PushVariable    $a                                       ; Pushes 1, <unknown variable>
+     0       PushVariable    $a                                       ; Pushes 1, <no variable info available>
              PushFloat       1                                        ; Pushes 1
              CallFunc        Bool.Not                                           
-             PushVariable    $b                                       ; Pushes 1, <unknown variable>
+             PushVariable    $b                                       ; Pushes 1, <no variable info available>
              PushFloat       2                                        ; Pushes 1
      5       CallFunc        Bool.And                                           
-             PushVariable    $b                                       ; Pushes 1, <unknown variable>
+             PushVariable    $b                                       ; Pushes 1, <no variable info available>
              PushFloat       2                                        ; Pushes 1
      8       CallFunc        Bool.Or                                            
 
 Node $D:
-     0       PushVariable    $a                                       ; Pushes 1, <unknown variable>
+     0       PushVariable    $a                                       ; Pushes 1, <no variable info available>
              PushFloat       1                                        ; Pushes 1
              CallFunc        Bool.Not                                           
-             PushVariable    $b                                       ; Pushes 1, <unknown variable>
+             PushVariable    $b                                       ; Pushes 1, <no variable info available>
              PushFloat       2                                        ; Pushes 1
      5       CallFunc        Bool.And                                           
-             PushVariable    $b                                       ; Pushes 1, <unknown variable>
+             PushVariable    $b                                       ; Pushes 1, <no variable info available>
              PushFloat       2                                        ; Pushes 1
              CallFunc        Bool.Or                                            
              PushVariable    $player_money                            ; Pushes 1, Implicitly declared in /Users/desplesda/Work/YarnSpinner/Tests/TestCases/SmartVariables.yarn, node Start
@@ -50,22 +50,22 @@ Node $D:
     14       CallFunc        Bool.Or                                            
 
 Node $E:
-     0       PushVariable    $a                                       ; Pushes 1, <unknown variable>
+     0       PushVariable    $a                                       ; Pushes 1, <no variable info available>
              PushFloat       1                                        ; Pushes 1
              CallFunc        Bool.Not                                           
-             PushVariable    $b                                       ; Pushes 1, <unknown variable>
+             PushVariable    $b                                       ; Pushes 1, <no variable info available>
              PushFloat       2                                        ; Pushes 1
      5       CallFunc        Bool.And                                           
-             PushVariable    $b                                       ; Pushes 1, <unknown variable>
+             PushVariable    $b                                       ; Pushes 1, <no variable info available>
              PushFloat       2                                        ; Pushes 1
              CallFunc        Bool.Or                                            
-             PushVariable    $a                                       ; Pushes 1, <unknown variable>
+             PushVariable    $a                                       ; Pushes 1, <no variable info available>
     10       PushFloat       1                                        ; Pushes 1
              CallFunc        Bool.Not                                           
-             PushVariable    $b                                       ; Pushes 1, <unknown variable>
+             PushVariable    $b                                       ; Pushes 1, <no variable info available>
              PushFloat       2                                        ; Pushes 1
              CallFunc        Bool.And                                           
-    15       PushVariable    $b                                       ; Pushes 1, <unknown variable>
+    15       PushVariable    $b                                       ; Pushes 1, <no variable info available>
              PushFloat       2                                        ; Pushes 1
              CallFunc        Bool.Or                                            
              PushFloat       2                                        ; Pushes 1

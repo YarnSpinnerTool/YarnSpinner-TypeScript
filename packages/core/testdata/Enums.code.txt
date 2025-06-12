@@ -1,5 +1,5 @@
 Node Start:
-     0       PushVariable    $favouriteFood                           ; Pushes 1, <unknown variable>
+     0       PushVariable    $favouriteFood                           ; Pushes 1, <no variable info available>
              PushFloat       0                                        ; Pushes 1
              PushFloat       2                                        ; Pushes 1
              CallFunc        Enum.EqualTo                                       
@@ -8,7 +8,7 @@ Node Start:
              JumpTo          L2_endif                                           
 L0_end_clause:
      7       Pop                                                      ; Pops 1  
-             PushVariable    $favouriteFood                           ; Pushes 1, <unknown variable>
+             PushVariable    $favouriteFood                           ; Pushes 1, <no variable info available>
              PushFloat       1                                        ; Pushes 1
     10       PushFloat       2                                        ; Pushes 1
              CallFunc        Enum.EqualTo                                       
@@ -20,7 +20,7 @@ L1_end_clause:
              RunLine         line:162d0862                            ; "It's an error if you see this!"
              JumpTo          L2_endif                                           
 L2_endif:
-    18       PushVariable    $secondFavouriteFood                     ; Pushes 1, <unknown variable>
+    18       PushVariable    $secondFavouriteFood                     ; Pushes 1, <no variable info available>
              PushFloat       1                                        ; Pushes 1
     20       PushFloat       2                                        ; Pushes 1
              CallFunc        Enum.EqualTo                                       
@@ -33,9 +33,9 @@ L3_end_clause:
              JumpTo          L4_endif                                           
 L4_endif:
     28       PushFloat       1                                        ; Pushes 1
-             StoreVariable   $favouriteFood                           ; <unknown variable>
+             StoreVariable   $favouriteFood                           ; <no variable info available>
     30       Pop                                                      ; Pops 1  
-             PushVariable    $favouriteFood                           ; Pushes 1, <unknown variable>
+             PushVariable    $favouriteFood                           ; Pushes 1, <no variable info available>
              PushFloat       0                                        ; Pushes 1
              PushFloat       2                                        ; Pushes 1
              CallFunc        Enum.EqualTo                                       
@@ -44,7 +44,7 @@ L4_endif:
              JumpTo          L7_endif                                           
 L5_end_clause:
     38       Pop                                                      ; Pops 1  
-             PushVariable    $favouriteFood                           ; Pushes 1, <unknown variable>
+             PushVariable    $favouriteFood                           ; Pushes 1, <no variable info available>
     40       PushFloat       1                                        ; Pushes 1
              PushFloat       2                                        ; Pushes 1
              CallFunc        Enum.NotEqualTo                                    
@@ -57,7 +57,7 @@ L6_end_clause:
              JumpTo          L7_endif                                           
 L7_endif:
     49       PushFloat       2                                        ; Pushes 1
-    50       StoreVariable   $favouriteFood                           ; <unknown variable>
+    50       StoreVariable   $favouriteFood                           ; <no variable info available>
              Pop                                                      ; Pops 1  
              PushFloat       0                                        ; Pushes 1
              StoreVariable   $aDifferentFood                          ; Implicitly declared in /Users/desplesda/Work/YarnSpinner/Tests/TestCases/Enums.yarn, node Start

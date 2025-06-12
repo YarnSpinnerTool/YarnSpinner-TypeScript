@@ -1,80 +1,80 @@
 Node Start:
      0       PushString      male                                     ; Pushes 1, "male"
-             StoreVariable   $gender                                  ; <unknown variable>
+             StoreVariable   $gender                                  ; <no variable info available>
              Pop                                                      ; Pops 1  
-             PushVariable    $gender                                  ; Pushes 1, <unknown variable>
+             PushVariable    $gender                                  ; Pushes 1, <no variable info available>
              RunLine         line:3c821e9a                            ; "Select: [select value={0} male="male" female="female" other="other"/]"
      5       PushString      female                                   ; Pushes 1, "female"
-             StoreVariable   $gender                                  ; <unknown variable>
+             StoreVariable   $gender                                  ; <no variable info available>
              Pop                                                      ; Pops 1  
-             PushVariable    $gender                                  ; Pushes 1, <unknown variable>
+             PushVariable    $gender                                  ; Pushes 1, <no variable info available>
              RunLine         line:aab219ed                            ; "Select: [select value={0} male="male" female="female" other="other"/]"
     10       PushString      other                                    ; Pushes 1, "other"
-             StoreVariable   $gender                                  ; <unknown variable>
+             StoreVariable   $gender                                  ; <no variable info available>
              Pop                                                      ; Pops 1  
-             PushVariable    $gender                                  ; Pushes 1, <unknown variable>
+             PushVariable    $gender                                  ; Pushes 1, <no variable info available>
              RunLine         line:10e31074                            ; "Select: [select value={0} male="male" female="female" other="other"/]"
     15       PushFloat       1                                        ; Pushes 1
-             StoreVariable   $num                                     ; <unknown variable>
+             StoreVariable   $num                                     ; <no variable info available>
              Pop                                                      ; Pops 1  
-             PushVariable    $num                                     ; Pushes 1, <unknown variable>
+             PushVariable    $num                                     ; Pushes 1, <no variable info available>
              RunLine         line:86d31703                            ; "Plural: [plural value={0} one="one" two="two" few="few" many="many" other="other"/]"
     20       PushFloat       2                                        ; Pushes 1
-             StoreVariable   $num                                     ; <unknown variable>
+             StoreVariable   $num                                     ; <no variable info available>
              Pop                                                      ; Pops 1  
-             PushVariable    $num                                     ; Pushes 1, <unknown variable>
+             PushVariable    $num                                     ; Pushes 1, <no variable info available>
              RunLine         line:2546739d                            ; "Plural: [plural value={0} one="one" two="two" few="few" many="many" other="other"/]"
     25       PushFloat       3                                        ; Pushes 1
-             StoreVariable   $num                                     ; <unknown variable>
+             StoreVariable   $num                                     ; <no variable info available>
              Pop                                                      ; Pops 1  
-             PushVariable    $num                                     ; Pushes 1, <unknown variable>
+             PushVariable    $num                                     ; Pushes 1, <no variable info available>
              RunLine         line:b37674ea                            ; "Plural: [plural value={0} one="one" two="two" few="few" many="many" other="other"/]"
     30       PushFloat       4                                        ; Pushes 1
-             StoreVariable   $num                                     ; <unknown variable>
+             StoreVariable   $num                                     ; <no variable info available>
              Pop                                                      ; Pops 1  
-             PushVariable    $num                                     ; Pushes 1, <unknown variable>
+             PushVariable    $num                                     ; Pushes 1, <no variable info available>
              RunLine         line:09277d73                            ; "Plural: [plural value={0} one="one" two="two" few="few" many="many" other="other"/]"
     35       PushFloat       1                                        ; Pushes 1
-             StoreVariable   $ord                                     ; <unknown variable>
+             StoreVariable   $ord                                     ; <no variable info available>
              Pop                                                      ; Pops 1  
-             PushVariable    $ord                                     ; Pushes 1, <unknown variable>
+             PushVariable    $ord                                     ; Pushes 1, <no variable info available>
              RunLine         line:9f177a04                            ; "Ordinal: [ordinal value={0} one="one" two="two" few="few" many="many" other="other"/]"
     40       PushFloat       2                                        ; Pushes 1
-             StoreVariable   $ord                                     ; <unknown variable>
+             StoreVariable   $ord                                     ; <no variable info available>
              Pop                                                      ; Pops 1  
-             PushVariable    $ord                                     ; Pushes 1, <unknown variable>
+             PushVariable    $ord                                     ; Pushes 1, <no variable info available>
              RunLine         line:0e0ac594                            ; "Ordinal: [ordinal value={0} one="one" two="two" few="few" many="many" other="other"/]"
     45       PushFloat       3                                        ; Pushes 1
-             StoreVariable   $ord                                     ; <unknown variable>
+             StoreVariable   $ord                                     ; <no variable info available>
              Pop                                                      ; Pops 1  
-             PushVariable    $ord                                     ; Pushes 1, <unknown variable>
+             PushVariable    $ord                                     ; Pushes 1, <no variable info available>
              RunLine         line:983ac2e3                            ; "Ordinal: [ordinal value={0} one="one" two="two" few="few" many="many" other="other"/]"
     50       PushFloat       4                                        ; Pushes 1
-             StoreVariable   $ord                                     ; <unknown variable>
+             StoreVariable   $ord                                     ; <no variable info available>
              Pop                                                      ; Pops 1  
-             PushVariable    $ord                                     ; Pushes 1, <unknown variable>
+             PushVariable    $ord                                     ; Pushes 1, <no variable info available>
              RunLine         line:658c35c2                            ; "Ordinal: [ordinal value={0} one="one" two="two" few="few" many="many" other="other"/]"
     55       PushString      other                                    ; Pushes 1, "other"
-             StoreVariable   $gender                                  ; <unknown variable>
+             StoreVariable   $gender                                  ; <no variable info available>
              Pop                                                      ; Pops 1  
              PushFloat       1                                        ; Pushes 1
-             StoreVariable   $num                                     ; <unknown variable>
+             StoreVariable   $num                                     ; <no variable info available>
     60       Pop                                                      ; Pops 1  
              PushFloat       1                                        ; Pushes 1
-             StoreVariable   $ord                                     ; <unknown variable>
+             StoreVariable   $ord                                     ; <no variable info available>
              Pop                                                      ; Pops 1  
-             PushVariable    $gender                                  ; Pushes 1, <unknown variable>
+             PushVariable    $gender                                  ; Pushes 1, <no variable info available>
     65       RunLine         line:f3bc32b5                            ; "[select value={0} male="male: %" female="female: %" other="other: %"/]"
              PushFloat       3                                        ; Pushes 1
-             StoreVariable   $race_position                           ; <unknown variable>
+             StoreVariable   $race_position                           ; <no variable info available>
              Pop                                                      ; Pops 1  
-             PushVariable    $race_position                           ; Pushes 1, <unknown variable>
+             PushVariable    $race_position                           ; Pushes 1, <no variable info available>
     70       RunLine         line:49ed3b2c                            ; "Mae: Wow, I came [ordinal value={0} one="%st" two="%nd" few="%rd" other="%th"/]!"
-             PushVariable    $gender                                  ; Pushes 1, <unknown variable>
+             PushVariable    $gender                                  ; Pushes 1, <no variable info available>
              AddOption       line:dfdd3c5b, L0_option_0               ; "[select value={0} male="male" female="female" other="other"/]"
-             PushVariable    $num                                     ; Pushes 1, <unknown variable>
+             PushVariable    $num                                     ; Pushes 1, <no variable info available>
              AddOption       line:7c4858c5, L1_option_1               ; "[plural value={0} one="one" few="few" many="many" other="other"/]"
-    75       PushVariable    $ord                                     ; Pushes 1, <unknown variable>
+    75       PushVariable    $ord                                     ; Pushes 1, <no variable info available>
              AddOption       line:ea785fb2, L2_option_2               ; "[ordinal value={0} one="one" two="two" few="few" many="many" other="other"/]"
              ShowOptions                                              ; Pushes 1
              PeekAndJump                                                        
@@ -90,7 +90,6 @@ L3_group_end:
 
 Node Destination:
      0       Stop                                                               
-             RunLine         line:c84b2f15                            ; ">"     
-     2       Return                                                             
+     1       Return                                                             
 
 

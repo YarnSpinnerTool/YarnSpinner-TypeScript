@@ -14,109 +14,119 @@ Node TestCaseDetours:
              RunLine         line:73d8a5e5                            ; "Returned from detoured node group 2"
      5       Return                                                             
 
-Node NodeGroup_5c62da95:
+Node NodeGroup.5c62da95:
      0       RunLine         line:4e9e451d                            ; "Node group option 1 (A)"
      1       Return                                                             
 
-Node NodeGroup_bec6a512:
+Node NodeGroup.bec6a512:
      0       RunLine         line:ed0b2183                            ; "Node group option 2 (always)"
      1       Return                                                             
 
-Node NodeGroup_1d53c18c:
+Node NodeGroup.1d53c18c:
      0       RunLine         line:7b3b26f4                            ; "Node group option 3 (not A)"
      1       Return                                                             
 
-Node NodeGroup_7950e45d:
+Node NodeGroup.7950e45d:
      0       RunLine         line:c16a2f6d                            ; "Node group option 4 (B)"
      1       Return                                                             
 
-Node NodeGroup_dac580c3:
+Node NodeGroup.dac580c3:
      0       RunLine         line:575a281a                            ; "Node group option 5 (once)"
      1       Return                                                             
 
-Node NodeGroup_3861ff44:
+Node NodeGroup.3861ff44:
      0       RunLine         line:c647978a                            ; "Node group option 6 (once if B)"
      1       Return                                                             
 
-Node UnRunnableNodegroup_bba60294:
+Node UnRunnableNodegroup.bba60294:
      0       RunLine         line:b3034160                            ; "Error: Node should not run"
      1       Return                                                             
 
-Node UnRunnableNodegroup_613142b8:
+Node UnRunnableNodegroup.613142b8:
      0       RunLine         line:1cf60a6e                            ; "Error: Node should not run"
      1       Return                                                             
 
-Node DetourNode_e6ee97c2:
+Node DetourNode.e6ee97c2:
      0       RunLine         line:13f00d83                            ; "Detour test 1"
      1       Return                                                             
 
-Node DetourNode_8c933ad2:
+Node DetourNode.8c933ad2:
      0       RunLine         line:a9a1041a                            ; "Detour test 2"
      1       Return                                                             
 
-Node $Yarn.Internal.NodeGroup.NodeGroup_5c62da95.Condition.0:
-     0       PushVariable    $conditionA                              ; Pushes 1, <unknown variable>
+Node TestCaseFunctionConditions.5266142c:
+     0       RunLine         line:a18cdf64                            ; "TestCaseFunctionConditions"
+     1       Return                                                             
 
-Node $Yarn.Internal.NodeGroup.NodeGroup_bec6a512.Condition.0:
+Node $Yarn.Internal.NodeGroup.NodeGroup.5c62da95.Condition.0:
+     0       PushVariable    $conditionA                              ; Pushes 1, <no variable info available>
+
+Node $Yarn.Internal.NodeGroup.NodeGroup.bec6a512.Condition.0:
      0       PushBool        True                                     ; Pushes 1
 
-Node $Yarn.Internal.NodeGroup.NodeGroup_1d53c18c.Condition.0:
-     0       PushVariable    $conditionA                              ; Pushes 1, <unknown variable>
+Node $Yarn.Internal.NodeGroup.NodeGroup.1d53c18c.Condition.0:
+     0       PushVariable    $conditionA                              ; Pushes 1, <no variable info available>
              PushFloat       1                                        ; Pushes 1
      2       CallFunc        Bool.Not                                           
 
-Node $Yarn.Internal.NodeGroup.NodeGroup_7950e45d.Condition.0:
-     0       PushVariable    $conditionB                              ; Pushes 1, <unknown variable>
+Node $Yarn.Internal.NodeGroup.NodeGroup.7950e45d.Condition.0:
+     0       PushVariable    $conditionB                              ; Pushes 1, <no variable info available>
 
-Node $Yarn.Internal.NodeGroup.NodeGroup_dac580c3.Condition.0:
-     0       PushVariable    $Yarn.Internal.Once.NodeGroup_dac580c3   ; Pushes 1, 'once' node condition for NodeGroup_dac580c3
+Node $Yarn.Internal.NodeGroup.NodeGroup.dac580c3.Condition.0:
+     0       PushVariable    $Yarn.Internal.Once.NodeGroup.dac580c3   ; Pushes 1, 'once' node condition for NodeGroup.dac580c3
              PushFloat       1                                        ; Pushes 1
      2       CallFunc        Bool.Not                                           
 
-Node $Yarn.Internal.NodeGroup.NodeGroup_3861ff44.Condition.0:
-     0       PushVariable    $conditionB                              ; Pushes 1, <unknown variable>
-             PushVariable    $Yarn.Internal.Once.NodeGroup_3861ff44   ; Pushes 1, 'once' node condition for NodeGroup_3861ff44
+Node $Yarn.Internal.NodeGroup.NodeGroup.3861ff44.Condition.0:
+     0       PushVariable    $conditionB                              ; Pushes 1, <no variable info available>
+             PushVariable    $Yarn.Internal.Once.NodeGroup.3861ff44   ; Pushes 1, 'once' node condition for NodeGroup.3861ff44
              PushFloat       1                                        ; Pushes 1
              CallFunc        Bool.Not                                           
              PushFloat       2                                        ; Pushes 1
      5       CallFunc        Bool.And                                           
 
 Node NodeGroup:
-     0       AddSaliencyCandidateFromNode NodeGroup_5c62da95, L1_run_candidate_NodeGroup_5c62da95           
-             AddSaliencyCandidateFromNode NodeGroup_bec6a512, L2_run_candidate_NodeGroup_bec6a512           
-             AddSaliencyCandidateFromNode NodeGroup_1d53c18c, L3_run_candidate_NodeGroup_1d53c18c           
-             AddSaliencyCandidateFromNode NodeGroup_7950e45d, L4_run_candidate_NodeGroup_7950e45d           
-             AddSaliencyCandidateFromNode NodeGroup_dac580c3, L5_run_candidate_NodeGroup_dac580c3           
-     5       AddSaliencyCandidateFromNode NodeGroup_3861ff44, L6_run_candidate_NodeGroup_3861ff44           
+     0       AddSaliencyCandidateFromNode NodeGroup.5c62da95, L1_run_candidate_NodeGroup.5c62da95           
+             AddSaliencyCandidateFromNode NodeGroup.bec6a512, L2_run_candidate_NodeGroup.bec6a512           
+             AddSaliencyCandidateFromNode NodeGroup.1d53c18c, L3_run_candidate_NodeGroup.1d53c18c           
+             AddSaliencyCandidateFromNode NodeGroup.7950e45d, L4_run_candidate_NodeGroup.7950e45d           
+             AddSaliencyCandidateFromNode NodeGroup.dac580c3, L5_run_candidate_NodeGroup.dac580c3           
+     5       AddSaliencyCandidateFromNode NodeGroup.3861ff44, L6_run_candidate_NodeGroup.3861ff44           
              SelectSaliencyCandidate                                                    
              JumpIfFalse     L0_no_content_available                            
              Pop                                                      ; Pops 1  
              PeekAndJump                                                        
 L0_no_content_available:
     10       Return                                                             
-L1_run_candidate_NodeGroup_5c62da95:
-    11       DetourToNode    NodeGroup_5c62da95                                 
+L1_run_candidate_NodeGroup.5c62da95:
+    11       DetourToNode    NodeGroup.5c62da95                                 
              Return                                                             
-L2_run_candidate_NodeGroup_bec6a512:
-    13       DetourToNode    NodeGroup_bec6a512                                 
+L2_run_candidate_NodeGroup.bec6a512:
+    13       DetourToNode    NodeGroup.bec6a512                                 
              Return                                                             
-L3_run_candidate_NodeGroup_1d53c18c:
-    15       DetourToNode    NodeGroup_1d53c18c                                 
+L3_run_candidate_NodeGroup.1d53c18c:
+    15       DetourToNode    NodeGroup.1d53c18c                                 
              Return                                                             
-L4_run_candidate_NodeGroup_7950e45d:
-    17       DetourToNode    NodeGroup_7950e45d                                 
+L4_run_candidate_NodeGroup.7950e45d:
+    17       DetourToNode    NodeGroup.7950e45d                                 
              Return                                                             
-L5_run_candidate_NodeGroup_dac580c3:
-    19       DetourToNode    NodeGroup_dac580c3                                 
-    20       Return                                                             
-L6_run_candidate_NodeGroup_3861ff44:
-    21       DetourToNode    NodeGroup_3861ff44                                 
-    22       Return                                                             
+L5_run_candidate_NodeGroup.dac580c3:
+    19       PushBool        True                                     ; Pushes 1
+    20       StoreVariable   $Yarn.Internal.Once.NodeGroup.dac580c3   ; 'once' node condition for NodeGroup.dac580c3
+             Pop                                                      ; Pops 1  
+             DetourToNode    NodeGroup.dac580c3                                 
+             Return                                                             
+L6_run_candidate_NodeGroup.3861ff44:
+    24       PushBool        True                                     ; Pushes 1
+    25       StoreVariable   $Yarn.Internal.Once.NodeGroup.3861ff44   ; 'once' node condition for NodeGroup.3861ff44
+             Pop                                                      ; Pops 1  
+             DetourToNode    NodeGroup.3861ff44                                 
+    28       Return                                                             
 
-Node $Yarn.Internal.UnRunnableNodegroup.UnRunnableNodegroup_bba60294.Condition.0:
+Node $Yarn.Internal.UnRunnableNodegroup.UnRunnableNodegroup.bba60294.Condition.0:
      0       PushBool        False                                    ; Pushes 1
 
-Node $Yarn.Internal.UnRunnableNodegroup.UnRunnableNodegroup_613142b8.Condition.0:
+Node $Yarn.Internal.UnRunnableNodegroup.UnRunnableNodegroup.613142b8.Condition.0:
      0       PushFloat       1                                        ; Pushes 1
              PushFloat       1                                        ; Pushes 1
              PushFloat       2                                        ; Pushes 1
@@ -126,41 +136,62 @@ Node $Yarn.Internal.UnRunnableNodegroup.UnRunnableNodegroup_613142b8.Condition.0
      6       CallFunc        Number.EqualTo                                     
 
 Node UnRunnableNodegroup:
-     0       AddSaliencyCandidateFromNode UnRunnableNodegroup_bba60294, L1_run_candidate_UnRunnableNodegroup_bba60294           
-             AddSaliencyCandidateFromNode UnRunnableNodegroup_613142b8, L2_run_candidate_UnRunnableNodegroup_613142b8           
+     0       AddSaliencyCandidateFromNode UnRunnableNodegroup.bba60294, L1_run_candidate_UnRunnableNodegroup.bba60294           
+             AddSaliencyCandidateFromNode UnRunnableNodegroup.613142b8, L2_run_candidate_UnRunnableNodegroup.613142b8           
              SelectSaliencyCandidate                                                    
              JumpIfFalse     L0_no_content_available                            
              Pop                                                      ; Pops 1  
      5       PeekAndJump                                                        
 L0_no_content_available:
      6       Return                                                             
-L1_run_candidate_UnRunnableNodegroup_bba60294:
-     7       DetourToNode    UnRunnableNodegroup_bba60294                       
+L1_run_candidate_UnRunnableNodegroup.bba60294:
+     7       DetourToNode    UnRunnableNodegroup.bba60294                       
              Return                                                             
-L2_run_candidate_UnRunnableNodegroup_613142b8:
-     9       DetourToNode    UnRunnableNodegroup_613142b8                       
+L2_run_candidate_UnRunnableNodegroup.613142b8:
+     9       DetourToNode    UnRunnableNodegroup.613142b8                       
     10       Return                                                             
 
-Node $Yarn.Internal.DetourNode.DetourNode_e6ee97c2.Condition.0:
+Node $Yarn.Internal.DetourNode.DetourNode.e6ee97c2.Condition.0:
      0       PushBool        True                                     ; Pushes 1
 
-Node $Yarn.Internal.DetourNode.DetourNode_8c933ad2.Condition.0:
+Node $Yarn.Internal.DetourNode.DetourNode.8c933ad2.Condition.0:
      0       PushBool        True                                     ; Pushes 1
 
 Node DetourNode:
-     0       AddSaliencyCandidateFromNode DetourNode_e6ee97c2, L1_run_candidate_DetourNode_e6ee97c2           
-             AddSaliencyCandidateFromNode DetourNode_8c933ad2, L2_run_candidate_DetourNode_8c933ad2           
+     0       AddSaliencyCandidateFromNode DetourNode.e6ee97c2, L1_run_candidate_DetourNode.e6ee97c2           
+             AddSaliencyCandidateFromNode DetourNode.8c933ad2, L2_run_candidate_DetourNode.8c933ad2           
              SelectSaliencyCandidate                                                    
              JumpIfFalse     L0_no_content_available                            
              Pop                                                      ; Pops 1  
      5       PeekAndJump                                                        
 L0_no_content_available:
      6       Return                                                             
-L1_run_candidate_DetourNode_e6ee97c2:
-     7       DetourToNode    DetourNode_e6ee97c2                                
+L1_run_candidate_DetourNode.e6ee97c2:
+     7       DetourToNode    DetourNode.e6ee97c2                                
              Return                                                             
-L2_run_candidate_DetourNode_8c933ad2:
-     9       DetourToNode    DetourNode_8c933ad2                                
+L2_run_candidate_DetourNode.8c933ad2:
+     9       DetourToNode    DetourNode.8c933ad2                                
     10       Return                                                             
+
+Node $Yarn.Internal.TestCaseFunctionConditions.TestCaseFunctionConditions.5266142c.Condition.0:
+     0       PushFloat       1                                        ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        min                                                
+             PushFloat       1                                        ; Pushes 1
+     5       PushFloat       2                                        ; Pushes 1
+     6       CallFunc        Number.EqualTo                                     
+
+Node TestCaseFunctionConditions:
+     0       AddSaliencyCandidateFromNode TestCaseFunctionConditions.5266142c, L1_run_candidate_TestCaseFunctionConditions.5266142c           
+             SelectSaliencyCandidate                                                    
+             JumpIfFalse     L0_no_content_available                            
+             Pop                                                      ; Pops 1  
+             PeekAndJump                                                        
+L0_no_content_available:
+     5       Return                                                             
+L1_run_candidate_TestCaseFunctionConditions.5266142c:
+     6       DetourToNode    TestCaseFunctionConditions.5266142c                
+     7       Return                                                             
 
 

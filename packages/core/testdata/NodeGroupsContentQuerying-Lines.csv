@@ -1,0 +1,10 @@
+id,text,file,node,lineNumber
+line:318ed773,Content for NodeGroupConditional available: {0},/Users/desplesda/Work/YarnSpinner/Tests/TestCases/NodeGroupsContentQuerying.yarn,Start,3
+line:a7bed004,Content for NodeGroupAlways available: {0},/Users/desplesda/Work/YarnSpinner/Tests/TestCases/NodeGroupsContentQuerying.yarn,Start,4
+line:1defd99d,Content for NotANodeGroup available: {0},/Users/desplesda/Work/YarnSpinner/Tests/TestCases/NodeGroupsContentQuerying.yarn,Start,5
+line:8bdfdeea,Content for NodeGroupConditional available: {0},/Users/desplesda/Work/YarnSpinner/Tests/TestCases/NodeGroupsContentQuerying.yarn,Start,9
+line:284aba74,Content for NodeGroupAlways available: {0},/Users/desplesda/Work/YarnSpinner/Tests/TestCases/NodeGroupsContentQuerying.yarn,Start,10
+line:be7abd03,Content for NotANodeGroup available: {0},/Users/desplesda/Work/YarnSpinner/Tests/TestCases/NodeGroupsContentQuerying.yarn,Start,11
+line:cc75ea91,conditional content,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/NodeGroupsContentQuerying.yarn,NodeGroupConditional,16
+line:1aa9ee4a,always-available content,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/NodeGroupsContentQuerying.yarn,NodeGroupAlways,21
+line:ba1d881a,"this is not a node group but will always ""have content available""",/Users/desplesda/Work/YarnSpinner/Tests/TestCases/NodeGroupsContentQuerying.yarn,NotANodeGroup,25

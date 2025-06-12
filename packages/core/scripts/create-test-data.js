@@ -67,7 +67,7 @@ const yarnProjectTemplate = {
     /** @type string[] */
     sourceFiles: [],
     localisation: {},
-    projectFileVersion: 2,
+    projectFileVersion: 3,
     compilerOptions: {},
     definitions: join(__dirname, "Tests.ysls.json"),
 };

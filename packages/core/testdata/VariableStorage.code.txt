@@ -1,8 +1,8 @@
 Node Start:
      0       PushFloat       1                                        ; Pushes 1
-             StoreVariable   $num1                                    ; <unknown variable>
+             StoreVariable   $num1                                    ; <no variable info available>
              Pop                                                      ; Pops 1  
-             PushVariable    $num1                                    ; Pushes 1, <unknown variable>
+             PushVariable    $num1                                    ; Pushes 1, <no variable info available>
              PushFloat       1                                        ; Pushes 1
      5       PushFloat       2                                        ; Pushes 1
              CallFunc        Number.EqualTo                                     
@@ -11,9 +11,9 @@ Node Start:
              PushFloat       1                                        ; Pushes 1
     10       PushFloat       1                                        ; Pushes 1
              CallFunc        Number.UnaryMinus                                  
-             StoreVariable   $num1                                    ; <unknown variable>
+             StoreVariable   $num1                                    ; <no variable info available>
              Pop                                                      ; Pops 1  
-             PushVariable    $num1                                    ; Pushes 1, <unknown variable>
+             PushVariable    $num1                                    ; Pushes 1, <no variable info available>
     15       PushFloat       1                                        ; Pushes 1
              PushFloat       1                                        ; Pushes 1
              CallFunc        Number.UnaryMinus                                  
@@ -22,201 +22,201 @@ Node Start:
     20       PushFloat       1                                        ; Pushes 1
              CallFunc        assert                                             
              PushString      foo                                      ; Pushes 1, "foo"
-             StoreVariable   $str1                                    ; <unknown variable>
+             StoreVariable   $str1                                    ; <no variable info available>
              Pop                                                      ; Pops 1  
-    25       PushVariable    $str1                                    ; Pushes 1, <unknown variable>
+    25       PushVariable    $str1                                    ; Pushes 1, <no variable info available>
              PushString      foo                                      ; Pushes 1, "foo"
              PushFloat       2                                        ; Pushes 1
              CallFunc        String.EqualTo                                     
              PushFloat       1                                        ; Pushes 1
     30       CallFunc        assert                                             
              PushFloat       45                                       ; Pushes 1
-             StoreVariable   $num1                                    ; <unknown variable>
+             StoreVariable   $num1                                    ; <no variable info available>
              Pop                                                      ; Pops 1  
-             PushVariable    $num1                                    ; Pushes 1, <unknown variable>
+             PushVariable    $num1                                    ; Pushes 1, <no variable info available>
     35       PushFloat       1                                        ; Pushes 1
              PushFloat       2                                        ; Pushes 1
              CallFunc        Number.Add                                         
-             StoreVariable   $num2                                    ; <unknown variable>
+             StoreVariable   $num2                                    ; <no variable info available>
              Pop                                                      ; Pops 1  
-    40       PushVariable    $num2                                    ; Pushes 1, <unknown variable>
+    40       PushVariable    $num2                                    ; Pushes 1, <no variable info available>
              PushFloat       46                                       ; Pushes 1
              PushFloat       2                                        ; Pushes 1
              CallFunc        Number.EqualTo                                     
              PushFloat       1                                        ; Pushes 1
     45       CallFunc        assert                                             
-             PushVariable    $num1                                    ; Pushes 1, <unknown variable>
+             PushVariable    $num1                                    ; Pushes 1, <no variable info available>
              PushFloat       1                                        ; Pushes 1
              PushFloat       2                                        ; Pushes 1
              CallFunc        Number.Minus                                       
-    50       StoreVariable   $num2                                    ; <unknown variable>
+    50       StoreVariable   $num2                                    ; <no variable info available>
              Pop                                                      ; Pops 1  
-             PushVariable    $num2                                    ; Pushes 1, <unknown variable>
+             PushVariable    $num2                                    ; Pushes 1, <no variable info available>
              PushFloat       44                                       ; Pushes 1
              PushFloat       2                                        ; Pushes 1
     55       CallFunc        Number.EqualTo                                     
              PushFloat       1                                        ; Pushes 1
              CallFunc        assert                                             
              PushFloat       46                                       ; Pushes 1
-             StoreVariable   $num1                                    ; <unknown variable>
+             StoreVariable   $num1                                    ; <no variable info available>
     60       Pop                                                      ; Pops 1  
-             PushVariable    $num1                                    ; Pushes 1, <unknown variable>
+             PushVariable    $num1                                    ; Pushes 1, <no variable info available>
              PushFloat       2                                        ; Pushes 1
              PushFloat       2                                        ; Pushes 1
              CallFunc        Number.Multiply                                    
-    65       StoreVariable   $num2                                    ; <unknown variable>
+    65       StoreVariable   $num2                                    ; <no variable info available>
              Pop                                                      ; Pops 1  
-             PushVariable    $num2                                    ; Pushes 1, <unknown variable>
+             PushVariable    $num2                                    ; Pushes 1, <no variable info available>
              PushFloat       92                                       ; Pushes 1
              PushFloat       2                                        ; Pushes 1
     70       CallFunc        Number.EqualTo                                     
              PushFloat       1                                        ; Pushes 1
              CallFunc        assert                                             
-             PushVariable    $num1                                    ; Pushes 1, <unknown variable>
+             PushVariable    $num1                                    ; Pushes 1, <no variable info available>
              PushFloat       2                                        ; Pushes 1
     75       PushFloat       2                                        ; Pushes 1
              CallFunc        Number.Divide                                      
-             StoreVariable   $num2                                    ; <unknown variable>
+             StoreVariable   $num2                                    ; <no variable info available>
              Pop                                                      ; Pops 1  
-             PushVariable    $num2                                    ; Pushes 1, <unknown variable>
+             PushVariable    $num2                                    ; Pushes 1, <no variable info available>
     80       PushFloat       23                                       ; Pushes 1
              PushFloat       2                                        ; Pushes 1
              CallFunc        Number.EqualTo                                     
              PushFloat       1                                        ; Pushes 1
              CallFunc        assert                                             
     85       PushFloat       45                                       ; Pushes 1
-             StoreVariable   $num1                                    ; <unknown variable>
+             StoreVariable   $num1                                    ; <no variable info available>
              Pop                                                      ; Pops 1  
-             PushVariable    $num1                                    ; Pushes 1, <unknown variable>
+             PushVariable    $num1                                    ; Pushes 1, <no variable info available>
              PushFloat       1                                        ; Pushes 1
     90       PushFloat       2                                        ; Pushes 1
              CallFunc        Number.Add                                         
-             StoreVariable   $num1                                    ; <unknown variable>
+             StoreVariable   $num1                                    ; <no variable info available>
              Pop                                                      ; Pops 1  
-             PushVariable    $num1                                    ; Pushes 1, <unknown variable>
+             PushVariable    $num1                                    ; Pushes 1, <no variable info available>
     95       PushFloat       46                                       ; Pushes 1
              PushFloat       2                                        ; Pushes 1
              CallFunc        Number.EqualTo                                     
              PushFloat       1                                        ; Pushes 1
              CallFunc        assert                                             
-   100       PushVariable    $num1                                    ; Pushes 1, <unknown variable>
+   100       PushVariable    $num1                                    ; Pushes 1, <no variable info available>
              PushFloat       2                                        ; Pushes 1
              PushFloat       2                                        ; Pushes 1
              CallFunc        Number.Multiply                                    
-             StoreVariable   $num1                                    ; <unknown variable>
+             StoreVariable   $num1                                    ; <no variable info available>
    105       Pop                                                      ; Pops 1  
-             PushVariable    $num1                                    ; Pushes 1, <unknown variable>
+             PushVariable    $num1                                    ; Pushes 1, <no variable info available>
              PushFloat       92                                       ; Pushes 1
              PushFloat       2                                        ; Pushes 1
              CallFunc        Number.EqualTo                                     
    110       PushFloat       1                                        ; Pushes 1
              CallFunc        assert                                             
-             PushVariable    $num1                                    ; Pushes 1, <unknown variable>
+             PushVariable    $num1                                    ; Pushes 1, <no variable info available>
              PushFloat       2                                        ; Pushes 1
              PushFloat       2                                        ; Pushes 1
    115       CallFunc        Number.Divide                                      
-             StoreVariable   $num1                                    ; <unknown variable>
+             StoreVariable   $num1                                    ; <no variable info available>
              Pop                                                      ; Pops 1  
-             PushVariable    $num1                                    ; Pushes 1, <unknown variable>
+             PushVariable    $num1                                    ; Pushes 1, <no variable info available>
              PushFloat       46                                       ; Pushes 1
    120       PushFloat       2                                        ; Pushes 1
              CallFunc        Number.EqualTo                                     
              PushFloat       1                                        ; Pushes 1
              CallFunc        assert                                             
-             PushVariable    $num1                                    ; Pushes 1, <unknown variable>
+             PushVariable    $num1                                    ; Pushes 1, <no variable info available>
    125       PushFloat       1                                        ; Pushes 1
              PushFloat       2                                        ; Pushes 1
              CallFunc        Number.Minus                                       
-             StoreVariable   $num1                                    ; <unknown variable>
+             StoreVariable   $num1                                    ; <no variable info available>
              Pop                                                      ; Pops 1  
-   130       PushVariable    $num1                                    ; Pushes 1, <unknown variable>
+   130       PushVariable    $num1                                    ; Pushes 1, <no variable info available>
              PushFloat       45                                       ; Pushes 1
              PushFloat       2                                        ; Pushes 1
              CallFunc        Number.EqualTo                                     
              PushFloat       1                                        ; Pushes 1
    135       CallFunc        assert                                             
              PushFloat       46                                       ; Pushes 1
-             StoreVariable   $num1                                    ; <unknown variable>
+             StoreVariable   $num1                                    ; <no variable info available>
              Pop                                                      ; Pops 1  
              PushFloat       1                                        ; Pushes 1
-   140       StoreVariable   $num2                                    ; <unknown variable>
+   140       StoreVariable   $num2                                    ; <no variable info available>
              Pop                                                      ; Pops 1  
-             PushVariable    $num1                                    ; Pushes 1, <unknown variable>
-             PushVariable    $num2                                    ; Pushes 1, <unknown variable>
+             PushVariable    $num1                                    ; Pushes 1, <no variable info available>
+             PushVariable    $num2                                    ; Pushes 1, <no variable info available>
              PushFloat       2                                        ; Pushes 1
    145       CallFunc        Number.Add                                         
-             StoreVariable   $num3                                    ; <unknown variable>
+             StoreVariable   $num3                                    ; <no variable info available>
              Pop                                                      ; Pops 1  
-             PushVariable    $num3                                    ; Pushes 1, <unknown variable>
+             PushVariable    $num3                                    ; Pushes 1, <no variable info available>
              PushFloat       47                                       ; Pushes 1
    150       PushFloat       2                                        ; Pushes 1
              CallFunc        Number.EqualTo                                     
              PushFloat       1                                        ; Pushes 1
              CallFunc        assert                                             
-             PushVariable    $num1                                    ; Pushes 1, <unknown variable>
-   155       PushVariable    $num2                                    ; Pushes 1, <unknown variable>
+             PushVariable    $num1                                    ; Pushes 1, <no variable info available>
+   155       PushVariable    $num2                                    ; Pushes 1, <no variable info available>
              PushFloat       2                                        ; Pushes 1
              CallFunc        Number.Minus                                       
-             StoreVariable   $num3                                    ; <unknown variable>
+             StoreVariable   $num3                                    ; <no variable info available>
              Pop                                                      ; Pops 1  
-   160       PushVariable    $num3                                    ; Pushes 1, <unknown variable>
+   160       PushVariable    $num3                                    ; Pushes 1, <no variable info available>
              PushFloat       45                                       ; Pushes 1
              PushFloat       2                                        ; Pushes 1
              CallFunc        Number.EqualTo                                     
              PushFloat       1                                        ; Pushes 1
    165       CallFunc        assert                                             
              PushFloat       2                                        ; Pushes 1
-             StoreVariable   $num2                                    ; <unknown variable>
+             StoreVariable   $num2                                    ; <no variable info available>
              Pop                                                      ; Pops 1  
-             PushVariable    $num1                                    ; Pushes 1, <unknown variable>
-   170       PushVariable    $num2                                    ; Pushes 1, <unknown variable>
+             PushVariable    $num1                                    ; Pushes 1, <no variable info available>
+   170       PushVariable    $num2                                    ; Pushes 1, <no variable info available>
              PushFloat       2                                        ; Pushes 1
              CallFunc        Number.Multiply                                    
-             StoreVariable   $num3                                    ; <unknown variable>
+             StoreVariable   $num3                                    ; <no variable info available>
              Pop                                                      ; Pops 1  
-   175       PushVariable    $num3                                    ; Pushes 1, <unknown variable>
+   175       PushVariable    $num3                                    ; Pushes 1, <no variable info available>
              PushFloat       92                                       ; Pushes 1
              PushFloat       2                                        ; Pushes 1
              CallFunc        Number.EqualTo                                     
              PushFloat       1                                        ; Pushes 1
    180       CallFunc        assert                                             
-             PushVariable    $num1                                    ; Pushes 1, <unknown variable>
-             PushVariable    $num2                                    ; Pushes 1, <unknown variable>
+             PushVariable    $num1                                    ; Pushes 1, <no variable info available>
+             PushVariable    $num2                                    ; Pushes 1, <no variable info available>
              PushFloat       2                                        ; Pushes 1
              CallFunc        Number.Divide                                      
-   185       StoreVariable   $num3                                    ; <unknown variable>
+   185       StoreVariable   $num3                                    ; <no variable info available>
              Pop                                                      ; Pops 1  
-             PushVariable    $num3                                    ; Pushes 1, <unknown variable>
+             PushVariable    $num3                                    ; Pushes 1, <no variable info available>
              PushFloat       23                                       ; Pushes 1
              PushFloat       2                                        ; Pushes 1
    190       CallFunc        Number.EqualTo                                     
              PushFloat       1                                        ; Pushes 1
              CallFunc        assert                                             
              PushString      foo                                      ; Pushes 1, "foo"
-             StoreVariable   $str1                                    ; <unknown variable>
+             StoreVariable   $str1                                    ; <no variable info available>
    195       Pop                                                      ; Pops 1  
              PushString      bar                                      ; Pushes 1, "bar"
-             StoreVariable   $str2                                    ; <unknown variable>
+             StoreVariable   $str2                                    ; <no variable info available>
              Pop                                                      ; Pops 1  
-             PushVariable    $str1                                    ; Pushes 1, <unknown variable>
+             PushVariable    $str1                                    ; Pushes 1, <no variable info available>
    200       PushString      bar                                      ; Pushes 1, "bar"
              PushFloat       2                                        ; Pushes 1
              CallFunc        String.Add                                         
-             StoreVariable   $str3                                    ; <unknown variable>
+             StoreVariable   $str3                                    ; <no variable info available>
              Pop                                                      ; Pops 1  
-   205       PushVariable    $str3                                    ; Pushes 1, <unknown variable>
+   205       PushVariable    $str3                                    ; Pushes 1, <no variable info available>
              PushString      foobar                                   ; Pushes 1, "foobar"
              PushFloat       2                                        ; Pushes 1
              CallFunc        String.EqualTo                                     
              PushFloat       1                                        ; Pushes 1
    210       CallFunc        assert                                             
-             PushVariable    $str1                                    ; Pushes 1, <unknown variable>
-             PushVariable    $str2                                    ; Pushes 1, <unknown variable>
+             PushVariable    $str1                                    ; Pushes 1, <no variable info available>
+             PushVariable    $str2                                    ; Pushes 1, <no variable info available>
              PushFloat       2                                        ; Pushes 1
              CallFunc        String.Add                                         
-   215       StoreVariable   $str3                                    ; <unknown variable>
+   215       StoreVariable   $str3                                    ; <no variable info available>
              Pop                                                      ; Pops 1  
-             PushVariable    $str3                                    ; Pushes 1, <unknown variable>
+             PushVariable    $str3                                    ; Pushes 1, <no variable info available>
              PushString      foobar                                   ; Pushes 1, "foobar"
              PushFloat       2                                        ; Pushes 1
    220       CallFunc        String.EqualTo                                     

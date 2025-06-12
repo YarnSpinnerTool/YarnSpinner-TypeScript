@@ -1,32 +1,112 @@
 Node Start:
      0       RunLine         line:b408a9f3                            ; "beginning"
-             RunNode         NoTrack                                  ; Clears stack
-     2       Return                                                             
-
-Node NoTrack:
-     0       RunLine         line:1afd91c7                            ; "entered NoTrack"
-             RunNode         Track                                    ; Clears stack
-     2       Return                                                             
-
-Node Track:
-     0       RunLine         line:596b5c5f                            ; "entered Track"
-             RunNode         End                                      ; Clears stack
-     2       Return                                                             
-
-Node End:
-     0       RunLine         line:27b10ade                            ; "entered End"
+             DetourToNode    ImplicitTrack                                      
+             DetourToNode    NoTrack                                            
+             DetourToNode    Track                                              
+             DetourToNode    NodeGroupImplicitTrack                             
+     5       DetourToNode    NodeGroupNoTrack                                   
+             DetourToNode    NodeGroupTrack                                     
+             RunLine         line:2238ae84                            ; "entered End"
+             PushString      ImplicitTrack                            ; Pushes 1, "ImplicitTrack"
+             PushFloat       1                                        ; Pushes 1
+    10       CallFunc        visited                                            
+             RunLine         line:9869a71d                            ; "did we visit ImplicitTrack? {0}!"
              PushString      NoTrack                                  ; Pushes 1, "NoTrack"
              PushFloat       1                                        ; Pushes 1
              CallFunc        visited                                            
-             RunLine         line:84246e40                            ; "did we visit NoTrack? {0}!"
-     5       PushString      Trac                                     ; Pushes 1, "Trac"
+    15       RunLine         line:0e59a06a                            ; "did we visit NoTrack? {0}!"
+             PushString      Trac                                     ; Pushes 1, "Trac"
              PushString      k                                        ; Pushes 1, "k"
              PushFloat       2                                        ; Pushes 1
              CallFunc        String.Add                                         
+    20       PushFloat       1                                        ; Pushes 1
+             CallFunc        visited                                            
+             RunLine         line:adccc4f4                            ; "did we visit Track? {0}!"
+             PushString      NodeGroupImplicitTrack                   ; Pushes 1, "NodeGroupImplicitTrack"
              PushFloat       1                                        ; Pushes 1
-    10       CallFunc        visited                                            
-             RunLine         line:12146937                            ; "did we visit Track? {0}!"
-             RunLine         line:a84560ae                            ; "done"  
-    13       Return                                                             
+    25       CallFunc        visited                                            
+             RunLine         line:3bfcc383                            ; "did we visit NodeGroupImplicitTrack? {0}!"
+             PushString      NodeGroupNoTrack                         ; Pushes 1, "NodeGroupNoTrack"
+             PushFloat       1                                        ; Pushes 1
+             CallFunc        visited                                            
+    30       RunLine         line:81adca1a                            ; "did we visit NodeGroupNoTrack? {0}!"
+             PushString      NodeGroupTrac                            ; Pushes 1, "NodeGroupTrac"
+             PushString      k                                        ; Pushes 1, "k"
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        String.Add                                         
+    35       PushFloat       1                                        ; Pushes 1
+             CallFunc        visited                                            
+             RunLine         line:179dcd6d                            ; "did we visit NodeGroupTrack? {0}!"
+             RunLine         line:868072fd                            ; "done"  
+    39       Return                                                             
+
+Node ImplicitTrack:
+     0       RunLine         line:1539da93                            ; "entered ImplicitTrack"
+     1       Return                                                             
+
+Node NoTrack:
+     0       RunLine         line:a6b77e09                            ; "entered NoTrack"
+     1       Return                                                             
+
+Node Track:
+     0       RunLine         line:4f0919ba                            ; "entered Track"
+     1       Return                                                             
+
+Node NodeGroupImplicitTrack.809b6b03:
+     0       RunLine         line:c56f1c7e                            ; "entered NodeGroupImplicitTrack"
+     1       Return                                                             
+
+Node NodeGroupTrack.3daf4887:
+     0       RunLine         line:619f52fd                            ; "entered NodeGroupTrack"
+     1       Return                                                             
+
+Node NodeGroupNoTrack.608ff4e5:
+     0       RunLine         line:c7dffc1f                            ; "entered NodeGroupNoTrack"
+     1       Return                                                             
+
+Node $Yarn.Internal.NodeGroupImplicitTrack.NodeGroupImplicitTrack.809b6b03.Condition.0:
+     0       PushBool        True                                     ; Pushes 1
+
+Node NodeGroupImplicitTrack:
+     0       AddSaliencyCandidateFromNode NodeGroupImplicitTrack.809b6b03, L1_run_candidate_NodeGroupImplicitTrack.809b6b03           
+             SelectSaliencyCandidate                                                    
+             JumpIfFalse     L0_no_content_available                            
+             Pop                                                      ; Pops 1  
+             PeekAndJump                                                        
+L0_no_content_available:
+     5       Return                                                             
+L1_run_candidate_NodeGroupImplicitTrack.809b6b03:
+     6       DetourToNode    NodeGroupImplicitTrack.809b6b03                    
+     7       Return                                                             
+
+Node $Yarn.Internal.NodeGroupTrack.NodeGroupTrack.3daf4887.Condition.0:
+     0       PushBool        True                                     ; Pushes 1
+
+Node NodeGroupTrack:
+     0       AddSaliencyCandidateFromNode NodeGroupTrack.3daf4887, L1_run_candidate_NodeGroupTrack.3daf4887           
+             SelectSaliencyCandidate                                                    
+             JumpIfFalse     L0_no_content_available                            
+             Pop                                                      ; Pops 1  
+             PeekAndJump                                                        
+L0_no_content_available:
+     5       Return                                                             
+L1_run_candidate_NodeGroupTrack.3daf4887:
+     6       DetourToNode    NodeGroupTrack.3daf4887                            
+     7       Return                                                             
+
+Node $Yarn.Internal.NodeGroupNoTrack.NodeGroupNoTrack.608ff4e5.Condition.0:
+     0       PushBool        True                                     ; Pushes 1
+
+Node NodeGroupNoTrack:
+     0       AddSaliencyCandidateFromNode NodeGroupNoTrack.608ff4e5, L1_run_candidate_NodeGroupNoTrack.608ff4e5           
+             SelectSaliencyCandidate                                                    
+             JumpIfFalse     L0_no_content_available                            
+             Pop                                                      ; Pops 1  
+             PeekAndJump                                                        
+L0_no_content_available:
+     5       Return                                                             
+L1_run_candidate_NodeGroupNoTrack.608ff4e5:
+     6       DetourToNode    NodeGroupNoTrack.608ff4e5                          
+     7       Return                                                             
 
 

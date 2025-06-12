@@ -9,8 +9,34 @@ Node Start:
 L0_end_clause:
      7       Pop                                                      ; Pops 1  
 L1_endif:
-     8       PushFloat       45.1                                     ; Pushes 1
-             RunLine         line:abb6193a                            ; "Here's a number: {0}"
-    10       Return                                                             
+     8       PushFloat       1.1                                      ; Pushes 1
+             PushFloat       0.1                                      ; Pushes 1
+    10       PushFloat       2                                        ; Pushes 1
+             CallFunc        Number.Add                                         
+             PushFloat       1.1                                      ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        Number.GreaterThan                                 
+    15       JumpIfFalse     L2_end_clause                                      
+             RunLine         line:abb6193a                            ; "Success"
+             JumpTo          L3_endif                                           
+L2_end_clause:
+    18       Pop                                                      ; Pops 1  
+L3_endif:
+    19       PushFloat       0.5                                      ; Pushes 1
+    20       PushFloat       3                                        ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+             CallFunc        Number.Multiply                                    
+             PushFloat       1.5                                      ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+    25       CallFunc        Number.EqualTo                                     
+             JumpIfFalse     L4_end_clause                                      
+             RunLine         line:11e710a3                            ; "Success"
+             JumpTo          L5_endif                                           
+L4_end_clause:
+    29       Pop                                                      ; Pops 1  
+L5_endif:
+    30       PushFloat       45.1                                     ; Pushes 1
+             RunLine         line:87d717d4                            ; "Here's a number: {0}"
+    32       Return                                                             
 
 

@@ -8,12 +8,12 @@ L0_once_start:
      5       StoreVariable   $Yarn.Internal.Once.2170d563             ; 'once' statement in file /Users/desplesda/Work/YarnSpinner/Tests/TestCases/LineGroups.yarn, node Start, line 10
              Pop                                                      ; Pops 1  
 L1_line_group_start:
-     7       PushVariable    $knows_player                            ; Pushes 1, <unknown variable>
+     7       PushVariable    $knows_player                            ; Pushes 1, <no variable info available>
              AddSaliencyCandidate line:55c31f6c, 1, L2_run_line_group_item ; Pops 1  
-             PushVariable    $knows_player                            ; Pushes 1, <unknown variable>
+             PushVariable    $knows_player                            ; Pushes 1, <no variable info available>
     10       PushFloat       1                                        ; Pushes 1
              CallFunc        Bool.Not                                           
-             AddSaliencyCandidate line:c3f3181b, 2, L3_run_line_group_item ; Pops 1  
+             AddSaliencyCandidate line:c3f3181b, 1, L3_run_line_group_item ; Pops 1  
              SelectSaliencyCandidate                                                    
              JumpIfFalse     L5_once_skip_primary                               
     15       Pop                                                      ; Pops 1  
@@ -29,23 +29,23 @@ L3_run_line_group_item:
 L5_once_skip_primary:
     23       Pop                                                      ; Pops 1  
 L5_line_group_start:
-    24       PushVariable    $pies_bought                             ; Pushes 1, <unknown variable>
+    24       PushVariable    $pies_bought                             ; Pushes 1, <no variable info available>
     25       PushFloat       0                                        ; Pushes 1
              PushFloat       2                                        ; Pushes 1
              CallFunc        Number.GreaterThan                                 
              AddSaliencyCandidate line:79a21182, 1, L6_run_line_group_item ; Pops 1  
-             PushVariable    $pies_bought                             ; Pushes 1, <unknown variable>
+             PushVariable    $pies_bought                             ; Pushes 1, <no variable info available>
     30       PushFloat       0                                        ; Pushes 1
              PushFloat       2                                        ; Pushes 1
              CallFunc        Number.GreaterThan                                 
              AddSaliencyCandidate line:ef9216f5, 1, L7_run_line_group_item ; Pops 1  
-             PushVariable    $pies_bought                             ; Pushes 1, <unknown variable>
+             PushVariable    $pies_bought                             ; Pushes 1, <no variable info available>
     35       PushFloat       0                                        ; Pushes 1
              PushFloat       2                                        ; Pushes 1
              CallFunc        Number.GreaterThan                                 
              AddSaliencyCandidate line:4c07726b, 1, L8_run_line_group_item ; Pops 1  
-             PushVariable    $knows_player                            ; Pushes 1, <unknown variable>
-    40       PushVariable    $pies_bought                             ; Pushes 1, <unknown variable>
+             PushVariable    $knows_player                            ; Pushes 1, <no variable info available>
+    40       PushVariable    $pies_bought                             ; Pushes 1, <no variable info available>
              PushFloat       0                                        ; Pushes 1
              PushFloat       2                                        ; Pushes 1
              CallFunc        Number.GreaterThan                                 
@@ -119,11 +119,11 @@ L17_run_line_group_item:
              RunLine         line:f435a318                            ; "Baker: Enjoy!"
    100       JumpTo          L18_line_group_end                                 
 L18_line_group_end:
-   101       PushVariable    $pies_bought                             ; Pushes 1, <unknown variable>
+   101       PushVariable    $pies_bought                             ; Pushes 1, <no variable info available>
              PushFloat       1                                        ; Pushes 1
              PushFloat       2                                        ; Pushes 1
              CallFunc        Number.Add                                         
-   105       StoreVariable   $pies_bought                             ; <unknown variable>
+   105       StoreVariable   $pies_bought                             ; <no variable info available>
              Pop                                                      ; Pops 1  
              JumpTo          L24_group_end                                      
 L20_line_group_start:
@@ -163,7 +163,7 @@ L0_line_group_start:
              AddSaliencyCandidate line:3ef3e0d6, 0, L2_run_line_group_item ; Pops 1  
              PushBool        True                                     ; Pushes 1
      5       AddSaliencyCandidate line:a8c3e7a1, 0, L3_run_line_group_item ; Pops 1  
-             PushVariable    $pies_bought                             ; Pushes 1, <unknown variable>
+             PushVariable    $pies_bought                             ; Pushes 1, <no variable info available>
              PushFloat       2                                        ; Pushes 1
              PushFloat       2                                        ; Pushes 1
              CallFunc        Number.GreaterThan                                 

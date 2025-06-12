@@ -1,0 +1,9 @@
+title: Start
+---
+<<jump NodeGroup>>
+===
+title: NodeGroup
+when:once
+---
+once
+===

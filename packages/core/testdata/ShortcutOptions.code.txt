@@ -6,11 +6,11 @@ Node Start:
              ShowOptions                                              ; Pushes 1
      5       PeekAndJump                                                        
 L0_option_0:
-     6       PushVariable    $selected                                ; Pushes 1, <unknown variable>
+     6       PushVariable    $selected                                ; Pushes 1, <no variable info available>
              PushFloat       1                                        ; Pushes 1
              PushFloat       2                                        ; Pushes 1
              CallFunc        Number.Add                                         
-    10       StoreVariable   $selected                                ; <unknown variable>
+    10       StoreVariable   $selected                                ; <no variable info available>
              Pop                                                      ; Pops 1  
              RunLine         line:ad1376c2                            ; "This line should appear."
              AddOption       line:17427f5b, L1_option_0               ; "Sub Option 1"
@@ -21,11 +21,11 @@ L0_option_0:
              PeekAndJump                                                        
 L1_option_0:
     19       RunLine         line:8172782c                            ; "This line should also appear."
-    20       PushVariable    $selected                                ; Pushes 1, <unknown variable>
+    20       PushVariable    $selected                                ; Pushes 1, <no variable info available>
              PushFloat       1                                        ; Pushes 1
              PushFloat       2                                        ; Pushes 1
              CallFunc        Number.Add                                         
-             StoreVariable   $selected                                ; <unknown variable>
+             StoreVariable   $selected                                ; <no variable info available>
     25       Pop                                                      ; Pops 1  
              JumpTo          L4_group_end                                       
 L2_option_1:

@@ -1,40 +1,40 @@
-Node Start_42eba07b:
+Node Start.42eba07b:
      0       RunLine         line:d4dba70c                            ; "Guard: Halt , traveller!"
              RunLine         line:42eba07b                            ; "Player: Why, hello there!"
              RunLine         line:f8baa9e2                            ; "Guard: Ah, my friend! You may pass."
      3       Return                                                             
 
-Node Start_765f726c:
+Node Start.765f726c:
      0       RunLine         line:6e8aae95                            ; "Guard: Halt, scum!"
              RunLine         line:cd1fca0b                            ; "Guard: None shall pass this point!"
      2       Return                                                             
 
-Node $Yarn.Internal.Start.Start_42eba07b.Condition.0:
-     0       PushVariable    $guard_friendly                          ; Pushes 1, Implicitly declared in /Users/desplesda/Work/YarnSpinner/Tests/TestCases/NodeGroupsWithImplicitDeclarations.yarn, node Start_42eba07b
+Node $Yarn.Internal.Start.Start.42eba07b.Condition.0:
+     0       PushVariable    $guard_friendly                          ; Pushes 1, Implicitly declared in /Users/desplesda/Work/YarnSpinner/Tests/TestCases/NodeGroupsWithImplicitDeclarations.yarn, node Start.42eba07b
              PushBool        True                                     ; Pushes 1
              PushFloat       2                                        ; Pushes 1
      3       CallFunc        Bool.EqualTo                                       
 
-Node $Yarn.Internal.Start.Start_765f726c.Condition.0:
-     0       PushVariable    $guard_friendly                          ; Pushes 1, Implicitly declared in /Users/desplesda/Work/YarnSpinner/Tests/TestCases/NodeGroupsWithImplicitDeclarations.yarn, node Start_42eba07b
+Node $Yarn.Internal.Start.Start.765f726c.Condition.0:
+     0       PushVariable    $guard_friendly                          ; Pushes 1, Implicitly declared in /Users/desplesda/Work/YarnSpinner/Tests/TestCases/NodeGroupsWithImplicitDeclarations.yarn, node Start.42eba07b
              PushBool        False                                    ; Pushes 1
              PushFloat       2                                        ; Pushes 1
      3       CallFunc        Bool.EqualTo                                       
 
 Node Start:
-     0       AddSaliencyCandidateFromNode Start_42eba07b, L1_run_candidate_Start_42eba07b           
-             AddSaliencyCandidateFromNode Start_765f726c, L2_run_candidate_Start_765f726c           
+     0       AddSaliencyCandidateFromNode Start.42eba07b, L1_run_candidate_Start.42eba07b           
+             AddSaliencyCandidateFromNode Start.765f726c, L2_run_candidate_Start.765f726c           
              SelectSaliencyCandidate                                                    
              JumpIfFalse     L0_no_content_available                            
              Pop                                                      ; Pops 1  
      5       PeekAndJump                                                        
 L0_no_content_available:
      6       Return                                                             
-L1_run_candidate_Start_42eba07b:
-     7       DetourToNode    Start_42eba07b                                     
+L1_run_candidate_Start.42eba07b:
+     7       DetourToNode    Start.42eba07b                                     
              Return                                                             
-L2_run_candidate_Start_765f726c:
-     9       DetourToNode    Start_765f726c                                     
+L2_run_candidate_Start.765f726c:
+     9       DetourToNode    Start.765f726c                                     
     10       Return                                                             
 
 

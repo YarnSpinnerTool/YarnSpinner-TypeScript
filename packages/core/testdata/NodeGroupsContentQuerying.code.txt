@@ -1,0 +1,76 @@
+Node Start:
+     0       PushString      NodeGroupConditional                     ; Pushes 1, "NodeGroupConditional"
+             PushFloat       1                                        ; Pushes 1
+             CallFunc        has_any_content                                    
+             RunLine         line:318ed773                            ; "Content for NodeGroupConditional available: {0}"
+             PushString      NodeGroupAlways                          ; Pushes 1, "NodeGroupAlways"
+     5       PushFloat       1                                        ; Pushes 1
+             CallFunc        has_any_content                                    
+             RunLine         line:a7bed004                            ; "Content for NodeGroupAlways available: {0}"
+             PushString      NotANodeGroup                            ; Pushes 1, "NotANodeGroup"
+             PushFloat       1                                        ; Pushes 1
+    10       CallFunc        has_any_content                                    
+             RunLine         line:1defd99d                            ; "Content for NotANodeGroup available: {0}"
+             PushBool        True                                     ; Pushes 1
+             StoreVariable   $a                                       ; Implicitly declared in /Users/desplesda/Work/YarnSpinner/Tests/TestCases/NodeGroupsContentQuerying.yarn, node Start
+             Pop                                                      ; Pops 1  
+    15       PushString      NodeGroupConditional                     ; Pushes 1, "NodeGroupConditional"
+             PushFloat       1                                        ; Pushes 1
+             CallFunc        has_any_content                                    
+             RunLine         line:8bdfdeea                            ; "Content for NodeGroupConditional available: {0}"
+             PushString      NodeGroupAlways                          ; Pushes 1, "NodeGroupAlways"
+    20       PushFloat       1                                        ; Pushes 1
+             CallFunc        has_any_content                                    
+             RunLine         line:284aba74                            ; "Content for NodeGroupAlways available: {0}"
+             PushString      NotANodeGroup                            ; Pushes 1, "NotANodeGroup"
+             PushFloat       1                                        ; Pushes 1
+    25       CallFunc        has_any_content                                    
+             RunLine         line:be7abd03                            ; "Content for NotANodeGroup available: {0}"
+    27       Return                                                             
+
+Node NodeGroupConditional.b27cd0b0:
+     0       RunLine         line:cc75ea91                            ; "conditional content"
+     1       Return                                                             
+
+Node NodeGroupAlways.46e77251:
+     0       RunLine         line:1aa9ee4a                            ; "always-available content"
+     1       Return                                                             
+
+Node NotANodeGroup:
+     0       RunLine         line:ba1d881a                            ; "this is not a node group but will always "have content available""
+     1       Return                                                             
+
+Node $Yarn.Internal.NodeGroupConditional.NodeGroupConditional.b27cd0b0.Condition.0:
+     0       PushVariable    $a                                       ; Pushes 1, Implicitly declared in /Users/desplesda/Work/YarnSpinner/Tests/TestCases/NodeGroupsContentQuerying.yarn, node Start
+             PushBool        True                                     ; Pushes 1
+             PushFloat       2                                        ; Pushes 1
+     3       CallFunc        Bool.EqualTo                                       
+
+Node NodeGroupConditional:
+     0       AddSaliencyCandidateFromNode NodeGroupConditional.b27cd0b0, L1_run_candidate_NodeGroupConditional.b27cd0b0           
+             SelectSaliencyCandidate                                                    
+             JumpIfFalse     L0_no_content_available                            
+             Pop                                                      ; Pops 1  
+             PeekAndJump                                                        
+L0_no_content_available:
+     5       Return                                                             
+L1_run_candidate_NodeGroupConditional.b27cd0b0:
+     6       DetourToNode    NodeGroupConditional.b27cd0b0                      
+     7       Return                                                             
+
+Node $Yarn.Internal.NodeGroupAlways.NodeGroupAlways.46e77251.Condition.0:
+     0       PushBool        True                                     ; Pushes 1
+
+Node NodeGroupAlways:
+     0       AddSaliencyCandidateFromNode NodeGroupAlways.46e77251, L1_run_candidate_NodeGroupAlways.46e77251           
+             SelectSaliencyCandidate                                                    
+             JumpIfFalse     L0_no_content_available                            
+             Pop                                                      ; Pops 1  
+             PeekAndJump                                                        
+L0_no_content_available:
+     5       Return                                                             
+L1_run_candidate_NodeGroupAlways.46e77251:
+     6       DetourToNode    NodeGroupAlways.46e77251                           
+     7       Return                                                             
+
+

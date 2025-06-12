@@ -1,9 +1,9 @@
 Node Start:
      0       PushFloat       0                                        ; Pushes 1
              CallFunc        dummy_number                                       
-             StoreVariable   $a                                       ; <unknown variable>
+             StoreVariable   $a                                       ; <no variable info available>
              Pop                                                      ; Pops 1  
-             PushVariable    $a                                       ; Pushes 1, <unknown variable>
+             PushVariable    $a                                       ; Pushes 1, <no variable info available>
      5       RunLine         line:113b2a39                            ; "{0}"   
              PushFloat       0                                        ; Pushes 1
              CallFunc        dummy_number                                       
@@ -13,9 +13,9 @@ Node Start:
              RunLine         line:870b2d4e                            ; "{0}"   
              PushFloat       0                                        ; Pushes 1
              CallFunc        dummy_bool                                         
-             StoreVariable   $c                                       ; <unknown variable>
+             StoreVariable   $c                                       ; <no variable info available>
     15       Pop                                                      ; Pops 1  
-             PushVariable    $c                                       ; Pushes 1, <unknown variable>
+             PushVariable    $c                                       ; Pushes 1, <no variable info available>
              RunLine         line:3d5a24d7                            ; "{0}"   
              PushFloat       0                                        ; Pushes 1
              CallFunc        dummy_bool                                         
@@ -25,9 +25,9 @@ Node Start:
              RunLine         line:ab6a23a0                            ; "{0}"   
              PushFloat       0                                        ; Pushes 1
     25       CallFunc        dummy_string                                       
-             StoreVariable   $e                                       ; <unknown variable>
+             StoreVariable   $e                                       ; <no variable info available>
              Pop                                                      ; Pops 1  
-             PushVariable    $e                                       ; Pushes 1, <unknown variable>
+             PushVariable    $e                                       ; Pushes 1, <no variable info available>
              RunLine         line:08ff473e                            ; "{0}"   
     30       PushFloat       0                                        ; Pushes 1
              CallFunc        dummy_string                                       

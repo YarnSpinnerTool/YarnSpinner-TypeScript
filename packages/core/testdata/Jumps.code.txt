@@ -12,7 +12,7 @@ Node NodeNameDestination:
 
 Node NodeNameConstantExpression:
      0       RunLine         line:2c8fdf38                            ; "NodeNameExpression"
-             PushVariable    $myNodeName                              ; Pushes 1, <unknown variable>
+             PushVariable    $myNodeName                              ; Pushes 1, <no variable info available>
              PeekAndRunNode                                                     
      3       Return                                                             
 

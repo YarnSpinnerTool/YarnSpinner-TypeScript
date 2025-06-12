@@ -1,3 +1,5 @@
 id,text,file,node,lineNumber
 line:3d861e4d,Success,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/DecimalNumbers.yarn,Start,10
-line:abb6193a,Here's a number: {0},/Users/desplesda/Work/YarnSpinner/Tests/TestCases/DecimalNumbers.yarn,Start,14
+line:abb6193a,Success,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/DecimalNumbers.yarn,Start,14
+line:11e710a3,Success,/Users/desplesda/Work/YarnSpinner/Tests/TestCases/DecimalNumbers.yarn,Start,18
+line:87d717d4,Here's a number: {0},/Users/desplesda/Work/YarnSpinner/Tests/TestCases/DecimalNumbers.yarn,Start,22
